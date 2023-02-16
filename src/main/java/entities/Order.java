@@ -26,6 +26,6 @@ public class Order implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusOrderType status;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 }
