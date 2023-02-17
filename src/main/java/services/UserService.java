@@ -1,4 +1,13 @@
 package services;
 
-public class UserService {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import repositories.UserRepository;
+import repositories.UserrRepository;
+
+@Service
+public class UserService implements UserInterface {
+
+    @Autowired
+    UserrRepository userRepository;
 }
