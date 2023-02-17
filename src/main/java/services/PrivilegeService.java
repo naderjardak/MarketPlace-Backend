@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import repositories.PrivilegeRepository;
 
 @Service
-public class PrivilegeService {
+public class PrivilegeService implements PrivilegeInterface {
     @Autowired
     PrivilegeRepository privilegeRepository;
 }

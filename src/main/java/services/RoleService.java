@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import repositories.RoleRepository;
 
 @Service
-public class RoleService {
+public class RoleService implements RoleInterface {
 
     @Autowired
     RoleRepository roleRepository;
