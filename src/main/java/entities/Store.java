@@ -18,4 +18,11 @@ public class Store {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private String name;
+
+    //the physical address of the store
+    private String address;
+
+    private String IBAN;
+
 }
