@@ -14,11 +14,14 @@ import java.util.List;
 public class AgencyDeliveryMan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
-    private  String zone;
+    private  Long id;
+    private  String firstName;
+    private  String lastName;
+    private  int cin;
     private  String gearv;
-    private  String ligne;
-    private String gearmatricuel;
+    private  String governorate;
+    private  String city;
+    private  String gearmatricuel;
     @Enumerated(EnumType.STRING)
     private TypeOfGear typeOfGear;
 
