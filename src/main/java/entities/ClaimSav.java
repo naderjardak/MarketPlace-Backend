@@ -3,10 +3,7 @@ package entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Getter
@@ -24,5 +21,15 @@ public class ClaimSav implements Serializable {
     private String description;
 
     private String status;
+
+    private ClaimSavType claimSavType;
+
+    //TO DO :Dear Houssem, complete your attributes
+
+    @ManyToOne
+    private User user;
+
+
+
 
 }

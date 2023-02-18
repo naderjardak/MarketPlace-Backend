@@ -25,4 +25,12 @@ public class AgencyDeliveryMan implements Serializable {
     @Enumerated(EnumType.STRING)
     private TypeOfGear typeOfGear;
 
+    @ManyToOne
+    private AgencyBranch agencyBranch;
+
+    @OneToMany(mappedBy = "agencyDeliveryMan")
+    private List<Pickup> pickups;
+
+
+
 }

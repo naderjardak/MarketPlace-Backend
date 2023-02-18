@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
     @Column(name = "reference", nullable = false)
@@ -56,4 +56,21 @@ public class Product {
 
     // Define a field to store the current status of the product
     private ProductStatus productStatus;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductQuantity> productQuantities;
+
+    @ManyToOne
+    private ProductCategory productCategory;
+
+    @OneToMany(mappedBy = "product")
+    private List<PromotionCode> promotionCodes;
+
+    @ManyToOne
+    private Store store;
+
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
+
+
 }

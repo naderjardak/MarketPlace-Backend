@@ -17,7 +17,14 @@ public class AgencyBranch implements Serializable {
     private Long id;
     private String governorate;
     private String city;
-    private String gosPoint;
+    private String gpsPoint;
+
+    @ManyToOne
+    User deliveryAgency;
+
+    @OneToMany(mappedBy = "agencyBranch")
+    private List<AgencyDeliveryMan> agencyDeliveryMEN;
+
 
 
 }

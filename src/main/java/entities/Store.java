@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +25,11 @@ public class Store {
     private String address;
 
     private String IBAN;
+
+    @OneToMany(mappedBy = "store")
+    private List<Product> products;
+
+    @ManyToOne
+    private User seller;
 
 }

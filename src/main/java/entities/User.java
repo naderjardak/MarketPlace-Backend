@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,7 +42,26 @@ public class User implements Serializable {
     private String gear;
     private String DriveLicense;
 
+    @OneToMany(mappedBy = "deliveryAgency")
+    private List<AgencyBranch> agencyBranches;
 
+    @OneToMany(mappedBy = "deliveryFreelancer")
+    private List<Pickup> pickups;
+
+    @OneToMany(mappedBy = "buyer")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Store> stores;
+
+    @ManyToOne
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<ClaimSav> claimSavList;
+
+    @OneToMany(mappedBy = "buyer_seller")
+    private List<Review> reviews;
 
 
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,8 +22,8 @@ public class Privilege implements Serializable {
     @Enumerated(EnumType.STRING)
     private PrivilegeName name;
 
-
-
+    @ManyToMany(mappedBy = "privileges")
+    private List<Role> roles;
 
 
 }

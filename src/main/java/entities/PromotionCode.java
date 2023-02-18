@@ -26,4 +26,7 @@ public class PromotionCode {
     @Temporal(TemporalType.DATE)
     private Date EndtDate;
 
+    @ManyToOne
+    private Product product;
+
 }
