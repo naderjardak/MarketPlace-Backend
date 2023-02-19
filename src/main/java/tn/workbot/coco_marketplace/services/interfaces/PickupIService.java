@@ -10,5 +10,5 @@ public interface PickupIService {
     public void removePickup(Long id);
     public Pickup RetrievePickup(Long id);
     public List<Pickup> RetrievePickups();
-    public Pickup updatePickup(Pickup pickup,Long id);
+    public Pickup updatePickup(Pickup pickup);
 }

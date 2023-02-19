@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AgencyDeliveryManIService {
     public AgencyDeliveryMan addAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan);
-    public AgencyDeliveryMan UpdateAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan,Long id);
+    public AgencyDeliveryMan UpdateAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan);
     public void removeAgencyDeliveryMan(Long id);
     public AgencyDeliveryMan RetrieveAgencyDeliveryMan(Long id);
     public List<AgencyDeliveryMan> RetrieveAgencyDeliveryMen();

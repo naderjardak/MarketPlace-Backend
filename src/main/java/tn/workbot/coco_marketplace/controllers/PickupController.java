@@ -34,7 +34,7 @@ public class PickupController  {
         return pis.RetrievePickups();
     }
     @PutMapping("Update Pickup")
-    public Pickup updatePickup(@RequestBody Pickup pickup,@RequestParam Long id){
-        return  pis.updatePickup(pickup,id);
+    public Pickup updatePickup(@RequestBody Pickup pickup){
+        return  pis.updatePickup(pickup);
     }
 }

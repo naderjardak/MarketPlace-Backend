@@ -28,7 +28,7 @@ public class AgencyBranchController {
         return  abi.RetrieveAllAgencyBranch();
     }
    @PutMapping("UpdateAgencyBranch")
-   public AgencyBranch updateAgencyBranch(@RequestBody AgencyBranch agencyBranch,@RequestParam Long id) {
-       return abi.updateAgencyBranch(agencyBranch,id);
+   public AgencyBranch updateAgencyBranch(@RequestBody AgencyBranch agencyBranch) {
+       return abi.updateAgencyBranch(agencyBranch);
    }
 }

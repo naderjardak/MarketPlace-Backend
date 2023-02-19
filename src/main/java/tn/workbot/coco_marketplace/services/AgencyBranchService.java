@@ -37,8 +37,7 @@ public class AgencyBranchService implements AgencyBranchIService {
     }
 
     @Override
-    public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch,Long id) {
-        agencyBranch.setId(id);
+    public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch) {
         return abr.save(agencyBranch);
     }
 }

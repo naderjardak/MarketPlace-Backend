@@ -9,5 +9,5 @@ public interface AgencyBranchIService {
     public void removeAgencyBranch(Long id);
     public AgencyBranch RetrieveAgencyBranch(Long id);
     public List<AgencyBranch> RetrieveAllAgencyBranch();
-    public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch,Long id);
+    public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch);
 }

@@ -37,8 +37,7 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup updatePickup(Pickup pickup,Long id) {
-        pickup.setId(id);
+    public Pickup updatePickup(Pickup pickup) {
         return pr.save(pickup);
     }
 }

@@ -20,8 +20,7 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     }
 
     @Override
-    public AgencyDeliveryMan UpdateAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan,Long id) {
-        agencyDeliveryMan.setId(id);
+    public AgencyDeliveryMan UpdateAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan) {
         return admr.save(agencyDeliveryMan );
     }
 

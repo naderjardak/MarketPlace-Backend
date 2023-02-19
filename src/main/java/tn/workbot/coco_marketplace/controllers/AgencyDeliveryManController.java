@@ -32,7 +32,7 @@ public class AgencyDeliveryManController  {
         return ad.RetrieveAgencyDeliveryMen();
     }
     @PutMapping("UpdateAgencyDeliveryMan")
-    public AgencyDeliveryMan UpdateAgencyDeliveryMan(@RequestBody AgencyDeliveryMan agencyDeliveryMan,@RequestParam Long id) {
-        return ad.UpdateAgencyDeliveryMan(agencyDeliveryMan,id);
+    public AgencyDeliveryMan UpdateAgencyDeliveryMan(@RequestBody AgencyDeliveryMan agencyDeliveryMan) {
+        return ad.UpdateAgencyDeliveryMan(agencyDeliveryMan);
     }
     }
