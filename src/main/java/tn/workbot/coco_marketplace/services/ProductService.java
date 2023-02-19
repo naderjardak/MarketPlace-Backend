@@ -35,9 +35,9 @@ public class ProductService implements ProductInterface {
     @Override
     public Product getById(Long id) {
         if(productRepository.findById(id).isPresent()){
-        return productRepository.findById(id).get();}
+                return productRepository.findById(id).get();}
 
-        return null;
+        return new Product();
     }
 
     @Override

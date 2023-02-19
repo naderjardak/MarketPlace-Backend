@@ -35,7 +35,7 @@ public class ProductCategoryService implements ProductCategoryInterface {
         if(productCategoryRepository.findById(id).isPresent())
              return productCategoryRepository.findById(id).get();
 
-        return null;
+        return new ProductCategory();
     }
 
     @Override

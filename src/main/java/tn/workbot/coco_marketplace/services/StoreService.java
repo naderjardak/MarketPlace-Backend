@@ -35,7 +35,10 @@ public class StoreService implements StoreInterface {
 
     @Override
     public Store getById(Long id) {
+        if(storeRepository.findById(id).isPresent())
         return storeRepository.findById(id).get();
+
+        return new Store();
     }
 
     @Override

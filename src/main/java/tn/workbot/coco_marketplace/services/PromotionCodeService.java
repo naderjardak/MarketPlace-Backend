@@ -32,7 +32,10 @@ public class PromotionCodeService implements PromotionCodeInterface {
 
     @Override
     public PromotionCode getById(Long id) {
-        return promotionCodeRepository.findById(id).get();
+        if(promotionCodeRepository.findById(id).isPresent())
+                return promotionCodeRepository.findById(id).get();
+
+        return new PromotionCode();
     }
 
     @Override
