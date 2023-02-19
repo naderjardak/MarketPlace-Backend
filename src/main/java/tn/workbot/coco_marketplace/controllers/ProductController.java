@@ -29,7 +29,7 @@ public class ProductController {
         return productInterface.create(p);
     }
 
-    @PostMapping("UpdateProduct")
+    @PutMapping("UpdateProduct")
     public Product updateProduct(@RequestBody Product p) {
         return productInterface.update(p);
     }
