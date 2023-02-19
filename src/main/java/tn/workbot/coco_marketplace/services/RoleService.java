@@ -6,6 +6,8 @@ import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
 
+import java.util.List;
+
 @Service
 public class RoleService implements RoleInterface {
 
@@ -32,5 +34,10 @@ public class RoleService implements RoleInterface {
     @Override
     public Role recupererRoleAvecId(long id) {
         return roleRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Role> recupererRoleAll() {
+        return (List<Role>) roleRepository.findAll();
     }
 }

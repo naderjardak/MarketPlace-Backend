@@ -1,10 +1,10 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
+import java.util.List;
 
 @RestController
 @RequestMapping("Role")
@@ -34,4 +34,8 @@ public class RoleController {
         return roleInterface.recupererRoleAvecId(id);
     }
 
+    @GetMapping("/selectRoleAll")
+    public List<Role> recupererRoleAll(){
+        return roleInterface.recupererRoleAll();
+    }
 }

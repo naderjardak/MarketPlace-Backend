@@ -6,6 +6,8 @@ import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserInterface {
 
@@ -31,6 +33,11 @@ public class UserService implements UserInterface {
     @Override
     public User recupererAvecId(long id) {
         return userRepository.findById(id).get();
+    }
+
+    @Override
+    public List<User> recupererAll() {
+        return (List<User>) userRepository.findAll();
     }
 
 

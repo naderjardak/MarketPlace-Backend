@@ -1,7 +1,9 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Privilege;
-import tn.workbot.coco_marketplace.entities.Role;
+
+
+import java.util.List;
 
 public interface PrivilegeInterface {
 
@@ -12,4 +14,7 @@ public interface PrivilegeInterface {
     public Privilege modifierPrivilege(Long id, Privilege p);
 
     Privilege recupererPrivilegeAvecId(long id);
+
+    public List<Privilege> recupererPrivilegeAll();
+
 }

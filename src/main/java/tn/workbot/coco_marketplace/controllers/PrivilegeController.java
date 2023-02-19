@@ -7,6 +7,8 @@ import tn.workbot.coco_marketplace.entities.Privilege;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.services.interfaces.PrivilegeInterface;
 
+import java.util.List;
+
 @RestController
 public class PrivilegeController {
 
@@ -30,6 +32,11 @@ public class PrivilegeController {
     Privilege recupererPrivilegeAvecId(@RequestParam long id){
 
         return privilegeInterface.recupererPrivilegeAvecId(id);
+    }
+
+    @GetMapping("/selectPrivilegAll")
+    public List<Privilege> recupererPrivilegeAll(){
+        return privilegeInterface.recupererPrivilegeAll();
     }
 
 

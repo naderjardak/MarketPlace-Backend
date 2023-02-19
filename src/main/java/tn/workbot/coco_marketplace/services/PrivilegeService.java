@@ -6,6 +6,8 @@ import tn.workbot.coco_marketplace.entities.Privilege;
 import tn.workbot.coco_marketplace.repositories.PrivilegeRepository;
 import tn.workbot.coco_marketplace.services.interfaces.PrivilegeInterface;
 
+import java.util.List;
+
 @Service
 public class PrivilegeService implements PrivilegeInterface {
     @Autowired
@@ -30,5 +32,10 @@ public class PrivilegeService implements PrivilegeInterface {
     @Override
     public Privilege recupererPrivilegeAvecId(long id) {
         return privilegeRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Privilege> recupererPrivilegeAll() {
+        return (List<Privilege>) privilegeRepository.findAll();
     }
 }

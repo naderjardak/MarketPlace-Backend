@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("User")
 public class UserController {
@@ -30,5 +32,9 @@ public class UserController {
     @GetMapping("/selectUserById")
     User recupererAvecId(@RequestParam long id){
         return userInterface.recupererAvecId(id);
+    }
+    @GetMapping("/selectUserAll")
+    public List<User> recupererAll(){
+        return userInterface.recupererAll();
     }
 }
