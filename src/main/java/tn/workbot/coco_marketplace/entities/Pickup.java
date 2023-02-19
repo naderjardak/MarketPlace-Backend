@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
@@ -31,13 +32,13 @@ public class Pickup implements Serializable {
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupBuyer statusPickupBuyer;
-
+@JsonIgnore
     @ManyToOne
     private AgencyDeliveryMan agencyDeliveryMan;
-
+@JsonIgnore
     @ManyToOne
     private User deliveryFreelancer;
-
+@JsonIgnore
     @ManyToOne
     private Order order;
 
