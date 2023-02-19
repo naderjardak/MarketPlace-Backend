@@ -1,11 +1,13 @@
 package tn.workbot.coco_marketplace.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
+import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
 import tn.workbot.coco_marketplace.repositories.ShippingRepository;
@@ -39,6 +41,11 @@ public class OrderServices implements OrderInterface {
 
             @Override
             public Order createOrder(Long shippingId,Order order) {
+                for (ProductQuantity pq:order.getProductQuantities())
+                {
+                pq.setOrder(order);
+                }
+                //Session Manager Id ne9sa affectation mte3 id user lil order
                 productQuantityRepository.saveAllAndFlush(order.getProductQuantities());
                 Shipping shipping = shippingServices.getShippingById(shippingId);
                 order.setShipping(shipping);
@@ -47,21 +54,17 @@ public class OrderServices implements OrderInterface {
 
             @Override
             public Boolean updateOrder(Long shippingId, Order order) {
-                Order existingOrder = orderRepository.findById(order.getId()).orElse(null);
-
-                if (existingOrder != null) {
-                    existingOrder.setRef(order.getRef());
-                    existingOrder.setSum(order.getSum());
-                    existingOrder.setOrderCode(order.getOrderCode());
-                    existingOrder.setPayment(order.getPayment());
-                    existingOrder.setStatus(order.getStatus());
-                    existingOrder.setCreationDate(order.getCreationDate());
+                if (orderRepository.findById(order.getId()).isPresent()) {
+                    for (ProductQuantity pq:order.getProductQuantities())
+                    {
+                        pq.setOrder(order);
+                    }
+                    productQuantityRepository.saveAllAndFlush(order.getProductQuantities());
                     Shipping shipping = shippingRepository.findById(shippingId).get();
                     order.setShipping(shipping);
-                    orderRepository.save(existingOrder);
+                    orderRepository.save(order);
                     return true;
                 }
-
                 return false;
             }
 
