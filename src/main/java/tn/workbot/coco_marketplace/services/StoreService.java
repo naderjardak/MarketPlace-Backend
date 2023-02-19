@@ -20,26 +20,26 @@ public class StoreService implements StoreInterface {
 
     @Override
     public Store create(Store s) {
-        return null;
+        return storeRepository.save(s);
     }
 
     @Override
     public Store update(Store s) {
-        return null;
+        return storeRepository.save(s);
     }
 
     @Override
     public List<Store> retrieveAll() {
-        return null;
+        return storeRepository.findAll();
     }
 
     @Override
     public Store getById(Long id) {
-        return null;
+        return storeRepository.findById(id).get();
     }
 
     @Override
     public void delete(Store s) {
-
+        storeRepository.delete(s);
     }
 }
