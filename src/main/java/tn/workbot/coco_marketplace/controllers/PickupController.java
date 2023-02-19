@@ -25,7 +25,7 @@ public class PickupController  {
     }
 
     @GetMapping("Retrieve Pickup")
-    public Optional<Pickup> RetrievePickup(@RequestParam Long id) {
+    public Pickup RetrievePickup(@RequestParam Long id) {
         return pis.RetrievePickup(id);
     }
 

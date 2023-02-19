@@ -25,7 +25,9 @@ public class AgencyBranchService implements AgencyBranchIService {
 
     @Override
     public AgencyBranch RetrieveAgencyBranch(Long id) {
+         if(abr.findById(id).isPresent())
         return abr.findById(id).get();
+         return new AgencyBranch();
     }
 
     @Override

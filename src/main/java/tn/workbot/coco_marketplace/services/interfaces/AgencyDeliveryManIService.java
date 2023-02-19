@@ -10,6 +10,6 @@ public interface AgencyDeliveryManIService {
     public AgencyDeliveryMan addAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan);
     public AgencyDeliveryMan UpdateAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan,Long id);
     public void removeAgencyDeliveryMan(Long id);
-    public Optional<AgencyDeliveryMan> RetrieveAgencyDeliveryMan(Long id);
+    public AgencyDeliveryMan RetrieveAgencyDeliveryMan(Long id);
     public List<AgencyDeliveryMan> RetrieveAgencyDeliveryMen();
 }

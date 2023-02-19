@@ -31,8 +31,11 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     }
 
     @Override
-    public Optional<AgencyDeliveryMan> RetrieveAgencyDeliveryMan(Long id) {
-        return admr.findById(id);
+    public AgencyDeliveryMan RetrieveAgencyDeliveryMan(Long id) {
+        if(admr.findById(id).isPresent())
+        return admr.findById(id).get();
+        return new AgencyDeliveryMan();
+
     }
 
     @Override

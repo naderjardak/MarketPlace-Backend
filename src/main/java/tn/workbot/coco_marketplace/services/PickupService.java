@@ -25,8 +25,10 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Optional<Pickup> RetrievePickup(Long id) {
-        return pr.findById(id);
+    public Pickup RetrievePickup(Long id) {
+        if(pr.findById(id).isPresent())
+        return pr.findById(id).get();
+        return new Pickup();
     }
 
     @Override

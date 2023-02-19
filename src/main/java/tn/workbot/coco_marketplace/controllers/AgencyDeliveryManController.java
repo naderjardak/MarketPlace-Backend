@@ -23,7 +23,7 @@ public class AgencyDeliveryManController  {
     }
 
     @GetMapping("RetrieveAgencyDeliveryMan")
-    public Optional<AgencyDeliveryMan> RetrieveAgencyDeliveryMan(@RequestParam Long id) {
+    public AgencyDeliveryMan RetrieveAgencyDeliveryMan(@RequestParam Long id) {
         return ad.RetrieveAgencyDeliveryMan(id);
     }
 
