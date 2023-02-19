@@ -8,18 +8,19 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductQuantityInterface;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/buyer/productQuantity")
 public class ProductQuantityController {
     @Autowired
     ProductQuantityInterface productQuantityInterface;
 
-    @PostMapping("Save Product Quantity")
+    @PostMapping("SaveProductQuantity")
     Boolean saveProductQuantity(@RequestBody ProductQuantity productQuantity){return productQuantityInterface.saveProductQuantity(productQuantity);};
-    @GetMapping("Get All Product Quantities")
+    @GetMapping("GetAllProductQuantities")
     List<ProductQuantity> getAllProductQuantities(@RequestParam Long id){return productQuantityInterface.getAllProductQuantitiesByProduct(id);}
-    @GetMapping("Get Product Quantity By Id")
+    @GetMapping("GetProductQuantityById")
     ProductQuantity getProductQuantityById(@RequestParam Long id){return productQuantityInterface.getProductQuantityById(id);}
-    @PutMapping("Delete Product Quantity")
+    @DeleteMapping("DeleteProductQuantity")
     Boolean deleteProductQuantity(@RequestParam Long id){return productQuantityInterface.deleteProductQuantity(id);}
 
 

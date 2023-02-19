@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,12 +22,14 @@ public class ProductQuantity implements Serializable {
     private int quantity;
 
    @ManyToOne
-    private Order order;
+   @JsonIgnore
+   private Order order;
 
     @ManyToOne
     private Product product;
 
     @OneToOne(mappedBy = "productQuantity")
+    @JsonIgnore
     private ClaimSav claimSav;
 
 }

@@ -4,9 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.repositories.OrderRepository;
+import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
+import tn.workbot.coco_marketplace.repositories.ShippingRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
+import tn.workbot.coco_marketplace.services.interfaces.ProductQuantityInterface;
 
 import java.util.List;
 
@@ -17,7 +21,11 @@ public class OrderServices implements OrderInterface {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
+    ShippingRepository shippingRepository;
+    @Autowired
     ShippingServices shippingServices;
+    @Autowired
+    ProductQuantityRepository productQuantityRepository;
 
             @Override
             public List<Order> getAllOrders() {
@@ -30,15 +38,16 @@ public class OrderServices implements OrderInterface {
             }
 
             @Override
-            public Order createOrder(Order order) {
-                Shipping shipping = shippingServices.getShippingById(order.getShipping().getId());
+            public Order createOrder(Long shippingId,Order order) {
+                productQuantityRepository.saveAllAndFlush(order.getProductQuantities());
+                Shipping shipping = shippingServices.getShippingById(shippingId);
                 order.setShipping(shipping);
                 return orderRepository.save(order);
             }
 
             @Override
-            public Boolean updateOrder(Long id, Order order) {
-                Order existingOrder = orderRepository.findById(id).orElse(null);
+            public Boolean updateOrder(Long shippingId, Order order) {
+                Order existingOrder = orderRepository.findById(order.getId()).orElse(null);
 
                 if (existingOrder != null) {
                     existingOrder.setRef(order.getRef());
@@ -47,7 +56,7 @@ public class OrderServices implements OrderInterface {
                     existingOrder.setPayment(order.getPayment());
                     existingOrder.setStatus(order.getStatus());
                     existingOrder.setCreationDate(order.getCreationDate());
-                    Shipping shipping = shippingServices.getShippingById(order.getShipping().getId());
+                    Shipping shipping = shippingRepository.findById(shippingId).get();
                     order.setShipping(shipping);
                     orderRepository.save(existingOrder);
                     return true;

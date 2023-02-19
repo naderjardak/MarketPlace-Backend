@@ -3,8 +3,10 @@ package tn.workbot.coco_marketplace.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
+import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductQuantityInterface;
@@ -20,11 +22,17 @@ public class ProductQuantityServices implements ProductQuantityInterface {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    OrderRepository orderRepository;
+
     @Override
     public Boolean saveProductQuantity(ProductQuantity productQuantity) {
         Product product=productRepository.findById(productQuantity.getProduct().getReference()).get();
+        Order order=orderRepository.findById(productQuantity.getOrder().getId()).get();
         if(product.getQuantity()<productQuantity.getQuantity())
             return false;
+        productQuantity.setProduct(product);
+        productQuantity.setOrder(order);
         productQuantityRepository.save(productQuantity);
         return true;
     }

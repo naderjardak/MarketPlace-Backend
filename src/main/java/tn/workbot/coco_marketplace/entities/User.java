@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +58,7 @@ public class User implements Serializable {
     private List<Pickup> pickups;
 
     @OneToMany(mappedBy = "buyer")
+    @JsonIgnore
     private List<Order> orders;
 
     @OneToMany(mappedBy = "seller")

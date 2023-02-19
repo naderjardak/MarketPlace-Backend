@@ -2,27 +2,26 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.services.interfaces.ShippingInterface;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/buyer/shipping")
 public class ShippingController {
     @Autowired
     ShippingInterface shippingInterface;
 
-    @GetMapping("Get All Shippings By User Id")
+    @GetMapping("GetAllShippingsByUserId")
     List<Shipping> getAllShippingsByUserID(Long idU){return shippingInterface.getAllShippingsByUserID(idU);}
-    @GetMapping("Get Shipping By Id")
+    @GetMapping("GetShippingById")
     Shipping getShippingById(Long id){return shippingInterface.getShippingById(id);}
-    @PostMapping("Create new Shipping")
+    @PostMapping("CreateNewShipping")
     Shipping createShipping(Shipping shipping){return shippingInterface.createShipping(shipping);}
-    @PutMapping("Update Shipping Adresse")
+    @PutMapping("UpdateShippingAdresse")
     Shipping updateShipping(Long id, Shipping shipping){return shippingInterface.updateShipping(id,shipping);}
-    @PutMapping("Delete Shipping Adresse")
+    @DeleteMapping("DeleteShippingAdresse")
     Boolean deleteShipping(Long id){return shippingInterface.deleteShipping(id);}
 }

@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,18 +60,23 @@ public class Product {
     private ProductStatus productStatus;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<ProductQuantity> productQuantities;
 
     @ManyToOne
+    @JsonIgnore
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Review> reviews;
 
 
