@@ -34,14 +34,11 @@ public class ShippingServices implements ShippingInterface {
     }
 
     public Shipping updateShipping(Long id, Shipping shipping) {
-        Shipping existingShipping = shippingRepository.findById(id).orElse(null);
-        if (existingShipping == null) {
-            return null;
+        if (shippingRepository.findById(id).isPresent()) {
+            shipping.setId(id);
+            return shippingRepository.save(shipping);
         }
-        existingShipping.setGovernorate(shipping.getGovernorate());
-        existingShipping.setCity(shipping.getCity());
-        existingShipping.setGpsPoint(shipping.getGpsPoint());
-        return shippingRepository.save(existingShipping);
+            return null;
     }
 
     public Boolean deleteShipping(Long id) {

@@ -59,7 +59,7 @@ public class OrderServices implements OrderInterface {
                     {
                         pq.setOrder(order);
                     }
-                    productQuantityRepository.saveAllAndFlush(order.getProductQuantities());
+                    productQuantityRepository.saveAll(order.getProductQuantities());
                     Shipping shipping = shippingRepository.findById(shippingId).get();
                     order.setShipping(shipping);
                     orderRepository.save(order);
