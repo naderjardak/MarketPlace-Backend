@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ import javax.persistence.*;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     //TO DO :Dear Houssem, complete your attributes
@@ -24,6 +25,12 @@ public class Review {
     private int rating;
 
     private String comment;
+
+    @Temporal(TemporalType.DATE)
+    private Date createdAt;
+
+    @Temporal(TemporalType.DATE)
+    private Date updatedAt;
 
 
     @ManyToOne

@@ -27,7 +27,7 @@ public class ReviewController {
 
     @PostMapping("AddReview")
     public void addReview(@RequestBody Review review){
-        reviewService.updateReview(review);
+        reviewService.addReview(review);
     }
 
     @PutMapping("UpdateReview")

@@ -27,7 +27,6 @@ public class ClaimSavService implements ClaimSavInterface {
     @Override
     public void addClaim(ClaimSav claim) {
         claim.setCreatedAt(new Date());
-        claim.setUpdatedAt(new Date());
         crp.save(claim);
     }
 

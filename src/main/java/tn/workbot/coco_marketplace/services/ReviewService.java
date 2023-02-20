@@ -6,6 +6,7 @@ import tn.workbot.coco_marketplace.entities.Review;
 import tn.workbot.coco_marketplace.repositories.ReviewRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ReviewInterface;
 
+import java.util.Date;
 import java.util.List;
 @Service
 public class ReviewService implements ReviewInterface {
@@ -25,11 +26,13 @@ public class ReviewService implements ReviewInterface {
 
     @Override
     public void addReview(Review review) {
+        review.setCreatedAt(new Date());
         rvp.save(review);
     }
 
     @Override
     public void updateReview(Review review) {
+        review.setUpdatedAt(new Date());
         rvp.save(review);
     }
 
