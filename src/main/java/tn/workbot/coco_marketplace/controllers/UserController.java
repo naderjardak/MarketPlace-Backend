@@ -15,26 +15,26 @@ public class UserController {
     UserInterface userInterface;
 
     @PostMapping("/addUser")
-    public User ajouter(@RequestBody User u) {
-        return userInterface.ajouter(u);
+    public User Create(@RequestBody User u) {
+        return userInterface.Create(u);
     }
 
     @DeleteMapping("/deleteUser")
-    void supprimerById(@RequestParam long id) {
-        userInterface.supprimerById(id);
+    void DeleteById(@RequestParam long id) {
+        userInterface.DeleteById(id);
     }
 
     @PutMapping("/updateUser")
-    public User modifier(@RequestParam  Long id, @RequestBody User u) {
-       return  userInterface.modifier(id, u);
+    public User update(@RequestBody User u) {
+       return  userInterface.update(u);
     }
 
     @GetMapping("/selectUserById")
-    User recupererAvecId(@RequestParam long id){
-        return userInterface.recupererAvecId(id);
+    User GetById(@RequestParam long id){
+        return userInterface.GetById(id);
     }
     @GetMapping("/selectUserAll")
-    public List<User> recupererAll(){
-        return userInterface.recupererAll();
+    public List<User>GetAll(){
+        return userInterface.GetAll();
     }
 }

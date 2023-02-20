@@ -14,28 +14,28 @@ public class PrivilegeService implements PrivilegeInterface {
     PrivilegeRepository privilegeRepository;
 
     @Override
-    public Privilege ajouterPrivilege(Privilege p) {
+    public Privilege CreatePrivilege(Privilege p) {
         return privilegeRepository.save(p);
     }
 
     @Override
-    public void supprimerPrivilegeById(long id) {
+    public void DeletePrivilegeById(long id) {
         privilegeRepository.deleteById(id);
     }
 
     @Override
-    public Privilege modifierPrivilege(Long id, Privilege p) {
-        p.setId(id);
+    public Privilege updatePrivilege( Privilege p) {
+
         return privilegeRepository.save(p);
     }
 
     @Override
-    public Privilege recupererPrivilegeAvecId(long id) {
+    public Privilege GetPrivilegeById(long id) {
         return privilegeRepository.findById(id).get();
     }
 
     @Override
-    public List<Privilege> recupererPrivilegeAll() {
+    public List<Privilege> GetPrivilegeAll() {
         return (List<Privilege>) privilegeRepository.findAll();
     }
 }

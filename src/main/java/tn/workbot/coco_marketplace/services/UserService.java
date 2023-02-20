@@ -15,28 +15,27 @@ public class UserService implements UserInterface {
     UserrRepository userRepository;
 
     @Override
-    public User ajouter(User u) {
+    public User Create(User u) {
         return userRepository.save(u);
     }
 
     @Override
-    public void supprimerById(long id) {
+    public void DeleteById(long id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public User modifier(Long id, User u) {
-        u.setId(id);
+    public User update( User u) {
         return userRepository.save(u);
     }
 
     @Override
-    public User recupererAvecId(long id) {
+    public User GetById(long id) {
         return userRepository.findById(id).get();
     }
 
     @Override
-    public List<User> recupererAll() {
+    public List<User> GetAll() {
         return (List<User>) userRepository.findAll();
     }
 

@@ -5,13 +5,13 @@ import tn.workbot.coco_marketplace.entities.User;
 import java.util.List;
 
 public interface UserInterface {
-    User ajouter(User u);
+    User Create(User u);
 
-    void supprimerById(long id);
+    void  DeleteById(long id);
 
-    public User modifier(Long id, User u);
+    public User update(User u);
 
-    User recupererAvecId(long id);
+    User GetById(long id);
 
-    public List<User> recupererAll();
+    public List<User> GetAll();
 }

@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface RoleInterface {
 
-    Role ajouterRole(Role r);
+    Role CreateRole(Role r);
 
-    void supprimerRoleById(long id);
+    void DeleteRoleById(long id);
 
-    public Role modifierRole(Long id, Role r);
+    public Role updateRole(Role r);
 
-    Role recupererRoleAvecId(long id);
-    public List<Role> recupererRoleAll();
+    Role GetRoleById(long id);
+    public List<Role> GetRoleAll();
 
 }

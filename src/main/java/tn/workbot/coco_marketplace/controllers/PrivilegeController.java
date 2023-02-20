@@ -16,27 +16,27 @@ public class PrivilegeController {
     PrivilegeInterface privilegeInterface;
 
     @PostMapping("/addPrivilege")
-    public Privilege ajouterPrivilege(@RequestBody Privilege p) {
-        return privilegeInterface.ajouterPrivilege(p);
+    public Privilege CreatePrivilege(@RequestBody Privilege p) {
+        return privilegeInterface.CreatePrivilege(p);
     }
     @DeleteMapping("/deletePrivilege")
-    void supprimerPrivilegeById(@RequestParam long id) {
-       privilegeInterface.supprimerPrivilegeById(id);
+    void DeletePrivilegeById(@RequestParam long id) {
+       privilegeInterface.DeletePrivilegeById(id);
     }
     @PutMapping("/updatePrivilege")
-    public Privilege modifierPrivilege(@RequestParam  Long id, @RequestBody Privilege p) {
-        return  privilegeInterface.modifierPrivilege(id,p);
+    public Privilege updatePrivilege( @RequestBody Privilege p) {
+        return  privilegeInterface.updatePrivilege(p);
     }
 
     @GetMapping("/selectPrivilegeById")
-    Privilege recupererPrivilegeAvecId(@RequestParam long id){
+    Privilege GetPrivilegeById(@RequestParam long id){
 
-        return privilegeInterface.recupererPrivilegeAvecId(id);
+        return privilegeInterface.GetPrivilegeById(id);
     }
 
     @GetMapping("/selectPrivilegAll")
-    public List<Privilege> recupererPrivilegeAll(){
-        return privilegeInterface.recupererPrivilegeAll();
+    public List<Privilege> GetPrivilegeAll(){
+        return privilegeInterface.GetPrivilegeAll();
     }
 
 

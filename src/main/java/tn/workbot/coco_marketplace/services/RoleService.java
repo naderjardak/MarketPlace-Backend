@@ -15,29 +15,29 @@ public class RoleService implements RoleInterface {
     RoleRepository roleRepository;
 
     @Override
-    public Role ajouterRole(Role r) {
+    public Role CreateRole(Role r) {
         return roleRepository.save(r);
     }
 
     @Override
-    public void supprimerRoleById(long id) {
+    public void DeleteRoleById(long id) {
         roleRepository.deleteById(id);
     }
 
     @Override
-    public Role modifierRole(Long id, Role r) {
-        r.setId(id);
+    public Role updateRole( Role r) {
+
         return roleRepository.save(r);
 
     }
 
     @Override
-    public Role recupererRoleAvecId(long id) {
+    public Role GetRoleById(long id) {
         return roleRepository.findById(id).get();
     }
 
     @Override
-    public List<Role> recupererRoleAll() {
+    public List<Role> GetRoleAll() {
         return (List<Role>) roleRepository.findAll();
     }
 }

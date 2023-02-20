@@ -14,28 +14,28 @@ public class RoleController {
     RoleInterface roleInterface;
 
     @PostMapping("/addRole")
-    public Role ajouterRole(@RequestBody Role r) {
-        return roleInterface.ajouterRole(r);
+    public Role CreateRole(@RequestBody Role r) {
+        return roleInterface.CreateRole(r);
     }
 
     @DeleteMapping("/deleteRole")
-    void supprimerRoleById(@RequestParam long id) {
-        roleInterface.supprimerRoleById(id);
+    void DeleteRoleById(@RequestParam long id) {
+        roleInterface.DeleteRoleById(id);
     }
 
     @PutMapping("/updateRole")
-    public Role modifierRole(@RequestParam  Long id, @RequestBody Role r) {
-        return  roleInterface.modifierRole(id, r);
+    public Role updateRole(@RequestBody Role r) {
+        return  roleInterface.updateRole( r);
     }
 
     @GetMapping("/selectRoleById")
-    Role recupererRoleAvecId(@RequestParam long id){
+    Role GetRoleById(@RequestParam long id){
 
-        return roleInterface.recupererRoleAvecId(id);
+        return roleInterface.GetRoleById(id);
     }
 
     @GetMapping("/selectRoleAll")
-    public List<Role> recupererRoleAll(){
-        return roleInterface.recupererRoleAll();
+    public List<Role> GetRoleAll(){
+        return roleInterface.GetRoleAll();
     }
 }

@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface PrivilegeInterface {
 
-    Privilege ajouterPrivilege(Privilege p);
+    Privilege CreatePrivilege(Privilege p);
 
-    void supprimerPrivilegeById(long id);
+    void DeletePrivilegeById(long id);
 
-    public Privilege modifierPrivilege(Long id, Privilege p);
+    public Privilege updatePrivilege(Privilege p);
 
-    Privilege recupererPrivilegeAvecId(long id);
+    Privilege GetPrivilegeById(long id);
 
-    public List<Privilege> recupererPrivilegeAll();
+    public List<Privilege> GetPrivilegeAll();
 
 }
