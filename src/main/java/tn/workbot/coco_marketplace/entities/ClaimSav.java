@@ -40,7 +40,7 @@ public class ClaimSav implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date updatedAt;
 
-    //TO DO :Dear Houssem, complete your attributes
+    ///TO DO :Dear Houssem, complete your attributes
 
     @ManyToOne
     private User user;

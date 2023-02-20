@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,10 +19,10 @@ public class AgencyBranch implements Serializable {
     private String governorate;
     private String city;
     private String gpsPoint;
-
+    @JsonIgnore
     @ManyToOne
     User deliveryAgency;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "agencyBranch")
     private List<AgencyDeliveryMan> agencyDeliveryMEN;
 

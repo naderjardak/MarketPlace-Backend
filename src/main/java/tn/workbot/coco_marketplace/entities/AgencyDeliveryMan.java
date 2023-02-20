@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import tn.workbot.coco_marketplace.entities.enmus.TypeOfGear;
 
@@ -18,17 +19,17 @@ public class AgencyDeliveryMan implements Serializable {
     private  Long id;
     private  String firstName;
     private  String lastName;
-    private  int cin;
+    private  String cin;
     private  String gearv;
     private  String governorate;
     private  String city;
     private  String gearmatricuel;
     @Enumerated(EnumType.STRING)
     private TypeOfGear typeOfGear;
-
+@JsonIgnore
     @ManyToOne
     private AgencyBranch agencyBranch;
-
+@JsonIgnore
     @OneToMany(mappedBy = "agencyDeliveryMan")
     private List<Pickup> pickups;
 
