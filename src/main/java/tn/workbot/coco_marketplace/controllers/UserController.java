@@ -33,6 +33,7 @@ public class UserController {
     User GetById(@RequestParam long id){
         return userInterface.GetById(id);
     }
+    
     @GetMapping("/selectUserAll")
     public List<User>GetAll(){
         return userInterface.GetAll();
