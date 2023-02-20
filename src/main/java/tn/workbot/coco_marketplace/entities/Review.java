@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    //@Column(name = "id", nullable = false)
     private Long id;
 
     //TO DO :Dear Houssem, complete your attributes
