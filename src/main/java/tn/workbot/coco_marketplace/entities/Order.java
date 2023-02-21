@@ -35,7 +35,7 @@ public class Order implements Serializable {
     private Date creationDate;                // date of creation of the order
 
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order")    //
     @JsonIgnore
     private List<Pickup> pickups;
 
