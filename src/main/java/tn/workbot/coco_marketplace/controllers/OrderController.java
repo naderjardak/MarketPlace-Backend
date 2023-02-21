@@ -8,7 +8,7 @@ import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("/buyer/order")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired

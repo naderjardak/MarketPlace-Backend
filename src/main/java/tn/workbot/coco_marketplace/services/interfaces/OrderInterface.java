@@ -1,8 +1,10 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderInterface {
 
@@ -20,5 +22,12 @@ public interface OrderInterface {
 
     // Delete an order from the database by ID
     Boolean deleteOrder(Long id);
+
+    //Stat for basket
+    Map<String, Integer> statsByStatusType();
+
+    //Ranking Users
+    List<String> statsByStatusTypeOrdred();
+
 
 }
