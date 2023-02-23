@@ -38,4 +38,9 @@ public class RoleController {
     public List<Role> GetRoleAll(){
         return roleInterface.GetRoleAll();
     }
+
+    @PutMapping("/affectRolePrivilege")
+    public void AssignRolePrivilege(@RequestParam long idRole , @RequestParam long idPrivilege){
+        roleInterface.AssignRolePrivilege(idRole,idPrivilege);
+    }
 }

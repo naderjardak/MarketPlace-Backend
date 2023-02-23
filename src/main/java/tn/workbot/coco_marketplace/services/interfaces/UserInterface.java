@@ -14,4 +14,5 @@ public interface UserInterface {
     User GetById(long id);
 
     public List<User> GetAll();
+    public void affectRoleAtUser(long idRole,long idUser);
 }

@@ -14,6 +14,7 @@ public class UserController {
     @Autowired
     UserInterface userInterface;
 
+
     @PostMapping("/addUser")
     public User Create(@RequestBody User u) {
         return userInterface.Create(u);
@@ -33,9 +34,14 @@ public class UserController {
     User GetById(@RequestParam long id){
         return userInterface.GetById(id);
     }
-    
+
     @GetMapping("/selectUserAll")
     public List<User>GetAll(){
         return userInterface.GetAll();
+    }
+
+    @PutMapping("/affectRole")
+    public void affectRoleAtUser(@RequestParam long idRole,@RequestParam long idUser){
+     userInterface.affectRoleAtUser(idRole,idUser);
     }
 }
