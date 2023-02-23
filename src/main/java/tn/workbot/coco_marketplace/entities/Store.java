@@ -20,9 +20,9 @@ public class Store {
     private Long id;
 
     private String name;
-
-    //the physical address of the store
-    private String address;
+    private String governorate;
+    private String city;
+    private String gpsPoint;
 
     private String IBAN;
 
@@ -31,5 +31,11 @@ public class Store {
 
     @ManyToOne
     private User seller;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Request>requestsellers;
+
+    @OneToMany(mappedBy = "store")
+    private  List<Pickup>pickups;
 
 }

@@ -51,11 +51,6 @@ public class User implements Serializable {
     private int numberOfRatings;
 
 
-    @OneToMany(mappedBy = "deliveryAgency")
-    private List<AgencyBranch> agencyBranches;
-
-    @OneToMany(mappedBy = "deliveryFreelancer")
-    private List<Pickup> pickups;
 
     @OneToMany(mappedBy = "buyer")
     @JsonIgnore
@@ -79,8 +74,27 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "DeliveryFreelancer")
     private List<Review> reviewsOnDF;
 
+   @OneToMany(mappedBy = "deliveryman")
+    private List<Request>requestsdeliverymen;
 
+   @OneToMany(mappedBy = "seller")
+    private List<Request>requestsellers;
 
+   @OneToMany(mappedBy = "Agency")
+    private List<Request>requestsAgencys;
+   @OneToMany(mappedBy = "deliveryAgency")
+    private  List<AgencyBranch>agencyBranches;
+
+  /* @OneToMany(mappedBy = "seller")
+    private  List<Pickup>pickupsSeller;*/
+    /*
+@OneToMany(mappedBy = "deliveryFreelancer")
+private List<Pickup>PickupdeliverymenFreelancer;
+    @OneToMany(mappedBy = "seller")
+    private List<Pickup>Pickupsellers;
+    @OneToMany(mappedBy = "deliveryAgency")
+    private List<Pickup>PickupAgencys;
+*/
 
 }
 

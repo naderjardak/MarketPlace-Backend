@@ -12,4 +12,5 @@ public interface AgencyDeliveryManIService {
     public void removeAgencyDeliveryMan(Long id);
     public AgencyDeliveryMan RetrieveAgencyDeliveryMan(Long id);
     public List<AgencyDeliveryMan> RetrieveAgencyDeliveryMen();
+    public AgencyDeliveryMan AssignAgencyDeliveryManByBranch(AgencyDeliveryMan agencyDeliveryMan,Long Id);
 }

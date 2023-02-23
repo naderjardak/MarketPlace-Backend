@@ -32,16 +32,16 @@ public class Pickup implements Serializable {
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupBuyer statusPickupBuyer;
-@JsonIgnore
-    @ManyToOne
-    private AgencyDeliveryMan agencyDeliveryMan;
-@JsonIgnore
-    @ManyToOne
-    private User deliveryFreelancer;
+
 @JsonIgnore
     @ManyToOne
     private Order order;
-
+@JsonIgnore
+   @OneToMany(mappedBy = "pickup")
+    private List<Request>requests;
+    @JsonIgnore
+    @ManyToOne
+    private Store store;
 
 
 }
