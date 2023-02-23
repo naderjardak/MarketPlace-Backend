@@ -1,17 +1,23 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.sun.istack.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.controllers.OrderStatsController;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
 import tn.workbot.coco_marketplace.repositories.ShippingRepository;
+import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 import tn.workbot.coco_marketplace.services.interfaces.ProductQuantityInterface;
 
+import javax.validation.constraints.Null;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +34,8 @@ public class OrderServices implements OrderInterface {
     ShippingServices shippingServices;
     @Autowired
     ProductQuantityRepository productQuantityRepository;
+    @Autowired
+    UserrRepository userrRepository;
 
             @Override
             public List<Order> getAllOrders() {
@@ -40,32 +48,62 @@ public class OrderServices implements OrderInterface {
             }
 
             @Override
-            public Order createOrder(Long shippingId,Order order) {
-                for (ProductQuantity pq:order.getProductQuantities())
-                {
-                pq.setOrder(order);
-                }
+            public Order createOrder(ProductQuantity productQuantity) {
+
                 //Session Manager Id ne9sa affectation mte3 id user lil order
-                productQuantityRepository.saveAllAndFlush(order.getProductQuantities());
-                Shipping shipping = shippingServices.getShippingById(shippingId);
+                User user=userrRepository.findById(1L).get();
+                Order newOrder = new Order();
+                newOrder.setBuyer(user);
+                newOrder.setStatus(StatusOrderType.BASKET);
+                newOrder.getProductQuantities().add(productQuantity);
+                newOrder.setCreationDate(new Date(System.currentTimeMillis()));
+                float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
+                newOrder.setSum(sum);
+                return null;
+
+            }
+
+            @Override
+            public Boolean AddProductToOrder(ProductQuantity productQuantity) {
+                 Order order= orderRepository.BasketExistance(1L);
+                  if(order==null) {
+                      createOrder(productQuantity);
+                      return true;
+                  }
+                  order.getProductQuantities().add(productQuantity);
+                  order.setSum(order.getSum()+(productQuantity.getQuantity()*productQuantity.getProduct().getProductPrice()));
+                  orderRepository.save(order);
+                    return true;
+            }
+
+            public Order AffectShippingAdressToOrder(Shipping shipping)
+            {
+                Order order= orderRepository.BasketExistance(1L);
                 order.setShipping(shipping);
                 return orderRepository.save(order);
             }
 
-            @Override
-            public Boolean updateOrder(Long shippingId, Order order) {
-                if (orderRepository.findById(order.getId()).isPresent()) {
-                    for (ProductQuantity pq:order.getProductQuantities())
-                    {
-                        pq.setOrder(order);
-                    }
-                    productQuantityRepository.saveAll(order.getProductQuantities());
-                    Shipping shipping = shippingRepository.findById(shippingId).get();
-                    order.setShipping(shipping);
-                    orderRepository.save(order);
-                    return true;
+            public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment)
+            {
+                Order order= orderRepository.BasketExistance(1L);
+                if (paymentType == PaymentType.CASH_ON_DELIVERY)
+                {
+                    order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
+                    order.setPayment(PaymentType.CASH_ON_DELIVERY);
                 }
-                return false;
+                else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
+                {
+                    order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
+                    order.setPayment(PaymentType.BANK_CARD);
+                }
+                else
+                {
+                    order.setStatus(StatusOrderType.REFUSED_PAYMENT);
+                    orderRepository.save(order);
+                    return false;
+                }
+                orderRepository.save(order);
+                return true;
             }
 
             @Override
@@ -86,7 +124,7 @@ public class OrderServices implements OrderInterface {
         stats.put("AllCount",orderList.size());
         for(Order o:orderList)
         {
-            if(o.getStatus().equals(StatusOrderType.BASKET))
+            if(o.getStatus().equals(StatusOrderType.BASKET ))
             {
                 BasketCount+=1;
             }

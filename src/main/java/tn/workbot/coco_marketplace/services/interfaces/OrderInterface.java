@@ -1,7 +1,9 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 
 import java.util.List;
 import java.util.Map;
@@ -12,10 +14,13 @@ public interface OrderInterface {
     List<Order> getAllOrders();
 
     // Create a new order in the database
-    Order createOrder(Long shippingId,Order order);
+    Order createOrder(ProductQuantity productQuantity);
 
     // Update an existing order in the database by ID
-    Boolean updateOrder(Long shippingId, Order order);
+    Boolean AddProductToOrder(ProductQuantity productQuantity);
+
+    //Ending command Paiment Prosess
+    Boolean endCommandProsess(PaymentType paymentType, Boolean cardPaiment);
 
     // Get an order from the database by ID
     Order getOrderById(Long id);

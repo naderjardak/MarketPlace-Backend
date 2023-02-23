@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.User;
@@ -15,4 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   List<String> RankUsersByOrdersAcceptedPayement();
 
   int findByBuyerId(Long id);
+
+  @Query("SELECT o from Order o where o.buyer.id=:id and o.status='BASKET'")
+  Order BasketExistance(@Param("id") Long id);
 }
