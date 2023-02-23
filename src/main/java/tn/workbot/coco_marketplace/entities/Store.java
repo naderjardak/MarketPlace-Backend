@@ -20,9 +20,9 @@ public class Store {
     private Long id;
 
     private String name;
-
-    //the physical address of the store
-    private String address;
+    private String governorate;
+    private String city;
+    private String gpsPoint;
 
     private String IBAN;
 

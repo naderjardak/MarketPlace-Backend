@@ -14,5 +14,10 @@ public interface ProductInterface {
 
     void delete(Product p);
 
+    Product createAndAssignToStore(Product p,Long idStore);
+
+
+    Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName);
+
 
 }

@@ -1,3 +1,4 @@
+
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,15 @@ public class ProductController {
     }
 
     @DeleteMapping("DeleteProduct")
-    public void delete(Product p) {
+    public void delete(@RequestBody Product p) {
         productInterface.delete(p);
     }
 
+    @PostMapping("CreateProductAndAssignCatAndSub")
+    public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName) {
+        return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName);
 
+
+    }
 
 }
