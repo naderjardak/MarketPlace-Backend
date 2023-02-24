@@ -215,21 +215,24 @@ public class PickupService implements PickupIService {
 
             DistanceMatrix matrix = request.await();
             Distance distance = matrix.rows[0].elements[0].distance;
-            if(request1.getDeliveryman().getGear().equals("CAR")){
+            if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("CAR"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("CAR"))){
                 double averageSpeed = 60.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
                 // Return the estimated delivery time as a Duration object
                 return Duration.ofHours((long) travelTimeInHours);
             }
-            else if(request1.getDeliveryman().getGear().equals("BIKE")){
+            else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("BIKE"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("BIKE"))){
                 double averageSpeed = 10.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
                 // Return the estimated delivery time as a Duration object
                 return Duration.ofHours((long) travelTimeInHours);
             }
-            else if(request1.getDeliveryman().getGear().equals("MOTO")){
+            else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("MOTO"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("MOTO"))){
                 double averageSpeed = 30.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
