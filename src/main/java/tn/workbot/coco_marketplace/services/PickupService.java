@@ -161,5 +161,31 @@ public class PickupService implements PickupIService {
         return pr.save(pickup1);
     }
 
+    @Override
+    public Pickup ModifyStatusOfPickupByDelivery(String Status,Long idPickup) {
+        Pickup pickup=pr.findById(idPickup).get();
+        if(Status.equals("SHIPPED")){
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("SHIPPED"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("ONTHEWAY"));
+            pr.save(pickup);
+        }
+        else if (Status.equals("DELIVERED")){
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("DELIVERED"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("DELIVERED"));
+            pr.save(pickup);
+        }
+        else if (Status.equals("RETURN")){
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("RETURN"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("RETURN"));
+            pr.save(pickup);
+        }
+        else {
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("REFUNDED"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("REFUNDED"));
+            pr.save(pickup);
+        }
+        return null;
+    }
+
 
 }

@@ -59,5 +59,8 @@ public class PickupController  {
     public Pickup AssignPickupByStore(@RequestBody Pickup pickup){
         return pis.AssignPickupByStore(pickup);
     }
-
+    @PutMapping("ModifyStatusOfPickupByDelivery")
+    public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {
+        return pis.ModifyStatusOfPickupByDelivery(Status,idPickup);
+    }
 }
