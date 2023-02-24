@@ -15,7 +15,6 @@ public interface PickupIService {
     public Pickup AssignPickupByOder(Pickup pickup,Long id);
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
     /*public Pickup AssignPickupBySeller(Pickup pickup);*/
-    public List<Pickup> testretrieve();
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
 
 

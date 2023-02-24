@@ -50,10 +50,6 @@ public class PickupController  {
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         return pis.RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
     }
-    @GetMapping("test")
-    public List<Pickup> testretrieve(){
-        return pis.testretrieve();
-    }
 
     @GetMapping("RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat")
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {

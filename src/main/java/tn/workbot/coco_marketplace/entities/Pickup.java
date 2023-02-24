@@ -7,6 +7,7 @@ import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +27,8 @@ public class Pickup implements Serializable {
     private String codePickup;
     private String shippingStatus;
     private String payed;
-    @Temporal(TemporalType.DATE)
-    private Date dateCreationPickup;
+    //@Temporal(TemporalType.DATE)
+    private LocalDateTime dateCreationPickup;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)

@@ -3,12 +3,16 @@ package tn.workbot.coco_marketplace.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class PickupService implements PickupIService {
@@ -25,6 +29,25 @@ public class PickupService implements PickupIService {
 
     @Override
     public Pickup addPickup(Pickup pickup) {
+        Random random = new Random(); //java.util.Random
+        pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+        pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+        String prefix = "216";
+        String code = prefix + randomNumber;
+        List<Pickup>pickups= (List<Pickup>) pr.findAll();
+        for (Pickup p:pickups) {
+                      if(p.getCodePickup()!=code){
+                          pickup.setCodePickup(code);
+                      }
+                      else {
+                          int randomNumber1 = random.nextInt(100) + 100;
+                          String code1 = prefix + randomNumber + randomNumber1;
+                          pickup.setCodePickup(code1);
+                      }
+        }
+        pickup.setCodePickup(code);
+        pickup.setDateCreationPickup(LocalDateTime.now());
         return pr.save(pickup);
     }
 
@@ -90,30 +113,6 @@ public class PickupService implements PickupIService {
         return  Collections.emptyList();
     }
 
-    @Override
-    public List<Pickup> testretrieve() {
-        User u = ur.findById(1L).get();
-        List<AgencyBranch> agencyBranch=abr.findAll();
-        List<User> users= (List<User>) ur.findAll();
-        List<Store>stores=sr.findAll();
-        List<AgencyBranch> agencyBranches = new ArrayList<>();
-        List<Store> agencyBranchess = new ArrayList<>();
-        ArrayList<Pickup> store = new ArrayList<>();
-
-        agencyBranches.addAll(u.getAgencyBranches());
-       // for (AgencyBranch a:agencyBranches) {
-        //    List<Store> storess = sr.findByGovernorate(a.getGovernorate()) ;
-        //    agencyBranchess.addAll(storess);
-       // }
-       for (AgencyBranch ab:agencyBranches) {
-            for(Store s:stores){
-                if(s.getGovernorate().equals(ab.getGovernorate())){
-                    store.addAll(s.getPickups());
-                }
-            }
-        }
-        return store ;
-    }
 
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
@@ -134,14 +133,6 @@ public class PickupService implements PickupIService {
         return store ;
     }
 
-
-  /*  @Override
-    public Pickup AssignPickupBySeller(Pickup pickup) {
-        Pickup pickup1=pr.save(pickup);
-        User user=ur.findById(1L).get();
-        pickup1.setSeller(user);
-        return pr.save(pickup);
-    }*/
 
 
 }
