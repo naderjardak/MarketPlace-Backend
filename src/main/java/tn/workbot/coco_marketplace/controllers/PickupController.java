@@ -55,9 +55,9 @@ public class PickupController  {
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         return pis.RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     }
-    @PostMapping("AssignPickupByStore")
-    public Pickup AssignPickupByStore(@RequestBody Pickup pickup){
-        return pis.AssignPickupByStore(pickup);
+    @PostMapping("AssignPickupByStoreAndOrder")
+    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id){
+        return pis.AssignPickupByStoreAndOrder(pickup,id);
     }
     @PutMapping("ModifyStatusOfPickupByDelivery")
     public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {

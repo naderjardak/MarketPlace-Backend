@@ -137,7 +137,7 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup AssignPickupByStore(Pickup pickup) {
+    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
         //Variable Of Session Manager
         Store store = sr.findById(1L).get();
         Pickup pickup1 = pr.save(pickup);
@@ -158,6 +158,8 @@ public class PickupService implements PickupIService {
                 pickup.setCodePickup(code1);
             }
         }
+        Order order = or.findById(id).get();
+        pickup.setOrder(order);
         pickup.setCodePickup(code);
         pickup.setDateCreationPickup(LocalDateTime.now());
         return pr.save(pickup1);
