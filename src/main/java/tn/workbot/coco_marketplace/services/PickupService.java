@@ -1,5 +1,11 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.Distance;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
@@ -9,7 +15,10 @@ import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
+import javax.swing.text.Position;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -186,6 +195,27 @@ public class PickupService implements PickupIService {
             pr.save(pickup);
         }
         return null;
+    }
+
+    @Override
+    public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException {
+         Pickup pickup=pr.findById(idPickup).get();
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                .build();
+        // Get the distance and travel time using the DistanceMatrixApi
+        DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                .origins(pickup.getGovernorate())
+                .destinations(pickup.getStore().getGovernorate())
+                .mode(TravelMode.DRIVING);
+        DistanceMatrix matrix = request.await();
+        Distance distance = matrix.rows[0].elements[0].distance;
+        // Calculate the estimated travel time based on the gear information
+        double averageSpeed = 60.0; // km/h
+        double distanceInKm = distance.inMeters / 1000.0;
+        double travelTimeInHours = distanceInKm / averageSpeed;
+        // Return the estimated delivery time as a Duration object
+        return Duration.ofHours((long) travelTimeInHours);
     }
 
 

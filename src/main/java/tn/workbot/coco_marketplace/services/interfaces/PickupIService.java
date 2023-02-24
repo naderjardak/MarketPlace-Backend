@@ -1,8 +1,12 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Store;
 
+import javax.swing.text.Position;
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 public interface PickupIService {
@@ -18,6 +22,8 @@ public interface PickupIService {
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id);
     public  Pickup ModifyStatusOfPickupByDelivery(String Status,Long idPickup);
+    public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException;
 
 
-}
+
+    }

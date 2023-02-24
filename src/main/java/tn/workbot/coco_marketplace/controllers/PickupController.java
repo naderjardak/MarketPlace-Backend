@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
@@ -7,6 +8,9 @@ import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
+import javax.swing.text.Position;
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -62,5 +66,9 @@ public class PickupController  {
     @PutMapping("ModifyStatusOfPickupByDelivery")
     public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {
         return pis.ModifyStatusOfPickupByDelivery(Status,idPickup);
+    }
+    @PostMapping("calculateDeliveryTime")
+    public Duration calculateDeliveryTime(@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
+        return pis.calculateDeliveryTime(idPickup);
     }
 }
