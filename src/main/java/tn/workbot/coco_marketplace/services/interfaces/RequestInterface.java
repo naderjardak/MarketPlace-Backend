@@ -14,5 +14,6 @@ public interface RequestInterface {
     public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idDeliveryAgency, Long idPickup,Long idDeliveryMenAgency);
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup);
 
-    public Request assignRequesttoseller(Long idRequest,Long idSeller,String status);
+    public Request assignRequesttoseller(Long idRequest,Long idSeller,String status,Long idPickup);
+
 }

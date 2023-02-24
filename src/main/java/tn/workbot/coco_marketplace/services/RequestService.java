@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Pickup;
@@ -13,6 +14,8 @@ import tn.workbot.coco_marketplace.repositories.RequestRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,7 +63,13 @@ public class RequestService implements RequestInterface {
         AgencyDeliveryMan agencyDeliveryMan=admr.findById(idDeliveryMenAgency).get();
         List<Request>requestList= (List<Request>) rr.findAll();
         Pickup pickup=pr.findById(idPickup).get();
-        if(rr.countrequestwithsomedeliverymen()<1) {
+     /*   int i = 0;
+        for (Request r:requestList) {
+            if(r.getAgencyDeliveryMan().getId().equals(idDeliveryAgency)){
+                i++;
+            }
+        }*/
+        if(rr.countrequestwithsomedeliverymen(idDeliveryMenAgency,idPickup)<1) {
             if (pickup.getGovernorate().equals(agencyDeliveryMan.getGovernorate())) {
                 Request request1 = rr.save(request);
                 request1.setAgencyDeliveryMan(agencyDeliveryMan);
@@ -84,13 +93,26 @@ public class RequestService implements RequestInterface {
     }
 
     @Override
-    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status) {
+    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status,Long idPickup) {
         Request request=rr.findById(idRequest).get();
         User seller=ur.findById(idSeller).get();
+        List<Request> requestsPending=new ArrayList<>();
+        requestsPending.addAll(rr.verifier2(idPickup));
+        request.setRequestStatus(RequestStatus.valueOf(status));
+        request.setSeller(seller);
+        rr.save(request);
+        if(rr.verifier(idPickup)==1){
+            for (Request r:requestsPending) {
+                r.setRequestStatus(RequestStatus.valueOf("REJECTED"));
+            }
+        }
         request.setRequestStatus(RequestStatus.valueOf(status));
         request.setSeller(seller);
         return rr.save(request);
     }
+
+
+
 
 
 }

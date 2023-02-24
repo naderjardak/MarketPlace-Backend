@@ -47,9 +47,8 @@ public class RequestController   {
         return ri.assignRequestDeliveryMenFreelancerandPickup(request, idDeliveryMenFreelancer, idPickup);
     }
     @PostMapping("assignRequesttoseller")
-    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status) {
-        return ri.assignRequesttoseller(idRequest, idSeller, status);
+    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) {
+        return ri.assignRequesttoseller(idRequest, idSeller, status,idPickup);
     }
 
-
-}
+    }
