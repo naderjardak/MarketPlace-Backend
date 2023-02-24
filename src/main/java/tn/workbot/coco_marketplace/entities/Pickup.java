@@ -38,7 +38,7 @@ public class Pickup implements Serializable {
     @ManyToOne
     private Order order;
 @JsonIgnore
-   @OneToMany(mappedBy = "pickup")
+   @OneToMany(mappedBy = "pickup",cascade = CascadeType.ALL)
     private List<Request>requests;
     @JsonIgnore
     @ManyToOne
