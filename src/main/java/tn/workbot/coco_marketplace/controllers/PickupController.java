@@ -55,8 +55,9 @@ public class PickupController  {
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         return pis.RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     }
- /*   @PostMapping("AssignPickupBySeller")
-    public Pickup AssignPickupBySeller(@RequestBody Pickup pickup){
-        return pis.AssignPickupBySeller(pickup);
-    }*/
+    @PostMapping("AssignPickupByStore")
+    public Pickup AssignPickupByStore(@RequestBody Pickup pickup){
+        return pis.AssignPickupByStore(pickup);
+    }
+
 }

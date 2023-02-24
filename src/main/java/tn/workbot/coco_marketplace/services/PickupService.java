@@ -133,6 +133,33 @@ public class PickupService implements PickupIService {
         return store ;
     }
 
+    @Override
+    public Pickup AssignPickupByStore(Pickup pickup) {
+        //Variable Of Session Manager
+        Store store=sr.findById(1L).get();
+        Pickup pickup1=pr.save(pickup);
+        pickup1.setStore(store);
+        Random random = new Random(); //java.util.Random
+        pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+        pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+        String prefix = "216";
+        String code = prefix + randomNumber;
+        List<Pickup>pickups= (List<Pickup>) pr.findAll();
+        for (Pickup p:pickups) {
+            if(p.getCodePickup()!=code){
+                pickup.setCodePickup(code);
+            }
+            else {
+                int randomNumber1 = random.nextInt(100) + 100;
+                String code1 = prefix + randomNumber + randomNumber1;
+                pickup.setCodePickup(code1);
+            }
+        }
+        pickup.setCodePickup(code);
+        pickup.setDateCreationPickup(LocalDateTime.now());
+        return pr.save(pickup1);
+    }
 
 
 }
