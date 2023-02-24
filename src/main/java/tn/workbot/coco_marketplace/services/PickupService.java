@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -20,10 +21,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PickupService implements PickupIService {
@@ -37,6 +35,8 @@ public class PickupService implements PickupIService {
     UserrRepository ur;
     @Autowired
     AgencyBranchRepository abr;
+    @Autowired
+    RequestRepository rr;
 
     @Override
     public Pickup addPickup(Pickup pickup) {
@@ -199,23 +199,38 @@ public class PickupService implements PickupIService {
 
     @Override
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException {
-         Pickup pickup=pr.findById(idPickup).get();
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
-                .build();
-        // Get the distance and travel time using the DistanceMatrixApi
-        DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                .origins(pickup.getGovernorate())
-                .destinations(pickup.getStore().getGovernorate())
-                .mode(TravelMode.DRIVING);
-        DistanceMatrix matrix = request.await();
-        Distance distance = matrix.rows[0].elements[0].distance;
-        // Calculate the estimated travel time based on the gear information
-        double averageSpeed = 60.0; // km/h
-        double distanceInKm = distance.inMeters / 1000.0;
-        double travelTimeInHours = distanceInKm / averageSpeed;
-        // Return the estimated delivery time as a Duration object
-        return Duration.ofHours((long) travelTimeInHours);
+
+        Pickup pickup1=pr.pickupprettolivred(idPickup);
+        Request request1=  rr.findById(pickup1.getId()).get();
+        if(request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
+            GeoApiContext context = new GeoApiContext.Builder()
+                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .build();
+            // Get the distance and travel time using the DistanceMatrixApi
+            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                    .origins(pickup1.getGovernorate())
+                    .destinations(pickup1.getStore().getGovernorate())
+                    .mode(TravelMode.DRIVING);
+
+            DistanceMatrix matrix = request.await();
+            Distance distance = matrix.rows[0].elements[0].distance;
+            // Calculate the estimated travel time based on the gear information
+            double averageSpeed = 60.0; // km/h
+            double distanceInKm = distance.inMeters / 1000.0;
+            double travelTimeInHours = distanceInKm / averageSpeed;
+            // Return the estimated delivery time as a Duration object
+            return Duration.ofHours((long) travelTimeInHours);
+        }
+        return null;
+
+    }
+    public Pickup test(Long id){
+        Pickup pickup1=pr.pickupprettolivred(id);
+        Request request=  rr.findById(pickup1.getId()).get();
+        if(request.getRequestStatus().equals(RequestStatus.APPROVED)) {
+            return pickup1;
+        }
+        return null;
     }
 
 
