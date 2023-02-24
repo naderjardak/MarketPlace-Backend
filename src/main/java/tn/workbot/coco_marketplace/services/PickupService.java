@@ -13,6 +13,7 @@ import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
+import tn.workbot.coco_marketplace.entities.enmus.TypeOfGear;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
@@ -214,12 +215,36 @@ public class PickupService implements PickupIService {
 
             DistanceMatrix matrix = request.await();
             Distance distance = matrix.rows[0].elements[0].distance;
-            // Calculate the estimated travel time based on the gear information
-            double averageSpeed = 60.0; // km/h
-            double distanceInKm = distance.inMeters / 1000.0;
-            double travelTimeInHours = distanceInKm / averageSpeed;
-            // Return the estimated delivery time as a Duration object
-            return Duration.ofHours((long) travelTimeInHours);
+            if(request1.getDeliveryman().getGear().equals("CAR")){
+                double averageSpeed = 60.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return Duration.ofHours((long) travelTimeInHours);
+            }
+            else if(request1.getDeliveryman().getGear().equals("BIKE")){
+                double averageSpeed = 10.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return Duration.ofHours((long) travelTimeInHours);
+            }
+            else if(request1.getDeliveryman().getGear().equals("MOTO")){
+                double averageSpeed = 30.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return Duration.ofHours((long) travelTimeInHours);
+            }
+            else {
+                // Calculate the estimated travel time based on the gear information
+                double averageSpeed = 60.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return Duration.ofHours((long) travelTimeInHours);
+            }
+
         }
         return null;
 
