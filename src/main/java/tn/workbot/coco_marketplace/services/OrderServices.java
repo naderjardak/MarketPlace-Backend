@@ -68,9 +68,6 @@ public class OrderServices implements OrderInterface {
                       createOrder(productQuantity);
                       return true;
                   }
-                  productQuantity.setOrder(order);
-                  productQuantityRepository.save(productQuantity);
-                  order.getProductQuantities().add(productQuantity);
                   order.setSum(order.getSum()+(productQuantity.getQuantity()*productQuantity.getProduct().getProductPrice()));
                   orderRepository.save(order);
                     return true;
