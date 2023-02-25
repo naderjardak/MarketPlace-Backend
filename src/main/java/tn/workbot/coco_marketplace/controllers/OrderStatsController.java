@@ -19,7 +19,9 @@ public class OrderStatsController {
     @GetMapping("OrderStatsByStatusType")
     Map<String, Integer> statsByStatusType(){return orderInterface.statsByStatusType();}
 
-    @GetMapping("OrderRankForUser")
+    @GetMapping("OrderRankForUsers")
     List<String> statsByStatusTypeOrdred(){return orderInterface.statsByStatusTypeOrdred();}
 
+    @GetMapping("RankGouvernoratByOrdersNumber")
+    List<String> GovernoratTopShipped(){return orderInterface.GovernoratTopShipped();}
 }
