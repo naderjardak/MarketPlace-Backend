@@ -1,4 +1,3 @@
-
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,5 @@ public class ProductController {
     public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName) {
         return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName);
 
-
     }
-
 }

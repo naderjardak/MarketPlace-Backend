@@ -5,11 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductCategory;
+import tn.workbot.coco_marketplace.entities.PromotionCode;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.repositories.ProductCategoryRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
+import tn.workbot.coco_marketplace.repositories.PromotionCodeRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,6 +31,9 @@ public class ProductService implements ProductInterface {
 
     @Autowired
     ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    PromotionCodeRepository promotionCodeRepository;
 
 
     @Override
@@ -64,8 +71,8 @@ public class ProductService implements ProductInterface {
     public Product createAndAssignToStore(Product p, Long idStore) {
         Store store = storeService.getById(idStore);
         p.setStore(store);
-        productRepository.save(p);
-        return p;
+        return productRepository.save(p);
+
     }
 
     @Override
@@ -73,6 +80,7 @@ public class ProductService implements ProductInterface {
 
         ProductCategory category = productCategoryRepository.findByName(categoryName);
         ProductCategory subCategory = productCategoryRepository.findByNameAndCategoryName(subCatName, categoryName);
+
         if (category == null && subCategory == null) {
             ProductCategory category1 = new ProductCategory();
             category1.setName(categoryName);
@@ -91,11 +99,16 @@ public class ProductService implements ProductInterface {
 
         }
 
+
         p.setProductCategory(subCategory);
 
-        productRepository.save(p);
-        return p;
+
+        return productRepository.save(p);
     }
+
+
+
+
 }
 
 

@@ -1,7 +1,9 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.PromotionCode;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductInterface {

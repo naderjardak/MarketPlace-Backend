@@ -67,7 +67,8 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     private ProductCategory productCategory;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
