@@ -1,6 +1,8 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
+import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
+import tn.workbot.coco_marketplace.entities.Request;
 
 import java.util.List;
 
@@ -12,4 +14,5 @@ public interface AgencyBranchIService {
     public List<AgencyBranch> RetrieveAllAgencyBranch();
     public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch);
     public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch,Long Id);
+    public List<Request> test(Long id);
 }

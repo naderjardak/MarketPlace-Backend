@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.Pickup;
+import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
@@ -71,8 +72,5 @@ public class PickupController  {
     public Duration calculateDeliveryTime(@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return pis.calculateDeliveryTime(idPickup);
     }
-    @GetMapping("testtttt")
-    public Pickup test(@RequestParam Long id){
-        return pis.test(id);
-    }
+
 }

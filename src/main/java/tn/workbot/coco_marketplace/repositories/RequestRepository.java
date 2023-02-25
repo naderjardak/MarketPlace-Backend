@@ -17,4 +17,6 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     public int  verifier(@Param("v2")Long pickupId);
     @Query("select r from Request r where r.requestStatus='PENDING' and r.pickup.id=:v2")
     public List<Request>  verifier2(@Param("v2")Long pickupId);
+    @Query("select r from Request r,AgencyDeliveryMan ab,AgencyBranch aa where r.agencyDeliveryMan.id=:v1  ")
+    public List<Request> ByDeliveryMen(@Param("v1")Long id);
 }

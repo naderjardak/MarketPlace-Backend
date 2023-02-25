@@ -252,12 +252,9 @@ public class PickupService implements PickupIService {
         return null;
 
     }
-    public Pickup test(Long id){
-        Pickup pickup1=pr.pickupprettolivred(id);
-        Request request=  rr.findById(pickup1.getId()).get();
-        if(request.getRequestStatus().equals(RequestStatus.APPROVED)) {
-            return pickup1;
-        }
+
+    @Override
+    public Pickup test(Long id) {
         return null;
     }
 
