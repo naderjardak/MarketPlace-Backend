@@ -150,33 +150,65 @@ public class PickupService implements PickupIService {
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
         //Variable Of Session Manager
         Store store = sr.findById(1L).get();
+        User user =ur.findById(1L).get();
+        Store store1=pr.storeoforder(id,user.getId());
+        Store store2=pr.storeoforder(id,2L);
         Pickup pickup1 = pr.save(pickup);
         int countstoreinorder=pr.countstoreorder(id);
-        pickup1.setStore(store);
-        Random random = new Random(); //java.util.Random
-        pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
-        pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
-        String prefix = "216";
-        String code = prefix + randomNumber;
-        List<Pickup> pickups = (List<Pickup>) pr.findAll();
-        for (Pickup p : pickups) {
-            if (p.getCodePickup() != code) {
-                pickup.setCodePickup(code);
-            } else {
-                int randomNumber1 = random.nextInt(100) + 100;
-                String code1 = prefix + randomNumber + randomNumber1;
-                pickup.setCodePickup(code1);
+        if(countstoreinorder>1) {
+            Random random = new Random(); //java.util.Random
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+            int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+            String prefix = "216";
+            String code = prefix + randomNumber;
+            List<Pickup> pickups = (List<Pickup>) pr.findAll();
+            for (Pickup p : pickups) {
+                if (p.getCodePickup() != code) {
+                    pickup.setCodePickup(code);
+                } else {
+                    int randomNumber1 = random.nextInt(100) + 100;
+                    String code1 = prefix + randomNumber + randomNumber1;
+                    pickup.setCodePickup(code1);
+                }
             }
+            Order order = or.findById(id).get();
+            pickup.setOrder(order);
+            pickup.setCodePickup(code);
+            pickup.setDateCreationPickup(LocalDateTime.now());
+            if (countstoreinorder > 1) {
+                pickup1.setAvailableDeliver("TRUE");
+            }
+            pickup1.setStore(store2);
+            return pr.save(pickup1);
+
         }
-        Order order = or.findById(id).get();
-        pickup.setOrder(order);
-        pickup.setCodePickup(code);
-        pickup.setDateCreationPickup(LocalDateTime.now());
-        if(countstoreinorder>1){
-            pickup1.setAvailableDeliver("TRUE");
+        else {
+            Random random = new Random(); //java.util.Random
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+            int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+            String prefix = "216";
+            String code = prefix + randomNumber;
+            List<Pickup> pickups = (List<Pickup>) pr.findAll();
+            for (Pickup p : pickups) {
+                if (p.getCodePickup() != code) {
+                    pickup.setCodePickup(code);
+                } else {
+                    int randomNumber1 = random.nextInt(100) + 100;
+                    String code1 = prefix + randomNumber + randomNumber1;
+                    pickup.setCodePickup(code1);
+                }
+            }
+            Order order = or.findById(id).get();
+            pickup.setOrder(order);
+            pickup.setCodePickup(code);
+            pickup.setDateCreationPickup(LocalDateTime.now());
+            if (countstoreinorder > 1) {
+                pickup1.setAvailableDeliver("TRUE");
+            }
+            return pr.save(pickup1);
         }
-        return pr.save(pickup1);
     }
 
     @Override
@@ -262,6 +294,5 @@ public class PickupService implements PickupIService {
         Order order=or.findById(id).get();
         return pr.countstoreorder(order.getId());
     }
-
 
 }

@@ -19,5 +19,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     Pickup pickupprettolivred(@Param("v1") Long id);
     @Query("select count(s) from Store s,Product p,ProductQuantity pq,Order o,Pickup pi where s.id=p.store.id and p.reference=pq.product.reference and o.id=pq.order.id and o.id=:v2")
     public  int countstoreorder(@Param("v2") Long id);
+    @Query("select s from Store s,Product p,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.reference=pq.product.reference and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    public  Store storeoforder(@Param("v3") Long id,@Param("v4") Long idSeller);
 
 }
