@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
+import tn.workbot.coco_marketplace.entities.Request;
+import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 import tn.workbot.coco_marketplace.repositories.AgencyBranchRepository;
 import tn.workbot.coco_marketplace.repositories.AgencyDeliveryManRepository;
+import tn.workbot.coco_marketplace.repositories.RequestRepository;
 import tn.workbot.coco_marketplace.services.interfaces.AgencyDeliveryManIService;
 
 import java.util.List;
@@ -17,6 +20,8 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     AgencyDeliveryManRepository admr;
     @Autowired
     AgencyBranchRepository  abr;
+    @Autowired
+    RequestRepository rr;
 
     @Override
     public AgencyDeliveryMan addAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan) {
@@ -30,7 +35,22 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
 
     @Override
     public void removeAgencyDeliveryMan(Long id) {
-        admr.deleteById(id);
+
+        AgencyDeliveryMan man=admr.findById(id).get();
+        List<Request> requests= (List<Request>) rr.findAll();
+        for (Request r:requests) {
+            if(r.getAgencyDeliveryMan().getId().equals(man.getId()))
+            {
+                if(!r.getRequestStatus().equals(RequestStatus.APPROVED))
+                {
+                    if(rr.countApprovedDeliveryAgence(id)==0) {
+                        admr.deleteById(id);
+                    }
+                }
+
+            }
+
+        }
     }
 
     @Override

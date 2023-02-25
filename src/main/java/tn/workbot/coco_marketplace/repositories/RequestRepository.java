@@ -21,4 +21,6 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     public List<Request> ByDeliveryMen(@Param("v1")Long id);
     @Query("select count(r) from Request r,AgencyDeliveryMan ab,AgencyBranch aa where r.agencyDeliveryMan.agencyBranch.id=:v1 and r.requestStatus='APPROVED'")
     public int countApproved(@Param("v1")Long id);
+    @Query("select count(r) from Request r,AgencyDeliveryMan ab,AgencyBranch aa where r.agencyDeliveryMan.id=:v1 and r.requestStatus='APPROVED'")
+    public int countApprovedDeliveryAgence(@Param("v1")Long id);
 }
