@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DatabindException;
 import lombok.*;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
@@ -47,9 +48,6 @@ public class ClaimSav implements Serializable {
 
     @OneToOne
     private ProductQuantity productQuantity;
-
-
-
 
 
 

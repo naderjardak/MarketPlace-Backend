@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 @Getter
 @Setter
@@ -20,7 +23,7 @@ public class Review {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    //TO DO :Dear Houssem, complete your attributes
+
 
     private int rating;
 
@@ -44,4 +47,14 @@ public class Review {
     private Product product;
 
 
+    public String hideBadWords(String comment) {
+
+        List<String> badWords = Arrays.asList("bad", "terrible", "awful", "hate", "dislike");
+
+        for (String badWord : badWords) {
+            comment = comment.toLowerCase(Locale.ROOT).replaceAll("(?i)" + badWord, "*".repeat(badWord.length()));
+        }
+
+        return comment;
+    }
 }
