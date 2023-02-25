@@ -15,7 +15,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     List<Pickup> findByGovernorate(String governorat);
     @Query("select s from User u , Store s where u.id=s.seller.id and u.id=:v1")
     List<Store> storesofuser(@Param("v1") Long id);
-    @Query("select p from Pickup p,Request r where p.id=r.pickup.id and p.id=:v1  and r.requestStatus like'APPROVED'")
+    @Query("select p from Pickup p,Request r where p.id=r.pickup.id and p.id=:v1  and r.requestStatus='APPROVED'")
     Pickup pickupprettolivred(@Param("v1") Long id);
 
 }

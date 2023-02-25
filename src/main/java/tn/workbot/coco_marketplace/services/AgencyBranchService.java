@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.AgencyBranchRepository;
 import tn.workbot.coco_marketplace.repositories.AgencyDeliveryManRepository;
@@ -34,7 +35,22 @@ public class AgencyBranchService implements AgencyBranchIService {
     @Override
     public void removeAgencyBranch(Long id) {
         AgencyBranch branch=abr.findById(id).get();
-        abr.deleteById(id);
+        List<Request> requests= (List<Request>) rr.findAll();
+        for (Request r:requests) {
+            if(r.getAgencyDeliveryMan().getAgencyBranch().getId().equals(branch.getId()))
+            {
+                if(!r.getRequestStatus().equals(RequestStatus.APPROVED))
+                {
+                    if(rr.countApproved(id)==0) {
+                        abr.deleteById(id);
+                    }
+                }
+                throw new IllegalStateException("Cannot remove Request with status APPROVED ");
+            }
+
+        }
+
+
     }
 
     @Override
