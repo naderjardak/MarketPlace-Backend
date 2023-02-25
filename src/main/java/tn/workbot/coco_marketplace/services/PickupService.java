@@ -151,6 +151,7 @@ public class PickupService implements PickupIService {
         //Variable Of Session Manager
         Store store = sr.findById(1L).get();
         Pickup pickup1 = pr.save(pickup);
+        int countstoreinorder=pr.countstoreorder(id);
         pickup1.setStore(store);
         Random random = new Random(); //java.util.Random
         pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
@@ -172,6 +173,9 @@ public class PickupService implements PickupIService {
         pickup.setOrder(order);
         pickup.setCodePickup(code);
         pickup.setDateCreationPickup(LocalDateTime.now());
+        if(countstoreinorder>1){
+            pickup1.setAvailableDeliver("TRUE");
+        }
         return pr.save(pickup1);
     }
 
@@ -254,8 +258,9 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup test(Long id) {
-        return null;
+    public int test(Long id) {
+        Order order=or.findById(id).get();
+        return pr.countstoreorder(order.getId());
     }
 
 

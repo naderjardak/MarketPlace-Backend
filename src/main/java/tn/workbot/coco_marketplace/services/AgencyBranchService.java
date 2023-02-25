@@ -45,7 +45,6 @@ public class AgencyBranchService implements AgencyBranchIService {
                         abr.deleteById(id);
                     }
                 }
-                throw new IllegalStateException("Cannot remove Request with status APPROVED ");
             }
 
         }
