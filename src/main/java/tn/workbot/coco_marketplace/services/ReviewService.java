@@ -55,7 +55,7 @@ public class ReviewService implements ReviewInterface {
 
     @Override
     public float calculateProductRating(Long productId, int rating) {
-   
+
         Product product = pr.findById(productId).orElse(null);
 
         if(product != null) {
