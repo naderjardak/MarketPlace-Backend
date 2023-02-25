@@ -129,6 +129,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
+        //sessionManager Variable
         User u = ur.findById(1L).get();
         List<AgencyBranch> agencyBranch = abr.findAll();
         List<User> users = (List<User>) ur.findAll();
@@ -149,7 +150,6 @@ public class PickupService implements PickupIService {
     @Override
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
         //Variable Of Session Manager
-        Store store = sr.findById(1L).get();
         User user =ur.findById(1L).get();
         Store store1=pr.storeoforder(id,user.getId());
         Store store2=pr.storeoforder(id,2L);
@@ -176,9 +176,7 @@ public class PickupService implements PickupIService {
             pickup.setOrder(order);
             pickup.setCodePickup(code);
             pickup.setDateCreationPickup(LocalDateTime.now());
-            if (countstoreinorder > 1) {
-                pickup1.setAvailableDeliver("TRUE");
-            }
+            pickup1.setAvailableDeliver("TRUE");
             pickup1.setStore(store2);
             return pr.save(pickup1);
 
@@ -204,9 +202,7 @@ public class PickupService implements PickupIService {
             pickup.setOrder(order);
             pickup.setCodePickup(code);
             pickup.setDateCreationPickup(LocalDateTime.now());
-            if (countstoreinorder > 1) {
-                pickup1.setAvailableDeliver("TRUE");
-            }
+            pickup1.setAvailableDeliver("FALSE");
             return pr.save(pickup1);
         }
     }
