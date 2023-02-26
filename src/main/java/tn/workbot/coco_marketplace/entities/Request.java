@@ -9,6 +9,7 @@ import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -20,8 +21,7 @@ public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Temporal(TemporalType.DATE)
-    private Date RequestDate;
+    private LocalDateTime RequestDate;
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
     @JsonIgnore
@@ -33,10 +33,10 @@ public class Request implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    private  User Agency;
+    private User Agency;
     @JsonIgnore
     @ManyToOne
-    private  Pickup pickup;
+    private Pickup pickup;
     @JsonIgnore
     @ManyToOne
     private AgencyDeliveryMan agencyDeliveryMan;

@@ -72,7 +72,7 @@ public class PickupController  {
     public Duration calculateDeliveryTime(@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return pis.calculateDeliveryTime(idPickup);
     }
-    @GetMapping("hetcountt")
+    @PostMapping("hetcountt")
     public int test(@RequestParam Long id) {
         return pis.test(id);
     }

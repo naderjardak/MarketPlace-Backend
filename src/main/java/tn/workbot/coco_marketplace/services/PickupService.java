@@ -7,6 +7,8 @@ import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.entities.*;
@@ -38,6 +40,8 @@ public class PickupService implements PickupIService {
     AgencyBranchRepository abr;
     @Autowired
     RequestRepository rr;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public Pickup addPickup(Pickup pickup) {
@@ -151,8 +155,7 @@ public class PickupService implements PickupIService {
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
         //Variable Of Session Manager
         User user =ur.findById(1L).get();
-        Store store1=pr.storeoforder(id,user.getId());
-        Store store2=pr.storeoforder(id,2L);
+        Store store2=pr.storeoforder(id,1L);
         Pickup pickup1 = pr.save(pickup);
         int countstoreinorder=pr.countstoreorder(id);
         if(countstoreinorder>1) {
@@ -203,6 +206,7 @@ public class PickupService implements PickupIService {
             pickup.setCodePickup(code);
             pickup.setDateCreationPickup(LocalDateTime.now());
             pickup1.setAvailableDeliver("FALSE");
+            pickup1.setStore(store2);
             return pr.save(pickup1);
         }
     }
@@ -287,8 +291,13 @@ public class PickupService implements PickupIService {
 
     @Override
     public int test(Long id) {
-        Order order=or.findById(id).get();
-        return pr.countstoreorder(order.getId());
+        User user=ur.findById(id).get();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("subject");
+        mailMessage.setText("body");
+        javaMailSender.send(mailMessage);
+        return 1;
     }
 
 }
