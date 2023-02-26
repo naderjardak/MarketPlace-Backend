@@ -184,12 +184,7 @@ public class PickupService implements PickupIService {
             pickup1.setGovernorate(order.getShipping().getGovernorate());
             pickup1.setCity(order.getShipping().getCity());
             List<Product> products=pr.productoforder(id,1L);
-            float totalPrice = 0;
-          /*  for (Product product:products) {
-                totalPrice=product.getProductPrice()+totalPrice;
-            }*/
-            float sum = totalPrice;
-            pickup1.setSum(sum);
+            pickup1.setSum(order.getSum());
             if(order.getPayment().equals(PaymentType.BANK_CARD)){
                     pickup1.setPayed(true);
             }
@@ -227,9 +222,9 @@ public class PickupService implements PickupIService {
             pickup1.setCity(order.getShipping().getCity());
             List<Product> products=pr.productoforder(id,1L);
             float totalPrice = 0;
-          /*  for (Product product:products) {
-                totalPrice=product.getProductPrice()+totalPrice;
-            }*/
+            for (Product product:products) {
+                totalPrice += product.getProductPrice();
+            }
             float sum = totalPrice;
             pickup1.setSum(sum);
 
