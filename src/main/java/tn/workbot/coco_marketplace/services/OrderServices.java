@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.Api.MailSenderService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
@@ -12,7 +13,6 @@ import tn.workbot.coco_marketplace.repositories.ShippingRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @Service
@@ -30,7 +30,10 @@ public class OrderServices implements OrderInterface {
     @Autowired
     UserrRepository userrRepository;
 
-            @Override
+    @Autowired
+    MailSenderService mailSenderService;
+
+    @Override
             public List<Order> getAllOrders() {
                 return orderRepository.findAll();
             }
@@ -70,7 +73,7 @@ public class OrderServices implements OrderInterface {
                   }
                   order.setSum(order.getSum()+(productQuantity.getQuantity()*productQuantity.getProduct().getProductPrice()));
                   orderRepository.save(order);
-                    return true;
+                  return true;
             }
 
 
@@ -129,23 +132,34 @@ public class OrderServices implements OrderInterface {
                 if(order.getShipping()==null)
                     return false;
 
+                String msg="";
                 if (paymentType == PaymentType.CASH_ON_DELIVERY)
                 {
                     order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
                     order.setPayment(PaymentType.CASH_ON_DELIVERY);
+                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.";
+                    //Session User
+                    mailSenderService.sendEmail(order.getBuyer().getEmail(),"Order is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.");
+
                 }
                 else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
                 {
                     order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
                     order.setPayment(PaymentType.BANK_CARD);
+                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
+                    mailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+
                 }
                 else
                 {
                     order.setStatus(StatusOrderType.REFUSED_PAYMENT);
                     orderRepository.save(order);
+
                     return false;
                 }
                 orderRepository.save(order);
+                //Twilio mna7iha 3al flous
+                //OrderTwilioService.sendSMS(msg);
                 return true;
             }
 
@@ -216,6 +230,7 @@ public class OrderServices implements OrderInterface {
                 return orderRepository.RankGouvernoratByNbOrders();
 
             }
+
 
 }
 

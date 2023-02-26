@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-  @Query("SELECT concat(u.FirstName,' ',u.LastName,' ',COUNT(o.status)) from User u,Order o where u.id=o.buyer.id and o.status='ACCEPTED_PAYMENT' GROUP BY u.id ORDER BY COUNT(o) desc ")
+  @Query("SELECT concat(o.buyer.FirstName,' & ',o.buyer.LastName,' ',count(o)) from Order o where o.status='ACCEPTED_PAYMENT' group by o.buyer order by count (o) desc ")
   List<String> RankUsersByOrdersAcceptedPayement();
 
   int findByBuyerId(Long id);

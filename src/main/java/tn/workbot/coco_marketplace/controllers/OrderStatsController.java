@@ -26,17 +26,33 @@ public class OrderStatsController {
     @GetMapping("OrderStatsByStatusType")
     Map<String, Integer> statsByStatusType(){return orderInterface.statsByStatusType();}
 
-    @GetMapping("OrderRankForUsers")
+    @GetMapping("OrderRankForUsersByStatusType")
     List<String> statsByStatusTypeOrdred(){return orderInterface.statsByStatusTypeOrdred();}
 
     @GetMapping("RankGouvernoratByOrdersNumber")
     List<String> GovernoratTopShipped(){return orderInterface.GovernoratTopShipped();}
 
-    @GetMapping(value = "Stats", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> customerReport() throws IOException {
+    @GetMapping(value = "PDF_RankGouvernoratByOrdersNumber", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> PDF_RankGouvernoratByOrdersNumber() throws IOException {
         List<String> stats = orderInterface.GovernoratTopShipped();
 
-        ByteArrayInputStream bis = OrderStatsPDFGenerator.customerPDFReport(stats);
+        ByteArrayInputStream bis = OrderStatsPDFGenerator.RankGouvernoratByOrdersNumberPDFReport(stats);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/pdf");
+        headers.add("Content-Disposition", "attachment; filename="+new Date(System.currentTimeMillis())+".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+    }
+
+    @GetMapping(value = "PDF_OrderRankForUsersByStatusType", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> PDF_OrderRankForUsers() throws IOException {
+        List<String> stats = orderInterface.statsByStatusTypeOrdred();
+
+        ByteArrayInputStream bis = OrderStatsPDFGenerator.OrderRankForUsersPDFReport(stats);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
         headers.add("Content-Disposition", "attachment; filename="+new Date(System.currentTimeMillis())+".pdf");
