@@ -15,4 +15,6 @@ public interface RequestInterface {
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup);
 
     public Request assignRequesttoseller(Long idRequest,Long idSeller,String status,Long idPickup);
+    public List<Request> retrieveRequestBySeller();
+    public List<Request> retrieveRequestByPickup(Long idPickup);
 }

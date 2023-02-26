@@ -23,4 +23,11 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     public int countApproved(@Param("v1")Long id);
     @Query("select count(r) from Request r,AgencyDeliveryMan ab,AgencyBranch aa where r.agencyDeliveryMan.id=:v1 and r.requestStatus='APPROVED'")
     public int countApprovedDeliveryAgence(@Param("v1")Long id);
+    @Query("select r from Request r,Pickup p,Store s,User u  where r.pickup.id=p.id and p.store.id=s.id and s.seller.id=u.id and u.id=:v6")
+    public List<Request> retrieveRequestBystore(@Param("v6")Long id);
+
+    @Query("select r from Request r,Pickup p where r.pickup.id=p.id and p.id=:v7")
+    public List<Request> retrieveRequestByPickup(@Param("v7")Long id);
+
+
 }

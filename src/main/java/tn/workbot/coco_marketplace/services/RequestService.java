@@ -93,6 +93,7 @@ public class RequestService implements RequestInterface {
     @Override
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
         Request request1 = rr.save(request);
+        //eliconnectetawa session id bech yet7at lena
         User user = ur.findById(idDeliveryMenFreelancer).get();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
@@ -105,8 +106,10 @@ public class RequestService implements RequestInterface {
     @Override
     public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) {
         Request request = rr.findById(idRequest).get();
+        //session manager el idmt3 seller bech njibo el id mt3 el pickup wel request mel url wel status yda5elha houwa
         User seller = ur.findById(idSeller).get();
         List<Request> requestsPending = new ArrayList<>();
+        //bech njib el request eli saro el kol 3al pickup haki bech kif ya5tar anahi bech ylivreha ytsetaw e yetsetaw el ba9i reject auto
         requestsPending.addAll(rr.verifier2(idPickup));
         request.setRequestStatus(RequestStatus.valueOf(status));
         request.setSeller(seller);
@@ -120,6 +123,18 @@ public class RequestService implements RequestInterface {
         request.setRequestStatus(RequestStatus.valueOf(status));
         request.setSeller(seller);
         return rr.save(request);
+    }
+
+    @Override
+    public List<Request> retrieveRequestBySeller() {
+        //session manager variable idseller
+        return rr.retrieveRequestBystore(2L);
+    }
+
+    @Override
+    public List<Request> retrieveRequestByPickup(Long idPickup) {
+        //na5o idPickup mel URL
+        return rr.retrieveRequestByPickup(idPickup);
     }
 
     @Scheduled(cron = "*/60 * * * * *")
@@ -138,7 +153,7 @@ public class RequestService implements RequestInterface {
                     mailMessage.setSubject("Request Status");
                     Context context = new Context();
                     String emailContent = templateEngine.process("emailRequest", context);
-                    mailMessage.setText(emailContent,true);
+                    mailMessage.setText(emailContent, true);
                     javaMailSender.send(message);
                 }
             } else if (r.getRequestStatus().equals(RequestStatus.REJECTED)) {
@@ -150,6 +165,16 @@ public class RequestService implements RequestInterface {
                     mailMessage.setSubject("Request Status");
                     mailMessage.setText("Rejected");
                     javaMailSender.send(mailMessage);
+                } else if (r.getRequestStatus().equals(RequestStatus.PENDING)) {
+                    LocalDateTime requestDate1 = r.getRequestDate();
+
+                    if (requestDate1.isAfter(now.minusMinutes(1)) && requestDate1.isBefore(now.plusMinutes(1))) {
+                        SimpleMailMessage mailMessage = new SimpleMailMessage();
+                        mailMessage.setTo(r.getDeliveryman().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        mailMessage.setText("Rejected");
+                        javaMailSender.send(mailMessage);
+                    }
                 }
             }
         }

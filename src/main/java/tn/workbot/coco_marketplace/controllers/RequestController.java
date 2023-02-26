@@ -50,5 +50,12 @@ public class RequestController   {
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) {
         return ri.assignRequesttoseller(idRequest, idSeller, status,idPickup);
     }
-
+     @GetMapping("retrieveRequestDeliveryAgencycBySeller")
+     public List<Request> retrieveRequestBySeller() {
+         return ri.retrieveRequestBySeller();
+     }
+     @GetMapping("retrieveRequestByPickup")
+     public List<Request> retrieveRequestByPickup(Long idPickup) {
+         return ri.retrieveRequestByPickup(idPickup);
+     }
     }
