@@ -107,7 +107,7 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         //HADHI session variable
-        User u = ur.findById(1L).get();
+        User u = ur.findById(3L).get();
         List<Store> store = (List<Store>) sr.findAll();
         List<Store> storesInSameGovernorate = sr.findByGovernorate(u.getGovernorate());
         List<Pickup> pickups = new ArrayList<>();
@@ -132,11 +132,10 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         //sessionManager Variable
-        User u = ur.findById(1L).get();
-        List<AgencyBranch> agencyBranch = abr.findAll();
-        List<User> users = (List<User>) ur.findAll();
+        User u = ur.findById(4L).get();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
+        List<AgencyDeliveryMan> agencyDeliveryManArrayList = new ArrayList<>();
         ArrayList<Pickup> store = new ArrayList<>();
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
