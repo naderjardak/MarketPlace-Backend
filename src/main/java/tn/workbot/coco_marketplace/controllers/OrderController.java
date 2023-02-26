@@ -1,7 +1,9 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
@@ -35,6 +37,13 @@ public class OrderController {
     @PutMapping("AddShippingToCard")
     public Order AffectShippingAdressToOrder(@RequestBody Shipping shipping){return orderInterface.AffectShippingAdressToOrder(shipping);}
 
+    @PostMapping("payements")
+    public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException { return orderInterface.StripePayementService(data); }
+
+    /*
+    //no need for this now
     @PutMapping("EndPaimentProcess")
     public Boolean endCommandProsess(@RequestParam PaymentType paymentType,@RequestParam Boolean cardPaiment) {return orderInterface.endCommandProsess(paymentType,cardPaiment);}
+    */
+
 }

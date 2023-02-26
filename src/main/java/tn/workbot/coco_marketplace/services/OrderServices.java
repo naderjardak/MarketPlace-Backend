@@ -1,9 +1,14 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tn.workbot.coco_marketplace.Api.MailSenderService;
+import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
+import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
@@ -31,7 +36,7 @@ public class OrderServices implements OrderInterface {
     UserrRepository userrRepository;
 
     @Autowired
-    MailSenderService mailSenderService;
+    OrderMailSenderService orderMailSenderService;
 
     @Override
             public List<Order> getAllOrders() {
@@ -139,7 +144,7 @@ public class OrderServices implements OrderInterface {
                     order.setPayment(PaymentType.CASH_ON_DELIVERY);
                     msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.";
                     //Session User
-                    mailSenderService.sendEmail(order.getBuyer().getEmail(),"Order is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.");
+                    orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Order is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.");
 
                 }
                 else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
@@ -147,7 +152,7 @@ public class OrderServices implements OrderInterface {
                     order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
                     order.setPayment(PaymentType.BANK_CARD);
                     msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-                    mailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+                    orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
 
                 }
                 else
@@ -229,6 +234,26 @@ public class OrderServices implements OrderInterface {
             {
                 return orderRepository.RankGouvernoratByNbOrders();
 
+            }
+
+            @Value("${stripe.api.key}")
+            private String stripeApiKey;
+            @Override
+            public CustemerModel StripePayementService( CustemerModel data) throws StripeException
+            {
+                Stripe.apiKey = stripeApiKey;
+                Map<String, Object> params = new HashMap<>();
+                params.put("name", data.getName());
+                params.put("email", data.getEmail());
+                Customer customer = Customer.create(params);
+                data.setCustemerId(customer.getId());
+                if(customer.getId()!=null)
+                {
+                    endCommandProsess(PaymentType.valueOf("BANK_CARD"),true);
+                }
+                else
+                    endCommandProsess(PaymentType.valueOf("BANK_CARD"),false);
+                return data;
             }
 
 

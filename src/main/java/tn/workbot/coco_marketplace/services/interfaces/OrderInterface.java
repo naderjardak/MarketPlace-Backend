@@ -1,5 +1,7 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import com.stripe.exception.StripeException;
+import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
@@ -47,6 +49,7 @@ public interface OrderInterface {
     //Governorate top Shipped
     List<String> GovernoratTopShipped();
 
-
+    //StripePayement
+    CustemerModel StripePayementService(CustemerModel data) throws StripeException;
 
 }

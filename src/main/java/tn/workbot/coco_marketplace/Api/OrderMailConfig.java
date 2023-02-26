@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Properties;
 
 @Configuration
-public class AppConfig {
+public class OrderMailConfig {
 
     @Bean
     public JavaMailSender javaMailSender() {
