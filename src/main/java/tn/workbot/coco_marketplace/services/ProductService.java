@@ -2,18 +2,16 @@ package tn.workbot.coco_marketplace.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductCategory;
-import tn.workbot.coco_marketplace.entities.PromotionCode;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.repositories.ProductCategoryRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
 import tn.workbot.coco_marketplace.repositories.PromotionCodeRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -107,6 +105,20 @@ public class ProductService implements ProductInterface {
     }
 
 
+    @Scheduled(cron = "0 0 8 * * *")
+    void productsOutOfStock() {
+        StringBuilder s = new StringBuilder("Products Out Of Stock");
+        int i = 0;
+        for (Product p : productRepository.findAll()) {
+            if (p.getQuantity() == 0) {
+                s.append("\n ").append(i + 1).append(" - ").append(p.getReference()).append(" : ").append(p.getName());
+                i++;
+            }
+        }
+        if (i > 0) {
+            log.info(s.toString());
+        }
+    }
 
 
 }

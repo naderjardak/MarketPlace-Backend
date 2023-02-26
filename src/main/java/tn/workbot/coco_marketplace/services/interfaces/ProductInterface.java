@@ -22,4 +22,6 @@ public interface ProductInterface {
     Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName);
 
 
+
+
 }

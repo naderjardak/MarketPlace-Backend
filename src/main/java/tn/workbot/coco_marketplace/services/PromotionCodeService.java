@@ -60,7 +60,7 @@ public class PromotionCodeService implements PromotionCodeInterface {
             promotionCode.setDiscountValue(discountValue);
             promotionCode.setStartDate(promotionCodeSatrDate);
         }
-        //afect child to parent
+        //affect child to parent
         promotionCode.setProduct(p);
         return  promotionCodeRepository.save(promotionCode);
     }
