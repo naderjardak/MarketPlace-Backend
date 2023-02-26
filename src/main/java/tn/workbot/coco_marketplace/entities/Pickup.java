@@ -21,13 +21,13 @@ public class Pickup implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String availableDeliver;
+    private Boolean orderOfTheSomeSeller;
     private String comment;
     private String governorate;
     private String city;
     private String codePickup;
     private String shippingStatus;
-    private String payed;
-    //@Temporal(TemporalType.DATE)
+    private Boolean payed;
     private LocalDateTime dateCreationPickup;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;

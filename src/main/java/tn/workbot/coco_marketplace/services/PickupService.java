@@ -12,10 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.entities.*;
-import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
-import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
-import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
-import tn.workbot.coco_marketplace.entities.enmus.TypeOfGear;
+import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
@@ -179,8 +176,14 @@ public class PickupService implements PickupIService {
             pickup.setOrder(order);
             pickup.setCodePickup(code);
             pickup.setDateCreationPickup(LocalDateTime.now());
-            pickup1.setAvailableDeliver("TRUE");
+            pickup1.setOrderOfTheSomeSeller(false);
             pickup1.setStore(store2);
+         /*   if(order.getPayment().equals(PaymentType.BANK_CARD)){
+
+            }
+            else {
+
+            }*/
             return pr.save(pickup1);
 
         }
@@ -205,7 +208,7 @@ public class PickupService implements PickupIService {
             pickup.setOrder(order);
             pickup.setCodePickup(code);
             pickup.setDateCreationPickup(LocalDateTime.now());
-            pickup1.setAvailableDeliver("FALSE");
+            pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(store2);
             return pr.save(pickup1);
         }
