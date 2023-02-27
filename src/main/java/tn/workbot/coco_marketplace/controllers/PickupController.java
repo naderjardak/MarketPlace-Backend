@@ -3,10 +3,7 @@ package tn.workbot.coco_marketplace.controllers;
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tn.workbot.coco_marketplace.entities.AgencyBranch;
-import tn.workbot.coco_marketplace.entities.Pickup;
-import tn.workbot.coco_marketplace.entities.Request;
-import tn.workbot.coco_marketplace.entities.Store;
+import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.swing.text.Position;
@@ -75,5 +72,13 @@ public class PickupController  {
     @PostMapping("hetcountt")
     public int test(@RequestParam Long id) {
         return pis.test(id);
+    }
+    @GetMapping("trakingbybuyer")
+    public Pickup trakingbybuyer(@RequestParam String codePickup,@RequestParam Long idBuyer) {
+        return pis.trakingbybuyer(codePickup, idBuyer);
+    }
+    @GetMapping("trakingbyseller")
+    public Pickup trakingbyseller(@RequestParam String codePickup) {
+        return pis.trakingbyseller(codePickup);
     }
 }

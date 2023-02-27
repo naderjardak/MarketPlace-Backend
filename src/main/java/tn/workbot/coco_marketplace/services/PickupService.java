@@ -7,6 +7,7 @@ import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -324,6 +325,19 @@ public class PickupService implements PickupIService {
         mailMessage.setText("body");
         javaMailSender.send(mailMessage);
         return 1;
+    }
+
+    @Override
+    public Pickup trakingbyseller(String codePickup) {
+        //session varaible
+        User u=ur.findById(1L).get();
+        return pr.trakingS(codePickup,u.getId()) ;
+    }
+
+    @Override
+    public Pickup trakingbybuyer(String codePickup,Long idBuyer) {
+        //idBuyer mel session manager
+        return pr.trakingB(codePickup,idBuyer);
     }
 
 }
