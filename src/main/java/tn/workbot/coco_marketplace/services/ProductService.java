@@ -4,12 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductCategory;
 import tn.workbot.coco_marketplace.entities.Store;
+import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.ProductCategoryRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
 import tn.workbot.coco_marketplace.repositories.PromotionCodeRepository;
+import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
 import java.util.List;
@@ -32,6 +36,12 @@ public class ProductService implements ProductInterface {
 
     @Autowired
     PromotionCodeRepository promotionCodeRepository;
+
+    @Autowired
+    OrderMailSenderService mailSenderService;
+
+    @Autowired
+    UserrRepository userrRepository;
 
 
     @Override
@@ -69,7 +79,7 @@ public class ProductService implements ProductInterface {
     public Product createAndAssignToStore(Product p, Long idStore) {
         Store store = storeService.getById(idStore);
         p.setStore(store);
-        return productRepository.save(p);
+        return this.create(p);
 
     }
 
@@ -101,25 +111,34 @@ public class ProductService implements ProductInterface {
         p.setProductCategory(subCategory);
 
 
-        return productRepository.save(p);
+        return this.create(p);
     }
 
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "* * * * * *")
     void productsOutOfStock() {
-        StringBuilder s = new StringBuilder("Products Out Of Stock");
-        int i = 0;
-        for (Product p : productRepository.findAll()) {
-            if (p.getQuantity() == 0) {
-                s.append("\n ").append(i + 1).append(" - ").append(p.getReference()).append(" : ").append(p.getName());
-                i++;
+        List<User> userList = userrRepository.findUserByRoleType(RoleType.ADMINISTRTOR);
+        for (User user : userList) {
+            StringBuilder s = new StringBuilder("Products Out Of Stock");
+            int i = 0;
+            for (Store store : user.getStores()) {
+                s.append("\n ").append("STORE : ").append(store.getName());
+                for (Product p : store.getProducts()) {
+                    if (p.getQuantity() == 0) {
+                        s.append("`\n").append("   ").append(p.getReference()).append(" : ").append(p.getName());
+                        i++;
+
+                    }
+                }
+            }
+            if (i > 0) {
+                //mailSenderService.sendEmail(user.getEmail(),"Products Out Of Stock",s.toString());
+                log.info(s.toString());
+            } else {
+                log.info("no products out of stock");
             }
         }
-        if (i > 0) {
-            log.info("no products out of stock");
-        }
     }
-
 
 }
 

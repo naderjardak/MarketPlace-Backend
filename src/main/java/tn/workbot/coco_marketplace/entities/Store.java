@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,16 +26,16 @@ public class Store {
 
     private String IBAN;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     private List<Product> products;
 
     @ManyToOne
     private User seller;
 
     @OneToMany(mappedBy = "seller")
-    private List<Request>requestsellers;
+    private List<Request> requestsellers;
 
     @OneToMany(mappedBy = "store")
-    private  List<Pickup>pickups;
+    private List<Pickup> pickups;
 
 }

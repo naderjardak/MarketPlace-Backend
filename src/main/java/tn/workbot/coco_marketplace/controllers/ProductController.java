@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Product;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@Tag(name = "Product Management")
+
 public class ProductController {
 
     @Autowired
