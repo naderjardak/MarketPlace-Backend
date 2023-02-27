@@ -81,6 +81,7 @@ public class PickupController  {
     public Pickup trakingbyseller(@RequestParam String codePickup) {
         return pis.trakingbyseller(codePickup);
     }
+    
     @GetMapping("retrievePickupByDeliveryMenFreelancer")
     public List<Pickup> retrievePickupByDeliveryMenFreelancer() {
         return pis.retrievePickupByDeliveryMenFreelancer();
