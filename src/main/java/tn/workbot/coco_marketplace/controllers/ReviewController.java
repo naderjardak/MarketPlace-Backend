@@ -26,8 +26,8 @@ public class ReviewController {
     }
 
     @PostMapping("AddReview")
-    public void addReview(@RequestBody Review review){
-        reviewService.addReview(review);
+    public void addReview(@RequestBody Review review,@RequestParam Long id){
+        reviewService.addReview(review,id);
     }
 
     @PutMapping("UpdateReview")
@@ -38,6 +38,12 @@ public class ReviewController {
     @DeleteMapping("DeleteReview")
     public void deleteReview(@RequestParam Long id){
         reviewService.deleteReview(id);
+    }
+
+    @PutMapping("rating")
+    public float calculateProductRating(@RequestParam Long productId, @RequestParam int rating)
+    {
+        return reviewService.calculateProductRating(productId, rating);
     }
 
 

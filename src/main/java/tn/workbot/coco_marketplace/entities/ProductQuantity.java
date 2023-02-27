@@ -29,7 +29,6 @@ public class ProductQuantity implements Serializable {
     private Product product;
 
     @OneToOne(mappedBy = "productQuantity")
-    @JsonIgnore
     private ClaimSav claimSav;
 
 }
