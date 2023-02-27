@@ -354,4 +354,11 @@ public class PickupService implements PickupIService {
         return pr.pickupOfAgency(u.getId());
     }
 
+    @Override
+    public List<Pickup> retrievePickupByBranch(Long idbranch) {
+        //session manager mt3 el agence
+        User u=ur.findById(1L).get();
+        return pr.pickupOfBranch(u.getId(),idbranch);
+    }
+
 }

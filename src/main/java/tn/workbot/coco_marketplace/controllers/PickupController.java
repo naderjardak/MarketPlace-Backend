@@ -91,6 +91,10 @@ public class PickupController  {
     public List<Pickup> retrievePickupByAgence() {
         return  pis.retrievePickupByAgence();
     }
+    @GetMapping("retrievePickupByBranch")
+    public List<Pickup> retrievePickupByBranch(Long idbranch) {
+        return pis.retrievePickupByBranch(idbranch);
+    }
 
 }
 

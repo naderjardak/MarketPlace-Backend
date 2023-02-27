@@ -29,10 +29,14 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select p from Pickup  p where p.codePickup=:v1 and p.store.seller.id=:v3")
     public Pickup trakingS(@Param("v1") String codeP,@Param("v3") Long idSeller);
-    @Query("select p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.deliveryman.id=u.id and u.id=:v4 ")
+    @Query("select distinct p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.deliveryman.id=u.id and u.id=:v4 ")
     public List<Pickup> pickupOfDeliveryMenFreelancer(@Param("v4") Long idFreelancer);
 
-    @Query("select p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 ")
-    public List<Pickup> pickupOfAgency(@Param("v4") Long idFreelancer);
+    @Query("select distinct p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 ")
+    public List<Pickup> pickupOfAgency(@Param("v4") Long idAgency);
+
+    @Query("select distinct p from Pickup p,Request r ,User u ,AgencyBranch ab where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 and r.agencyDeliveryMan.agencyBranch.id=:v5 ")
+    public List<Pickup> pickupOfBranch(@Param("v4") Long idAgency,@Param("v5")Long idBranch);
+
 
 }
