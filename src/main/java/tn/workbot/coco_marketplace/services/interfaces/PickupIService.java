@@ -27,7 +27,9 @@ public interface PickupIService {
     public Pickup trakingbyseller(String codePickup);
     public Pickup trakingbybuyer(String codePickup,Long idBuyer);
     public List<Pickup> retrievePickupByDeliveryMenFreelancer();
+    public List<Pickup> retrievePickupByAgence();
 
 
 
-    }
+
+}

@@ -85,4 +85,12 @@ public class PickupController  {
     public List<Pickup> retrievePickupByDeliveryMenFreelancer() {
         return pis.retrievePickupByDeliveryMenFreelancer();
     }
+
+
+    @GetMapping("retrievePickupByAgence")
+    public List<Pickup> retrievePickupByAgence() {
+        return  pis.retrievePickupByAgence();
     }
+
+}
+

@@ -32,4 +32,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.deliveryman.id=u.id and u.id=:v4 ")
     public List<Pickup> pickupOfDeliveryMenFreelancer(@Param("v4") Long idFreelancer);
 
+    @Query("select p from Pickup p,Request r ,User u where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 ")
+    public List<Pickup> pickupOfAgency(@Param("v4") Long idFreelancer);
+
 }

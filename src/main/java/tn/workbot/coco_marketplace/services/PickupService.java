@@ -347,4 +347,11 @@ public class PickupService implements PickupIService {
         return pr.pickupOfDeliveryMenFreelancer(u.getId());
     }
 
+    @Override
+    public List<Pickup> retrievePickupByAgence() {
+        //session Manager Variable
+        User u=ur.findById(1L).get();
+        return pr.pickupOfAgency(u.getId());
+    }
+
 }
