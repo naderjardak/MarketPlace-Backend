@@ -28,7 +28,7 @@ public class ProductQuantityServices implements ProductQuantityInterface {
 
     @Override
     public Boolean saveProductQuantity(ProductQuantity productQuantity) {
-        Product product=productRepository.findById(productQuantity.getProduct().getReference()).get();
+        Product product=productRepository.findByReference(productQuantity.getProduct().getReference());
         Order order=orderRepository.findById(productQuantity.getOrder().getId()).get();
         if(product.getQuantity()<productQuantity.getQuantity())
             return false;

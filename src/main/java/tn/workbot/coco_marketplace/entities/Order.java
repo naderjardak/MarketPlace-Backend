@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 
@@ -35,7 +36,7 @@ public class Order implements Serializable {
     private Date creationDate;                // date of creation of the order
 
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order")    //
     @JsonIgnore
     private List<Pickup> pickups;
 

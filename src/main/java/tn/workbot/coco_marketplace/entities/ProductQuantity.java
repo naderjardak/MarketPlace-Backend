@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +30,6 @@ public class ProductQuantity implements Serializable {
     private Product product;
 
     @OneToOne(mappedBy = "productQuantity")
-    @JsonIgnore
     private ClaimSav claimSav;
 
 }

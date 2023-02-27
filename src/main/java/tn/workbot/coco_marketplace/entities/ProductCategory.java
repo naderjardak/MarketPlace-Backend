@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ProductCategory {
     @OneToMany(mappedBy = "productCategory")
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private ProductCategory category;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

@@ -15,4 +15,6 @@ public interface ProductCategoryInterface {
     ProductCategory getById(Long id);
 
     void delete(ProductCategory p);
+    ProductCategory findByName(String name);
+
 }

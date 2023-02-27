@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
@@ -18,8 +19,9 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reference;
+    private Long id;
 
+    private String reference;
     // Define a field to store the name of the product
     private String name;
 
@@ -64,16 +66,21 @@ public class Product {
     private List<ProductQuantity> productQuantities;
 
     @ManyToOne
+    @JsonIgnore
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Review> reviews;
+
 
 
 }

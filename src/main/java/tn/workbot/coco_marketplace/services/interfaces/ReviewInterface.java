@@ -8,7 +8,9 @@ public interface ReviewInterface {
 
     List<Review> getAllReviews();
     Review getReviewById(Long id);
-    void addReview(Review review);
+    void addReview(Review review,Long id);
     void updateReview(Review review);
     void deleteReview(Long id);
+
+    public float calculateProductRating(Long productId, int rating);
 }

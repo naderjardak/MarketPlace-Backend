@@ -1,7 +1,9 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.PromotionCode;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductInterface {
@@ -13,6 +15,13 @@ public interface ProductInterface {
     Product getById(Long id);
 
     void delete(Product p);
+
+    Product createAndAssignToStore(Product p,Long idStore);
+
+
+    Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName);
+
+
 
 
 }

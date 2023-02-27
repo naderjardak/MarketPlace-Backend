@@ -1,11 +1,14 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.PromotionCode;
 import tn.workbot.coco_marketplace.services.interfaces.PromotionCodeInterface;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,6 +41,11 @@ public class PromortionCodeController {
     @DeleteMapping("DeletePromotionCode")
     public void delete(PromotionCode p) {
         promotionCodeInterface.delete(p);
+    }
+
+    @PostMapping("createProductAndAssignPC")
+    public PromotionCode createAndAssignPromortionCodeToProduct(@RequestParam Long idp, @RequestParam String voucher , @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date promotionCodeSatrDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam int discountValue){
+        return promotionCodeInterface.createAndAssignPromortionCodeToProduct(idp,voucher,promotionCodeSatrDate,endDate,discountValue);
     }
 
 }
