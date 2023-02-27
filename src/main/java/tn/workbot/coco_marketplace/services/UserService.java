@@ -2,7 +2,9 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
@@ -13,6 +15,9 @@ public class UserService implements UserInterface {
 
     @Autowired
     UserrRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public User Create(User u) {
@@ -37,6 +42,14 @@ public class UserService implements UserInterface {
     @Override
     public List<User> GetAll() {
         return (List<User>) userRepository.findAll();
+    }
+
+    @Override
+    public void affectRoleAtUser(long idRole, long idUser) {
+        Role r=roleRepository.findById(idRole).get();
+        User u=userRepository.findById(idUser).get();
+        u.setRole(r);
+        userRepository.save(u);
     }
 
 

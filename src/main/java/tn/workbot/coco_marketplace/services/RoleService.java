@@ -2,7 +2,9 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.entities.Privilege;
 import tn.workbot.coco_marketplace.entities.Role;
+import tn.workbot.coco_marketplace.repositories.PrivilegeRepository;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
 
@@ -13,6 +15,8 @@ public class RoleService implements RoleInterface {
 
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    PrivilegeRepository privilegeRepository;
 
     @Override
     public Role CreateRole(Role r) {
@@ -39,5 +43,14 @@ public class RoleService implements RoleInterface {
     @Override
     public List<Role> GetRoleAll() {
         return (List<Role>) roleRepository.findAll();
+    }
+
+    @Override
+    public void AssignRolePrivilege(long idRole, long idPrivilege) {
+        Role r=roleRepository.findById(idRole).get();//parent
+        Privilege p=privilegeRepository.findById(idPrivilege).get();//child
+        r.getPrivileges().add(p);
+        roleRepository.save(r);
+
     }
 }

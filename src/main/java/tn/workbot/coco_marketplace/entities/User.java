@@ -79,9 +79,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "DeliveryFreelancer")
     private List<Review> reviewsOnDF;
 
-
-
-
 }
 
 
