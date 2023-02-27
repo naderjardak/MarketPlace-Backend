@@ -65,6 +65,7 @@ public class ClaimSavController {
 
     @GetMapping("/send-email-to-user-1")
     public String sendEmailToUser() {
+        //TEST 
         User user = userService.GetById(1);
         String subject = "Example Subject";
         String message = "Hello " + user.getFirstName() + ",\n\nFrom CocoMarcet Claim Service";
