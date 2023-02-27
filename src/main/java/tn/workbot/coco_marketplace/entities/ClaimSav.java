@@ -4,6 +4,7 @@ package tn.workbot.coco_marketplace.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DatabindException;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavType;
 

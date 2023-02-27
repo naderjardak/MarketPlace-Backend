@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 

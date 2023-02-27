@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
@@ -64,17 +65,20 @@ public class Product {
     @JsonIgnore
     private List<ProductQuantity> productQuantities;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     private ProductCategory productCategory;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Review> reviews;
 
 
