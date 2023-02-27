@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.services.interfaces.AgencyDeliveryManIService;
 
@@ -34,5 +35,9 @@ public class AgencyDeliveryManController  {
     @PutMapping("UpdateAgencyDeliveryMan")
     public AgencyDeliveryMan UpdateAgencyDeliveryMan(@RequestBody AgencyDeliveryMan agencyDeliveryMan) {
         return ad.UpdateAgencyDeliveryMan(agencyDeliveryMan);
+    }
+    @PostMapping("AssignAgencyDeliveryManByBranch")
+    public AgencyDeliveryMan AssignAgencyDeliveryManByBranch(@RequestBody AgencyDeliveryMan agencyDeliveryMan,@RequestParam Long Id) {
+        return ad.AssignAgencyDeliveryManByBranch(agencyDeliveryMan,Id);
     }
     }

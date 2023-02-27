@@ -31,8 +31,8 @@ public class AgencyDeliveryMan implements Serializable {
     @ManyToOne
     private AgencyBranch agencyBranch;
 @JsonIgnore
-    @OneToMany(mappedBy = "agencyDeliveryMan")
-    private List<Pickup> pickups;
+    @OneToMany(mappedBy = "agencyDeliveryMan",cascade = CascadeType.ALL)
+    private List<Request> requests;
 
 
 

@@ -8,7 +8,7 @@ import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -21,28 +21,29 @@ public class Pickup implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String availableDeliver;
+    private Boolean orderOfTheSomeSeller;
     private String comment;
     private String governorate;
     private String city;
     private String codePickup;
     private String shippingStatus;
-    private String payed;
-    @Temporal(TemporalType.DATE)
-    private Date dateCreationPickup;
+    private Boolean payed;
+    private LocalDateTime dateCreationPickup;
+    private float sum;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupBuyer statusPickupBuyer;
-@JsonIgnore
-    @ManyToOne
-    private AgencyDeliveryMan agencyDeliveryMan;
-@JsonIgnore
-    @ManyToOne
-    private User deliveryFreelancer;
-@JsonIgnore
+
+    @JsonIgnore
     @ManyToOne
     private Order order;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "pickup", cascade = CascadeType.ALL)
+    private List<Request> requests;
+    @JsonIgnore
+    @ManyToOne
+    private Store store;
 
 
 }

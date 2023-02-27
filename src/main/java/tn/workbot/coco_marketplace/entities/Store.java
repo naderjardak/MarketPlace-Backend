@@ -33,4 +33,10 @@ public class Store {
     @ManyToOne
     private User seller;
 
+    @OneToMany(mappedBy = "seller")
+    private List<Request>requestsellers;
+
+    @OneToMany(mappedBy = "store")
+    private  List<Pickup>pickups;
+
 }
