@@ -6,6 +6,7 @@ import com.stripe.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
@@ -174,6 +175,7 @@ public class OrderServices implements OrderInterface {
                 return true;
             }
 
+            @Override
             public float SummOrder()
             {
                 Order order= orderRepository.BasketExistance(1L);
@@ -184,8 +186,6 @@ public class OrderServices implements OrderInterface {
                 }
                 return sum;
             }
-
-
 
             @Override
             public Map<String, Integer> statsByStatusType() {
@@ -238,6 +238,7 @@ public class OrderServices implements OrderInterface {
 
             @Value("${stripe.api.key}")
             private String stripeApiKey;
+
             @Override
             public CustemerModel StripePayementService( CustemerModel data) throws StripeException
             {
@@ -256,7 +257,20 @@ public class OrderServices implements OrderInterface {
                 return data;
             }
 
+            @Value("${Days.To.Delete.After}")
+            private int days;
 
+            @Override
+            @Scheduled(cron = "0 0 5 * * ?")
+            public void deleteOrderAfterDateExmiration()
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date(System.currentTimeMillis()));
+                calendar.add(Calendar.DATE, -days);
+                Date newDate = calendar.getTime();
+                List<Order> orderList=orderRepository.deleteOrderByStatusAndCreationDate(newDate);
+                orderRepository.deleteAll(orderList);
+            }
 }
 
 

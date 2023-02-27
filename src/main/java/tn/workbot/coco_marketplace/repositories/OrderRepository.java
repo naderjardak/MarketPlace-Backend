@@ -6,7 +6,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   @Query("SELECT concat(o.shipping.governorate,' ',COUNT(o)) FROM Order o where o.status='ACCEPTED_PAYMENT' group by o.shipping.governorate order by count(o) desc ")
   List<String> RankGouvernoratByNbOrders();
+
+  @Query("SELECT o from Order o where o.status='BASKET' and o.creationDate<:date" )
+  List<Order> deleteOrderByStatusAndCreationDate(@Param("date") Date date);
 
 }
 

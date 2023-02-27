@@ -49,7 +49,15 @@ public interface OrderInterface {
     //Governorate top Shipped
     List<String> GovernoratTopShipped();
 
+    //Sum of order Amount
+    public float SummOrder();
+
     //StripePayement
     CustemerModel StripePayementService(CustemerModel data) throws StripeException;
+
+    //Delete order Created for more than 10 Days when status is Basket
+    void deleteOrderAfterDateExmiration();
+
+
 
 }
