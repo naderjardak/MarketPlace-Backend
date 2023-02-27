@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.google.maps.errors.ApiException;
+import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Store;
 
@@ -29,6 +30,7 @@ public interface PickupIService {
     public List<Pickup> retrievePickupByDeliveryMenFreelancer();
     public List<Pickup> retrievePickupByAgence();
     public List<Pickup> retrievePickupByBranch(Long idbranch);
+    public List<Order> retrieveOrderByseller();
 
 
 

@@ -95,6 +95,10 @@ public class PickupController  {
     public List<Pickup> retrievePickupByBranch(Long idbranch) {
         return pis.retrievePickupByBranch(idbranch);
     }
+    @GetMapping("retrieveOrderByseller")
+    public List<Order> retrieveOrderByseller() {
+        return pis.retrieveOrderByseller();
+    }
 
 }
 

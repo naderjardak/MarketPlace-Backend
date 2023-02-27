@@ -153,7 +153,6 @@ public class PickupService implements PickupIService {
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
         //Variable Of Session Manager
         Store store2=pr.storeoforder(id,1L);
-        Store store3=sr.findById(1L).get();
         Pickup pickup1 = pr.save(pickup);
         pr.countstoreorder(id);
         System.out.println(pr.countstoreorder(id));
@@ -181,8 +180,6 @@ public class PickupService implements PickupIService {
             pickup1.setDateCreationPickup(LocalDateTime.now());
             pickup1.setOrderOfTheSomeSeller(false);
             pickup1.setStore(store2);
-            pickup1.setGovernorate(order.getShipping().getGovernorate());
-            pickup1.setCity(order.getShipping().getCity());
             List<Product> products=pr.productoforder(id,1L);
             pickup1.setSum(order.getSum());
             if(order.getPayment().equals(PaymentType.BANK_CARD)){
@@ -218,8 +215,6 @@ public class PickupService implements PickupIService {
             pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(store2);
             pr.save(pickup1);
-            pickup1.setGovernorate(order.getShipping().getGovernorate());
-            pickup1.setCity(order.getShipping().getCity());
             List<Product> products=pr.productoforder(id,1L);
             float totalPrice = 0;
             for (Product product:products) {
@@ -359,6 +354,13 @@ public class PickupService implements PickupIService {
         //session manager mt3 el agence
         User u=ur.findById(1L).get();
         return pr.pickupOfBranch(u.getId(),idbranch);
+    }
+
+    @Override
+    public List<Order> retrieveOrderByseller() {
+        //session manager idseller
+        User u=ur.findById(1L).get();
+        return pr.orderOfstore(u.getId());
     }
 
 }

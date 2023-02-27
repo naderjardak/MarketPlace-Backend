@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -18,11 +19,11 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     List<Store> storesofuser(@Param("v1") Long id);
     @Query("select p from Pickup p,Request r where p.id=r.pickup.id and p.id=:v1  and r.requestStatus='APPROVED'")
     Pickup pickupprettolivred(@Param("v1") Long id);
-    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o where s.id=p.store.id and p.reference=pq.product.reference and o.id=pq.order.id and o.id=:v2 ")
+    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v2 ")
     public  int countstoreorder(@Param("v2") Long id);
-    @Query("select s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.reference=pq.product.reference and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    @Query("select s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
     public  Store storeoforder(@Param("v3") Long id,@Param("v4") Long idSeller);
-    @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.reference=pq.product.reference and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
     public  List<Product> productoforder(@Param("v3") Long id, @Param("v4") Long idSeller);
     @Query("select p from Pickup  p ,Request r ,User u,Order o where p.codePickup=:v1 and p.order.buyer.id=:v3 ")
     public Pickup trakingB(@Param("v1") String codeP,@Param("v3") Long idBuyer);
@@ -38,5 +39,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct p from Pickup p,Request r ,User u ,AgencyBranch ab where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 and r.agencyDeliveryMan.agencyBranch.id=:v5 ")
     public List<Pickup> pickupOfBranch(@Param("v4") Long idAgency,@Param("v5")Long idBranch);
 
+    @Query("select o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
+    public  List<Order> orderOfstore(@Param("v4") Long idSeller);
 
 }
