@@ -47,7 +47,7 @@ public class PickupService implements PickupIService {
         Random random = new Random(); //java.util.Random
         pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
         pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number betweeen 1000 and 9999
         String prefix = "216";
         String code = prefix + randomNumber;
         List<Pickup> pickups = (List<Pickup>) pr.findAll();
