@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import com.stripe.exception.StripeException;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
@@ -47,7 +48,7 @@ public interface OrderInterface {
     List<String> statsByStatusTypeOrdred();
 
     //Governorate top Shipped
-    List<String> GovernoratTopShipped();
+    List<Map<String,Integer>> GovernoratTopShipped();
 
     //Sum of order Amount
     public float SummOrder();
@@ -58,6 +59,8 @@ public interface OrderInterface {
     //Delete order Created for more than 10 Days when status is Basket
     void deleteOrderAfterDateExmiration();
 
+    //Buyer Product Page and research
+    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark);
 
 
 }

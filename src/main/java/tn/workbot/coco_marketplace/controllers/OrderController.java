@@ -1,13 +1,14 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
-import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 
 import java.util.List;
@@ -40,6 +41,8 @@ public class OrderController {
     @PostMapping("payements")
     public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException { return orderInterface.StripePayementService(data); }
 
+    @GetMapping("ProductResearch")
+    public List<Product> research(@RequestParam int maxPrix ,@RequestParam int minPrix ,@RequestParam(required = false) String nameProduct,@RequestParam(required = false) String categorie,@RequestParam(required = false) String mark){return orderInterface.research(maxPrix,minPrix,nameProduct,categorie,mark);}
     /*
     //no need for this now
     @PutMapping("EndPaimentProcess")

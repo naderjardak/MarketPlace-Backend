@@ -1,8 +1,12 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import io.swagger.v3.core.util.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -229,11 +233,11 @@ public class OrderServices implements OrderInterface {
                 return orderRepository.RankUsersByOrdersAcceptedPayement();
             }
 
+
             @Override
-            public List<String> GovernoratTopShipped()
+            public List<Map<String,Integer>> GovernoratTopShipped()
             {
                 return orderRepository.RankGouvernoratByNbOrders();
-
             }
 
             @Value("${stripe.api.key}")
@@ -271,6 +275,36 @@ public class OrderServices implements OrderInterface {
                 List<Order> orderList=orderRepository.deleteOrderByStatusAndCreationDate(newDate);
                 orderRepository.deleteAll(orderList);
             }
+
+            @Override
+            public List<Product> research(float maxPrix , float minPrix , String nameProduct,String categorie,String mark)
+            {
+                float aux=0;
+                if(maxPrix<minPrix)
+                {
+                  aux=maxPrix;
+                  maxPrix=minPrix;
+                  minPrix=aux;
+                }
+                if(maxPrix==0)
+                {
+                    maxPrix = orderRepository.maxProductPrice();
+                }
+                if (nameProduct==null)
+                {
+                    nameProduct="";
+                }
+                if(categorie==null)
+                {
+                    categorie="%";
+                }
+                if(mark==null)
+                {
+                    mark="";
+                }
+                return orderRepository.researchProduct(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+            }
+
 }
 
 

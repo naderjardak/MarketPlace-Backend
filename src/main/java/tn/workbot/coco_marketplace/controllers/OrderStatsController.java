@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
 
@@ -22,6 +24,8 @@ import java.util.Map;
 public class OrderStatsController {
     @Autowired
     OrderInterface orderInterface;
+    @Autowired
+    OrderRepository orderRepository;
 
     @GetMapping("OrderStatsByStatusType")
     Map<String, Integer> statsByStatusType(){return orderInterface.statsByStatusType();}
@@ -30,11 +34,11 @@ public class OrderStatsController {
     List<String> statsByStatusTypeOrdred(){return orderInterface.statsByStatusTypeOrdred();}
 
     @GetMapping("RankGouvernoratByOrdersNumber")
-    List<String> GovernoratTopShipped(){return orderInterface.GovernoratTopShipped();}
+    List<Map<String,Integer>> GovernoratTopShipped() {return orderInterface.GovernoratTopShipped();}
 
     @GetMapping(value = "PDF_RankGouvernoratByOrdersNumber", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> PDF_RankGouvernoratByOrdersNumber() throws IOException {
-        List<String> stats = orderInterface.GovernoratTopShipped();
+        List<String> stats = orderRepository.PDF_RankGouvernoratByNbOrders();
 
         ByteArrayInputStream bis = OrderStatsPDFGenerator.RankGouvernoratByOrdersNumberPDFReport(stats);
         HttpHeaders headers = new HttpHeaders();
