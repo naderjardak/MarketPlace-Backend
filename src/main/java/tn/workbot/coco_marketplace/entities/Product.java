@@ -18,8 +18,9 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reference;
+    private Long id;
 
+    private String reference;
     // Define a field to store the name of the product
     private String name;
 
@@ -63,10 +64,11 @@ public class Product {
     @JsonIgnore
     private List<ProductQuantity> productQuantities;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private ProductCategory productCategory;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
@@ -74,6 +76,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
+
 
 
 }

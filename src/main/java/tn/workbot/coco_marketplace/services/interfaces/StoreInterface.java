@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.PromotionCode;
 import tn.workbot.coco_marketplace.entities.Store;
 
@@ -16,4 +17,6 @@ public interface StoreInterface {
     Store getById(Long id);
 
     void delete(Store s);
+
+
 }
