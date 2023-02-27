@@ -116,7 +116,7 @@ public class ProductService implements ProductInterface {
             }
         }
         if (i > 0) {
-            log.info(s.toString());
+            log.info("no products out of stock");
         }
     }
 
