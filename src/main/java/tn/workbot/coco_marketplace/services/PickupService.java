@@ -340,4 +340,11 @@ public class PickupService implements PickupIService {
         return pr.trakingB(codePickup,idBuyer);
     }
 
+    @Override
+    public List<Pickup> retrievePickupByDeliveryMenFreelancer() {
+        //session manager
+        User u=ur.findById(4L).get();
+        return pr.pickupOfDeliveryMenFreelancer(u.getId());
+    }
+
 }

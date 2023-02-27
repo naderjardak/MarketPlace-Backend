@@ -26,6 +26,7 @@ public interface PickupIService {
     public int test(Long id);
     public Pickup trakingbyseller(String codePickup);
     public Pickup trakingbybuyer(String codePickup,Long idBuyer);
+    public List<Pickup> retrievePickupByDeliveryMenFreelancer();
 
 
 
