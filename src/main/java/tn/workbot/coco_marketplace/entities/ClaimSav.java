@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.DatabindException;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,16 +42,13 @@ public class ClaimSav implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date updatedAt;
 
-    ///TO DO :Dear Houssem, complete your attributes
+   ///DoneCrud
 
     @ManyToOne
     private User user;
 
     @OneToOne
     private ProductQuantity productQuantity;
-
-
-
 
 
 

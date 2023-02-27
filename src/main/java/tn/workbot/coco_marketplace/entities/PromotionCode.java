@@ -30,6 +30,6 @@ public class PromotionCode {
     @ManyToOne
     private Product product;
 
-    //(example : 20%)
+    //  percentage
     private int discountValue;
 }

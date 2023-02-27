@@ -16,4 +16,6 @@ public interface RoleInterface {
     Role GetRoleById(long id);
     public List<Role> GetRoleAll();
 
+    public void AssignRolePrivilege(long idRole ,long idPrivilege);
+
 }

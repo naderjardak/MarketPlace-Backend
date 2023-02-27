@@ -19,8 +19,9 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reference;
+    private Long id;
 
+    private String reference;
     // Define a field to store the name of the product
     private String name;
 
@@ -79,6 +80,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<Review> reviews;
+
 
 
 }

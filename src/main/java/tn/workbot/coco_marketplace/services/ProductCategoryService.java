@@ -32,8 +32,8 @@ public class ProductCategoryService implements ProductCategoryInterface {
 
     @Override
     public ProductCategory getById(Long id) {
-        if(productCategoryRepository.findById(id).isPresent())
-             return productCategoryRepository.findById(id).get();
+        if (productCategoryRepository.findById(id).isPresent())
+            return productCategoryRepository.findById(id).get();
 
         return new ProductCategory();
     }
@@ -42,4 +42,13 @@ public class ProductCategoryService implements ProductCategoryInterface {
     public void delete(ProductCategory p) {
         productCategoryRepository.delete(p);
     }
+
+    @Override
+    public ProductCategory findByName(String name) {
+        if (productCategoryRepository.findByName(name) != null)
+            return productCategoryRepository.findByName(name);
+        return new ProductCategory();
+    }
+
+
 }
