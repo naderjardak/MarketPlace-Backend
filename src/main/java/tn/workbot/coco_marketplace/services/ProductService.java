@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductCategory;
@@ -115,7 +116,7 @@ public class ProductService implements ProductInterface {
     }
 
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "0 0 8 * * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.ADMINISTRTOR);
         for (User user : userList) {
@@ -139,8 +140,13 @@ public class ProductService implements ProductInterface {
             }
         }
     }
-
 }
+
+
+
+
+
+
 
 
 

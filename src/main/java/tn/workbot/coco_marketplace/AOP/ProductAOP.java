@@ -14,7 +14,7 @@ public class ProductAOP {
 
 
 
-    @Before("execution(* tn.workbot.coco_marketplace.services.ProductService.create(..)) && args(p)")
+    @Before("execution(* tn.workbot.coco_marketplace.services.ProductService.create*(..)) && args(p)")
     public void deliveryPrice(Product p) {
         if (p.getProductWeight() <= 1) {
             p.setDeliveryPrice(6);

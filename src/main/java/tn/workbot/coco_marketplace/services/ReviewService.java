@@ -2,8 +2,12 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.entities.Order;
+import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.Review;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
+import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
 import tn.workbot.coco_marketplace.repositories.ReviewRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ReviewInterface;
@@ -19,6 +23,9 @@ public class ReviewService implements ReviewInterface {
 
     @Autowired
     ProductRepository pr;
+
+    @Autowired
+    OrderRepository repository;
 
     @Override
     public List<Review> getAllReviews() {
@@ -38,7 +45,9 @@ public class ReviewService implements ReviewInterface {
         review1.setProduct(product);
         review.setComment(review.hideBadWords(review.getComment()));
         rvp.save(review);
-    }
+
+       }
+
 
     @Override
     public void updateReview(Review review) {
