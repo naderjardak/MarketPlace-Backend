@@ -86,6 +86,7 @@ public class User implements Serializable {
    @OneToMany(mappedBy = "deliveryAgency")
     private  List<AgencyBranch>agencyBranches;
 
+
   /* @OneToMany(mappedBy = "seller")
     private  List<Pickup>pickupsSeller;*/
     /*
