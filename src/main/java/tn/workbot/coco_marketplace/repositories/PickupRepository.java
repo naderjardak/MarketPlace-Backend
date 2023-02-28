@@ -2,12 +2,9 @@ package tn.workbot.coco_marketplace.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tn.workbot.coco_marketplace.entities.Order;
-import tn.workbot.coco_marketplace.entities.Pickup;
+import tn.workbot.coco_marketplace.entities.*;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 
 import java.util.List;
@@ -41,5 +38,11 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
     public  List<Order> orderOfstore(@Param("v4") Long idSeller);
+    @Query("select distinct p from Pickup p , Store s ,User u where p.store.seller.id=:id and p.statusPickupSeller='PICKED'")
+    public  List<Pickup> PickupBySeller(@Param("id") Long idSeller);
+    @Query("select count(distinct r) from Request r,Pickup p where r.pickup.id=p.id and p.store.seller.id=:id1")
+    public int countrequest(@Param("id1") Long idSellerr);
+    @Query("select u from User u,Pickup p,Store s where p.store.seller.id=u.id and p.id=:v3")
+    public User UserOfPickup(@Param("v3") Long idPickup);
 
 }

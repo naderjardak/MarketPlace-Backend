@@ -99,6 +99,10 @@ public class PickupController  {
     public List<Order> retrieveOrderByseller() {
         return pis.retrieveOrderByseller();
     }
+    @GetMapping("retrievePickupBysellerAttent")
+    public List<Pickup> retrievePickupBysellerAttent(){
+              return pis.retrievePickupBysellerAttent();
+    }
 
 }
 

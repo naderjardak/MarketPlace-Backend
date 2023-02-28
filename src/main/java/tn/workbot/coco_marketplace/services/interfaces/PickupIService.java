@@ -31,6 +31,7 @@ public interface PickupIService {
     public List<Pickup> retrievePickupByAgence();
     public List<Pickup> retrievePickupByBranch(Long idbranch);
     public List<Order> retrieveOrderByseller();
+    public List<Pickup> retrievePickupBysellerAttent();
 
 
 
