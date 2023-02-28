@@ -38,7 +38,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
     public  List<Order> orderOfstore(@Param("v4") Long idSeller);
-    @Query("select distinct p from Pickup p , Store s ,User u where p.store.seller.id=:id and p.statusPickupSeller='PICKED'")
+    @Query("select distinct p from Pickup p , Store s ,User u,Request r where p.store.seller.id=:id and r.pickup.id=r.id and r.requestStatus='PENDING'")
     public  List<Pickup> PickupBySeller(@Param("id") Long idSeller);
     @Query("select count(distinct r) from Request r,Pickup p where r.pickup.id=p.id and p.store.seller.id=:id1")
     public int countrequest(@Param("id1") Long idSellerr);
