@@ -2,13 +2,9 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.workbot.coco_marketplace.entities.AgencyBranch;
-import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
-import tn.workbot.coco_marketplace.entities.Request;
+import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
-import tn.workbot.coco_marketplace.repositories.AgencyBranchRepository;
-import tn.workbot.coco_marketplace.repositories.AgencyDeliveryManRepository;
-import tn.workbot.coco_marketplace.repositories.RequestRepository;
+import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.AgencyDeliveryManIService;
 
 import java.util.List;
@@ -22,6 +18,10 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     AgencyBranchRepository  abr;
     @Autowired
     RequestRepository rr;
+    @Autowired
+    UserrRepository ur;
+    @Autowired
+    PickupRepository pr;
 
     @Override
     public AgencyDeliveryMan addAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan) {
@@ -72,5 +72,13 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
         AgencyBranch agencyBranch=abr.findById(Id).get();
         agencyDeliveryMan1.setAgencyBranch(agencyBranch);
         return admr.save(agencyDeliveryMan1);
+    }
+
+    @Override
+    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idAgency,Long idPickup) {
+       //session el id mt3 agency
+        User u=ur.findById(idAgency).get();
+        Pickup p=pr.findById(idPickup).get();
+        return admr.deliveryMenByAgency(u.getId(),p.getId());
     }
 }

@@ -365,6 +365,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Pickup> retrievePickupBysellerAttent() {
+        /////session manager
         User u=ur.findById(1L).get();
         return pr.PickupBySeller(u.getId());
     }

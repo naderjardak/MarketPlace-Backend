@@ -40,4 +40,8 @@ public class AgencyDeliveryManController  {
     public AgencyDeliveryMan AssignAgencyDeliveryManByBranch(@RequestBody AgencyDeliveryMan agencyDeliveryMan,@RequestParam Long Id) {
         return ad.AssignAgencyDeliveryManByBranch(agencyDeliveryMan,Id);
     }
+    @GetMapping("RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen")
+    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idAgency,Long idPickup) {
+        return ad.RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(idAgency, idPickup);
+    }
     }
