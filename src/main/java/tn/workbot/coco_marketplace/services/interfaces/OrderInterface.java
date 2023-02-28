@@ -1,13 +1,12 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.stripe.exception.StripeException;
+import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
-import tn.workbot.coco_marketplace.entities.Order;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.ProductQuantity;
-import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
+import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ public interface OrderInterface {
 
 
     //Ending command Paiment Prosess
-    Boolean endCommandProsess(PaymentType paymentType, Boolean cardPaiment);
+    Boolean endCommandProsess(PaymentType paymentType, Boolean cardPaiment) throws MessagingException;
 
     // Get an order from the database by ID
     Order getOrderById(Long id);
@@ -54,13 +53,22 @@ public interface OrderInterface {
     public float SummOrder();
 
     //StripePayement
-    CustemerModel StripePayementService(CustemerModel data) throws StripeException;
+    CustemerModel StripePayementService(CustemerModel data) throws StripeException, MessagingException;
 
     //Delete order Created for more than 10 Days when status is Basket
     void deleteOrderAfterDateExmiration();
 
     //Buyer Product Page and research
-    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark);
+    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre);
 
+    //validate Cash On delivery Command
+    public String validateCommand(String token) throws MessagingException;
 
-}
+    //Token generator
+    public String generateToken(User user);
+
+    //uncode Token
+    public String parseToken(String token);
+
+    public String generateRandomNumber(int n);
+    }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
+import java.security.Timestamp;
 import java.util.List;
 
 @Getter
@@ -57,6 +58,9 @@ public class Product {
     // Define a field to store any additional delivery instructions provided by the customer
     private String AdditionalDeliveryInstructions;
 
+    private int firstQuantity;
+
+    private Timestamp creationDate;
     // Define a field to store the current status of the product
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;

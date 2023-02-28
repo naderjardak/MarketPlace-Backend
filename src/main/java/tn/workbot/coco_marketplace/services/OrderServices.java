@@ -1,28 +1,36 @@
 package tn.workbot.coco_marketplace.services;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
-import io.swagger.v3.core.util.Json;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
+import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
 import tn.workbot.coco_marketplace.repositories.ShippingRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.*;
 
 @Service
@@ -43,7 +51,13 @@ public class OrderServices implements OrderInterface {
     @Autowired
     OrderMailSenderService orderMailSenderService;
 
-    @Override
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+            @Override
             public List<Order> getAllOrders() {
                 return orderRepository.findAll();
             }
@@ -66,6 +80,7 @@ public class OrderServices implements OrderInterface {
                 }
                 newOrder.getProductQuantities().add(productQuantity);
                 newOrder.setCreationDate(new Date(System.currentTimeMillis()));
+                newOrder.setRef(" ");
                 float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
                 newOrder.setSum(sum);
                 productQuantity.setOrder(newOrder);
@@ -134,10 +149,9 @@ public class OrderServices implements OrderInterface {
             }
 
             @Override
-            public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment)
-            {
-
-                Order order= orderRepository.BasketExistance(1L);
+            public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
+                User user=userrRepository.findById(1L).get();
+                Order order= orderRepository.BasketExistance(user.getId());
 
                 if(order.getShipping()==null)
                     return false;
@@ -145,11 +159,21 @@ public class OrderServices implements OrderInterface {
                 String msg="";
                 if (paymentType == PaymentType.CASH_ON_DELIVERY)
                 {
-                    order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
-                    order.setPayment(PaymentType.CASH_ON_DELIVERY);
-                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.";
-                    //Session User
-                    orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Order is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your order is confirmed successfully.");
+                    //Mail api
+                    MimeMessage message = javaMailSender.createMimeMessage();
+                    MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
+                    mailMessage.setTo(user.getEmail());
+                    mailMessage.setSubject("From Coco Market");
+                    Context context = new Context();
+                    String msag="Have a nice day, your order is confirmed successfully.";
+                    context.setVariable("msg",msag);
+                    String lien="http://localhost:8081/order/validateCommand?token="+generateToken(user);
+                    context.setVariable("link",lien);
+                    String name="Thank you, "+user.getFirstName().substring(0,1).toUpperCase()+user.getFirstName().substring(1);
+                    context.setVariable("name",name);
+                    String emailContent = templateEngine.process("OrderConfirmation", context);
+                    mailMessage.setText(emailContent, true);
+                    javaMailSender.send(message);
 
                 }
                 else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
@@ -158,18 +182,25 @@ public class OrderServices implements OrderInterface {
                     order.setPayment(PaymentType.BANK_CARD);
                     msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
                     orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
-
+                    //Twilio mna7iha 3al flous
+                    //OrderTwilioService.sendSMS(msg);
+                    List<String> refList=orderRepository.reflist();
+                    String referance="";
+                    do{
+                        referance=generateRandomNumber(10);
+                    }while (refList.contains(referance));
+                    order.setRef(referance);
                 }
                 else
                 {
                     order.setStatus(StatusOrderType.REFUSED_PAYMENT);
                     orderRepository.save(order);
-
+                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" you have error in Payment with card please retry with a valid card.";
+                    //Twilio mna7iha 3al flous
+                    //OrderTwilioService.sendSMS(msg);
                     return false;
                 }
                 orderRepository.save(order);
-                //Twilio mna7iha 3al flous
-                //OrderTwilioService.sendSMS(msg);
                 return true;
             }
 
@@ -244,8 +275,7 @@ public class OrderServices implements OrderInterface {
             private String stripeApiKey;
 
             @Override
-            public CustemerModel StripePayementService( CustemerModel data) throws StripeException
-            {
+            public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {
                 Stripe.apiKey = stripeApiKey;
                 Map<String, Object> params = new HashMap<>();
                 params.put("name", data.getName());
@@ -277,7 +307,7 @@ public class OrderServices implements OrderInterface {
             }
 
             @Override
-            public List<Product> research(float maxPrix , float minPrix , String nameProduct,String categorie,String mark)
+            public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
             {
                 float aux=0;
                 if(maxPrix<minPrix)
@@ -302,7 +332,72 @@ public class OrderServices implements OrderInterface {
                 {
                     mark="";
                 }
-                return orderRepository.researchProduct(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+                if(productFiltre == ProductFiltre.TOP_RATED)
+                    return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+                if(productFiltre == ProductFiltre.ASCENDING_PRICE)
+                    return orderRepository.researchProductASCENDINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+                if(productFiltre == ProductFiltre.DECREASING_PRICE)
+                    return orderRepository.researchProductDECREASINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+                if(productFiltre == ProductFiltre.MOST_REQUESTED)
+                    return orderRepository.researchProductMOSTREQUESTED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+
+                return orderRepository.researchProductNEWARRIVAL(maxPrix, minPrix, "%" + nameProduct + "%", categorie, "%" + mark + "%");
+            }
+
+
+            @Override
+            public String validateCommand(String token) throws MessagingException
+            {
+                String email=parseToken(token);
+                if(orderRepository.findUserByEmail(email)==1)
+                {
+                    User user=userrRepository.findById(1L).get();
+                    Order order= orderRepository.BasketExistance(user.getId());
+                    order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
+                    order.setPayment(PaymentType.CASH_ON_DELIVERY);
+                    List<String> refList=orderRepository.reflist();
+                    String referance="";
+                    do{
+                        referance=generateRandomNumber(10);
+                    }while (!refList.contains(referance));
+                    order.setRef(referance);
+                    orderRepository.save(order);
+
+                    return "Your command is successfully confirmed";
+                }
+                return "Expired Link Token";
+            }
+
+
+            //coded with HS256
+            @Override
+            public String generateToken(User user) {
+                return Jwts.builder()
+                        .setSubject("Order Verification To Cash ON Delivery")
+                        .claim("Email", user.getEmail())
+                        .signWith(SignatureAlgorithm.HS256, "sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ")
+                        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5))
+                        .setIssuedAt(new Date(System.currentTimeMillis()))
+                        .compact();
+            }
+
+
+            //uncoded
+            @Override
+            public String parseToken(String token) {
+                Jws<Claims> claims = Jwts.parser().setSigningKey("sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ").parseClaimsJws(token);
+                return claims.getBody().get("Email", String.class);
+            }
+
+
+            @Override
+            public String generateRandomNumber(int n) {
+                Random rand = new Random();
+                StringBuilder sb = new StringBuilder(n);
+                for (int i = 0; i < n; i++) {
+                    sb.append(rand.nextInt(10));
+                }
+                return sb.toString();
             }
 
 }
