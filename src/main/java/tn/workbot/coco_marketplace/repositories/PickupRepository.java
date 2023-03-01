@@ -76,4 +76,9 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select  distinct(p) from Pickup p,Request r,User u where  r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.Agency.id=:v1   and DATE(r.RequestDate) = CURRENT_DATE ")
     public List<Pickup> SumPricePickupDeliveredByAgencyToday(@Param("v1") Long idAFreelancer);
 
+    @Query("select distinct p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
+    public  List<Product> productofpickup(@Param("v1") Long idPickup,@Param("v2") Long idSeller);
+    @Query("select distinct p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where  p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
+    public List<Product> productOfOrder(@Param("v1") Long idPickup,@Param("v2") Long idSeller);
+
 }

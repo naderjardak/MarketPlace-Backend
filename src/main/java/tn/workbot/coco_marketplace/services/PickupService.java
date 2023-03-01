@@ -483,4 +483,19 @@ public class PickupService implements PickupIService {
         return null;
     }
 
+    @Override
+    public List<Product> RetrieveProductByPickup(Long idPickup) {
+        User u=ur.findById(1L).get();
+        Pickup p=pr.findById(idPickup).get();
+        Long i=p.getOrder().getId();
+        List<Product> products=new ArrayList<>();
+        if(pr.countstoreorder(i)>1){
+            products.addAll(pr.productofpickup(p.getId(),u.getId()));
+        }
+        else {
+            products.addAll(pr.productOfOrder(p.getId(), u.getId()));
+        }
+        return products;
+    }
+
 }

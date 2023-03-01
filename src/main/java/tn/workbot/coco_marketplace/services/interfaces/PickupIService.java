@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Pickup;
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.Store;
 
 import javax.swing.text.Position;
@@ -48,6 +49,8 @@ public interface PickupIService {
    public Float SumPricePickupDeliveredByAgencyToday();
    public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
    public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
+
+   public List<Product>RetrieveProductByPickup(Long idPickup);
 
 
 

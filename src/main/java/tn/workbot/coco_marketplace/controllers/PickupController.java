@@ -3,9 +3,11 @@ package tn.workbot.coco_marketplace.controllers;
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.Api.PdfPickup;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.text.Position;
 import java.io.IOException;
 import java.time.Duration;
@@ -15,6 +17,8 @@ import java.util.List;
 public class PickupController  {
     @Autowired
     PickupIService pis;
+    @Autowired
+    PdfPickup pdf;
 
 
     @PostMapping("addPickup")
@@ -161,6 +165,16 @@ public class PickupController  {
     @GetMapping("SumPricePickupDeliveredByAgencyToday")
     public Float SumPricePickupDeliveredByAgencyToday(){
         return pis.SumPricePickupDeliveredByAgencyToday();
+    }
+
+    ////////////Pdf
+    @GetMapping("pdfPick")
+    public  void pdfPick(HttpServletResponse response,@RequestParam Long idPickup) throws IOException {
+        pdf.pdfPickup(response,idPickup);
+    }
+    @GetMapping("RetrieveProductByPickup")
+    public List<Product> RetrieveProductByPickup(@RequestParam Long idPickup) {
+        return pis.RetrieveProductByPickup(idPickup);
     }
 
 
