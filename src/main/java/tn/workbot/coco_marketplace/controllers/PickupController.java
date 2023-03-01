@@ -103,6 +103,66 @@ public class PickupController  {
     public List<Pickup> retrievePickupBysellerAttent(){
               return pis.retrievePickupBysellerAttent();
     }
+    @GetMapping("countPickupSellerPendingToday")
+    public int countPickupSellerPendingToday() {
+        return pis.countPickupSellerPendingToday();
+    }
+    @GetMapping("countPickupSelleronTheWayToday")
+    public int countPickupSelleronTheWayToday() {
+        return pis.countPickupSelleronTheWayToday();
+    }
+
+    @GetMapping("countPickupSellerDeliveredToday")
+    public int countPickupSellerDeliveredToday() {
+        return pis.countPickupSellerDeliveredToday();
+    }
+
+    @GetMapping("countPickupSellerReturnToday")
+    public int countPickupSellerReturnToday() {
+        return pis.countPickupSellerReturnToday();
+    }
+
+    @GetMapping("countPickupSellerRefundedToday")
+    public int countPickupSellerRefundedToday() {
+        return pis.countPickupSellerRefundedToday();
+    }
+
+    @GetMapping("countPickupDeliveryManFreelancerPendingToday")
+    public int countPickupDeliveryManFreelancerPendingToday() {
+        return pis.countPickupDeliveryManFreelancerPendingToday();
+    }
+    @GetMapping("countPickupAgencyToday")
+    public int countPickupAgencyToday() {
+        return pis.countPickupAgencyToday();
+    }
+    @GetMapping("countRequestRejectedDeliveryManFreelancerToday")
+    public int countRequestRejectedDeliveryManFreelancerToday() {
+        return pis.countRequestRejectedDeliveryManFreelancerToday();
+    }
+
+    @GetMapping("countRequestApprovedDeliveryManFreelancerToday")
+    public int countRequestApprovedDeliveryManFreelancerToday() {
+        return pis.countRequestApprovedDeliveryManFreelancerToday();
+    }
+
+    @GetMapping("countRequestRejectedAgencyToday")
+    public int countRequestRejectedAgencyToday() {
+        return pis.countRequestRejectedAgencyToday();
+    }
+
+    @GetMapping("countRequestApprovedAgencyToday")
+    public int countRequestApprovedAgencyToday() {
+        return pis.countRequestApprovedAgencyToday();
+    }
+    @GetMapping("SumPricePickupDeliveredByFreelancerToday")
+    public Float SumPricePickupDeliveredByFreelancerToday() {
+        return pis.SumPricePickupDeliveredByFreelancerToday();
+    }
+    @GetMapping("SumPricePickupDeliveredByAgencyToday")
+    public Float SumPricePickupDeliveredByAgencyToday(){
+        return pis.SumPricePickupDeliveredByAgencyToday();
+    }
+
 
 }
 

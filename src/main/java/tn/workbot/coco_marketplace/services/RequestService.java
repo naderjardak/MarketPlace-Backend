@@ -149,7 +149,8 @@ public class RequestService implements RequestInterface {
         return rr.retrieveRequestByPickup(idPickup);
     }
 
-    @Scheduled(cron = "*/60 * * * * *")
+    //@Scheduled(cron = "*/60 * * * * *")
+    @Scheduled(cron = "* * * * 6 *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {
         System.out.println("test");
         List<Request> requests = (List<Request>) rr.findAll();

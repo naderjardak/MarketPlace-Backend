@@ -32,6 +32,23 @@ public interface PickupIService {
     public List<Pickup> retrievePickupByBranch(Long idbranch);
     public List<Order> retrieveOrderByseller();
     public List<Pickup> retrievePickupBysellerAttent();
+    public int countPickupSellerPendingToday();
+    public int countPickupSelleronTheWayToday();
+    public int countPickupSellerDeliveredToday();
+    public int countPickupSellerReturnToday();
+    public int countPickupSellerRefundedToday();
+    public int countPickupDeliveryManFreelancerPendingToday();
+    public int countPickupAgencyToday();
+    public int countRequestRejectedDeliveryManFreelancerToday();
+    public int countRequestApprovedDeliveryManFreelancerToday();
+    public int countRequestRejectedAgencyToday();
+    public int countRequestApprovedAgencyToday();
+
+   public Float SumPricePickupDeliveredByFreelancerToday();
+   public Float SumPricePickupDeliveredByAgencyToday();
+   public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
+   public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
+
 
 
 

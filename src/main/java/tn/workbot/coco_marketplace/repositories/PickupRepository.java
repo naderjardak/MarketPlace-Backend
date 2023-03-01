@@ -44,5 +44,36 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     public int countrequest(@Param("id1") Long idSellerr);
     @Query("select u from User u,Pickup p,Store s where p.store.seller.id=u.id and p.id=:v3")
     public User UserOfPickup(@Param("v3") Long idPickup);
+    //Stat
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='PICKED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE ")
+    public int countPickupSellerPendingToday(@Param("v1") Long idSeller);
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='ONTHEWAY' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupSelleronTheWayToday(@Param("v1") Long idSeller);
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='DELIVERED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupSellerDeliveredToday(@Param("v1") Long idSeller);
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='RETURN' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupSellerReturnToday(@Param("v1") Long idSeller);
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='REFUNDED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupSellerRefundedToday(@Param("v1") Long idSeller);
+    @Query("select  count(distinct p) from Pickup p,Request r,User u where r.pickup.id=p.id and p.statusPickupSeller='PICKED' and r.requestStatus='APPROVED' and r.deliveryman.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupDeliveryManFreelancerPendingToday(@Param("v1") Long iDFreelancer);
+
+    @Query("select  count(distinct p) from Pickup p,Request r,User u where r.pickup.id=p.id and p.statusPickupSeller='PICKED' and r.requestStatus='APPROVED' and r.Agency.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupAgencyToday(@Param("v1") Long idAgency);
+    @Query("select count(distinct r) from Request r,User u where r.requestStatus='REJECTED' and r.deliveryman.id=:v1 and DATE(r.RequestDate) = CURRENT_DATE")
+    public int countRequestRejectedDeliveryManFreelancerToday(@Param("v1") Long idAFreelancer);
+    @Query("select count(distinct r) from Request r,User u where r.requestStatus='APPROVED' and r.deliveryman.id=:v1 and DATE(r.RequestDate) = CURRENT_DATE")
+    public int countRequestApprovedDeliveryManFreelancerToday(@Param("v1") Long idAFreelancer);
+    @Query("select count(distinct r) from Request r,User u where r.requestStatus='APPROVED' and r.Agency.id=:v1 and DATE(r.RequestDate) = CURRENT_DATE")
+    public int countRequestApprovedAgencyToday(@Param("v1") Long idAgency);
+
+    @Query("select count(distinct r) from Request r,User u where r.requestStatus='REJECTED' and r.Agency.id=:v1 and DATE(r.RequestDate) = CURRENT_DATE")
+    public int countRequestRejectedAgencyToday(@Param("v1") Long idAgency);
+
+    @Query("select  distinct(p) from Pickup p,Request r,User u where  r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.deliveryman.id=:v1   and DATE(r.RequestDate) = CURRENT_DATE ")
+    public List<Pickup> SumPricePickupDeliveredByFreelancerToday(@Param("v1") Long idAFreelancer);
+
+    @Query("select  distinct(p) from Pickup p,Request r,User u where  r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.Agency.id=:v1   and DATE(r.RequestDate) = CURRENT_DATE ")
+    public List<Pickup> SumPricePickupDeliveredByAgencyToday(@Param("v1") Long idAFreelancer);
 
 }

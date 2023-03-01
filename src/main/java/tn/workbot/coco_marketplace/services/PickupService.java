@@ -369,5 +369,118 @@ public class PickupService implements PickupIService {
         User u=ur.findById(1L).get();
         return pr.PickupBySeller(u.getId());
     }
+///////stat
+    @Override
+    public int countPickupSellerPendingToday() {
+        //Session Manager idSeller
+         User u=ur.findById(1L).get();
+        return pr.countPickupSellerPendingToday(u.getId());
+    }
+
+    @Override
+    public int countPickupSelleronTheWayToday() {
+        //Session Manager idSeller
+        User u=ur.findById(1L).get();
+        return pr.countPickupSelleronTheWayToday(u.getId());
+    }
+
+    @Override
+    public int countPickupSellerDeliveredToday() {
+        //Session Manager idSeller
+        User u=ur.findById(1L).get();
+        return pr.countPickupSellerDeliveredToday(u.getId());
+    }
+
+    @Override
+    public int countPickupSellerReturnToday() {
+        //Session Manager idSeller
+        User u=ur.findById(1L).get();
+        return pr.countPickupSellerReturnToday(u.getId());
+    }
+
+    @Override
+    public int countPickupSellerRefundedToday() {
+        //Session Manager idSeller
+        User u=ur.findById(1L).get();
+        return pr.countPickupSellerRefundedToday(u.getId());
+    }
+
+    @Override
+    public int countPickupDeliveryManFreelancerPendingToday() {
+        //Session Manager ManFreelancer
+        User u=ur.findById(3L).get();
+        return pr.countPickupDeliveryManFreelancerPendingToday(u.getId());
+    }
+
+    @Override
+    public int countPickupAgencyToday() {
+        //Session Manager Agency
+        User u=ur.findById(4L).get();
+        return pr.countPickupAgencyToday(u.getId());
+    }
+
+    @Override
+    public int countRequestRejectedDeliveryManFreelancerToday() {
+        //Session Manager DeliveryManFreelancer
+        User u=ur.findById(4L).get();
+        return pr.countRequestRejectedDeliveryManFreelancerToday(u.getId());
+    }
+
+    @Override
+    public int countRequestApprovedDeliveryManFreelancerToday() {
+        //Session Manager DeliveryManFreelancer
+        User u=ur.findById(4L).get();
+        return pr.countRequestApprovedDeliveryManFreelancerToday(u.getId());
+    }
+
+    @Override
+    public int countRequestRejectedAgencyToday() {
+        //Session Manager Agency
+        User u=ur.findById(4L).get();
+        return pr.countRequestRejectedAgencyToday(u.getId());
+    }
+
+    @Override
+    public int countRequestApprovedAgencyToday() {
+        //Session Manager Agency
+        User u=ur.findById(4L).get();
+        return pr.countRequestApprovedAgencyToday(u.getId());
+    }
+
+    @Override
+    public Float SumPricePickupDeliveredByFreelancerToday() {
+        //Session Manager Agency
+        User u=ur.findById(3L).get();
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.SumPricePickupDeliveredByFreelancerToday(u.getId()));
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+             sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float SumPricePickupDeliveredByAgencyToday() {
+        //Session Manager Agency
+        User u=ur.findById(4L).get();
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.SumPricePickupDeliveredByAgencyToday(u.getId()));
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday() {
+        return null;
+    }
+
+    @Override
+    public Float SumPriceDeliveryPickupisDeliveredByAgencyToday() {
+        return null;
+    }
 
 }
