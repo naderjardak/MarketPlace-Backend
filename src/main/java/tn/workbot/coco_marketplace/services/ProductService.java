@@ -4,12 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductCategory;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.ProductCategoryRepository;
 import tn.workbot.coco_marketplace.repositories.ProductRepository;
@@ -17,7 +17,9 @@ import tn.workbot.coco_marketplace.repositories.PromotionCodeRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -47,6 +49,18 @@ public class ProductService implements ProductInterface {
 
     @Override
     public Product create(Product p) {
+        if (p.getProductWeight() <= 1) {
+            p.setDeliveryPrice(6);
+        } else if (p.getProductWeight() > 1) {
+            p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
+
+        }
+        Random random = new Random();
+        int nbRand = random.nextInt(99999);
+        p.setReference(("REF-" + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
+
+        p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        p.setCreationDate(new Timestamp(System.currentTimeMillis()));
         return productRepository.save(p);
     }
 
@@ -107,8 +121,6 @@ public class ProductService implements ProductInterface {
 
 
         }
-
-
         p.setProductCategory(subCategory);
 
 

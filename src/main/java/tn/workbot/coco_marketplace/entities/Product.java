@@ -8,7 +8,7 @@ import lombok.Setter;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -53,10 +53,11 @@ public class Product {
 
     // Define a field to indicate whether the product is currently available for purchase
     private boolean enabled;
-    private Timestamp creationDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
     // Define a field to store any additional delivery instructions provided by the customer
     private String AdditionalDeliveryInstructions;
-    private int firstQuantity;
+    private int numberOfPurchase;
     // Define a field to store the current status of the product
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
@@ -79,7 +80,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<Review> reviews;
-
 
 
 }

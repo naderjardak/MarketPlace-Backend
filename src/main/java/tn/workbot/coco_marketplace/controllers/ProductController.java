@@ -19,6 +19,7 @@ import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/product")
@@ -72,7 +73,6 @@ public class ProductController {
         User user = userInterface.GetById(1);
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
         XSSFSheet worksheet = workbook.getSheetAt(0);
-
         for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
             Product p = new Product();
 
@@ -83,21 +83,20 @@ public class ProductController {
             float price = (float) row.getCell(2).getNumericCellValue();
             p.setProductPrice(price);
             p.setProductPriceBeforeDiscount(price);
-            int quantity = (int) row.getCell(3).getNumericCellValue();
-            p.setQuantity(quantity);
-            p.setFirstQuantity(quantity);
+            p.setQuantity((int) row.getCell(3).getNumericCellValue());
             String cat = (row.getCell(4).getStringCellValue());
             String subCat = (row.getCell(5).getStringCellValue());
             String storeName = row.getCell(7).getStringCellValue();
             p.setStore(storeRepository.findStoreByNameAndAndSeller(storeName, user));
             p.setDescription(row.getCell(6).getStringCellValue());
+            p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
             if (p.getProductWeight() <= 1) {
                 p.setDeliveryPrice(6);
             } else if (p.getProductWeight() > 1) {
                 p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
 
             }
-            p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+
             log.info(p.getName());
 
             productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat);
