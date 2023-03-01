@@ -485,6 +485,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Product> RetrieveProductByPickup(Long idPickup) {
+        //session manager idSeller
         User u=ur.findById(1L).get();
         Pickup p=pr.findById(idPickup).get();
         Long i=p.getOrder().getId();
