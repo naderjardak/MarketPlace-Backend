@@ -8,11 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +39,6 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<Pickup> pickups;
 
+    @OneToMany(mappedBy = "store")
+    private List<User> suppliers;
 }

@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.User;
-import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.repositories.StoreRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/product")
@@ -82,20 +80,13 @@ public class ProductController {
             p.setProductWeight((float) row.getCell(1).getNumericCellValue());
             float price = (float) row.getCell(2).getNumericCellValue();
             p.setProductPrice(price);
-            p.setProductPriceBeforeDiscount(price);
             p.setQuantity((int) row.getCell(3).getNumericCellValue());
             String cat = (row.getCell(4).getStringCellValue());
             String subCat = (row.getCell(5).getStringCellValue());
-            String storeName = row.getCell(7).getStringCellValue();
+            String storeName = row.getCell(7).getStringCellValue().toLowerCase();
             p.setStore(storeRepository.findStoreByNameAndAndSeller(storeName, user));
             p.setDescription(row.getCell(6).getStringCellValue());
-            p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
-            if (p.getProductWeight() <= 1) {
-                p.setDeliveryPrice(6);
-            } else if (p.getProductWeight() > 1) {
-                p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
-
-            }
+            p.setAdditionalDeliveryInstructions(row.getCell(8).getStringCellValue());
 
             log.info(p.getName());
 

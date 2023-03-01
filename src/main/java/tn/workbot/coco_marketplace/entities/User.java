@@ -95,6 +95,14 @@ private List<Pickup>PickupdeliverymenFreelancer;
     private List<Pickup>PickupAgencys;
 */
 
+    @OneToMany(mappedBy = "supplier")
+    private List<SupplierRequest> supplierRequests;
+
+   @ManyToOne
+   private Store store;
+
+
+
 }
 
 

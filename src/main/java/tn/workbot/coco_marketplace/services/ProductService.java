@@ -11,10 +11,7 @@ import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
-import tn.workbot.coco_marketplace.repositories.ProductCategoryRepository;
-import tn.workbot.coco_marketplace.repositories.ProductRepository;
-import tn.workbot.coco_marketplace.repositories.PromotionCodeRepository;
-import tn.workbot.coco_marketplace.repositories.UserrRepository;
+import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
 import java.sql.Timestamp;
@@ -30,6 +27,9 @@ public class ProductService implements ProductInterface {
 
     @Autowired
     StoreService storeService;
+
+    @Autowired
+    StoreRepository storeRepository;
 
     @Autowired
     ProductCategoryService productCategoryService;
@@ -49,18 +49,26 @@ public class ProductService implements ProductInterface {
 
     @Override
     public Product create(Product p) {
+        User user = userrRepository.findById(1L).get();
+
         if (p.getProductWeight() <= 1) {
             p.setDeliveryPrice(6);
         } else if (p.getProductWeight() > 1) {
             p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
 
         }
+        p.setProductPriceBeforeDiscount(p.getProductPrice());
+
         Random random = new Random();
         int nbRand = random.nextInt(99999);
         p.setReference(("REF-" + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
         p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
+
+        //a verifier en premier en cas de probleme!!!!
+        p.setStore(storeRepository.findStoreByNameAndAndSeller(p.getStore().getName(), user));
+
         return productRepository.save(p);
     }
 
