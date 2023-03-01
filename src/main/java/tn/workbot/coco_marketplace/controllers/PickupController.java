@@ -3,12 +3,13 @@ package tn.workbot.coco_marketplace.controllers;
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PdfPickup;
+import tn.workbot.coco_marketplace.Api.Weather;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.Position;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -19,6 +20,8 @@ public class PickupController  {
     PickupIService pis;
     @Autowired
     PdfPickup pdf;
+    @Autowired
+    private OpenWeatherMapClient weatherClient;
 
 
     @PostMapping("addPickup")
@@ -175,6 +178,10 @@ public class PickupController  {
     @GetMapping("RetrieveProductByPickup")
     public List<Product> RetrieveProductByPickup(@RequestParam Long idPickup) {
         return pis.RetrieveProductByPickup(idPickup);
+    }
+    @GetMapping("/weather/{city}")
+    public double getWeather(@PathVariable String city) {
+        return weatherClient.getWeather(city);
     }
 
 

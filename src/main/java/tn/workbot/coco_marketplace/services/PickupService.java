@@ -12,6 +12,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
+import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
+import tn.workbot.coco_marketplace.Api.Weather;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -41,6 +43,8 @@ public class PickupService implements PickupIService {
     RequestRepository rr;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    OpenWeatherMapClient openWeatherMapClient;
 
     @Override
     public Pickup addPickup(Pickup pickup) {
@@ -109,23 +113,27 @@ public class PickupService implements PickupIService {
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         //HADHI session variable
         User u = ur.findById(3L).get();
+        double a=openWeatherMapClient.getWeather(u.getGovernorate());
         List<Store> store = (List<Store>) sr.findAll();
         List<Store> storesInSameGovernorate = sr.findByGovernorate(u.getGovernorate());
         List<Pickup> pickups = new ArrayList<>();
         //ELI 3ANDHOUM BIKE MATODHA7RELHOUM KEN EL PICKUPS ELI BECH TTLVRA FEN HOUMA W STORE YABDA FARD GOVERNORATE
-        if ((u.getGear().equals("BIKE")) || (u.getGear().equals("MOTO"))) {
-            for (Store s : store) {
-                if (u.getGovernorate().equals(s.getGovernorate())) {
-                    return pr.findByGovernorate(s.getGovernorate());
+        if (a>2){
+            if ((u.getGear().equals("BIKE")) || (u.getGear().equals("MOTO"))) {
+                for (Store s : store) {
+                    if (u.getGovernorate().equals(s.getGovernorate())) {
+                        return pr.findByGovernorate(s.getGovernorate());
+                    }
                 }
             }
-        } else if (u.getGear().equals("CAR")) {
-            for (Store storee : storesInSameGovernorate) {
-                pickups.addAll(storee.getPickups());
+            } else if (u.getGear().equals("CAR")) {
+                for (Store storee : storesInSameGovernorate) {
+                    pickups.addAll(storee.getPickups());
+                }
+
+                return pickups;
             }
 
-            return pickups;
-        }
         return Collections.emptyList();
     }
 
