@@ -75,6 +75,7 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
@@ -82,6 +83,7 @@ public class Product {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<SupplierRequest> supplierRequests;
 
 }

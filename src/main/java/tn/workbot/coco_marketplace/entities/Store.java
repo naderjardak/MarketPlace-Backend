@@ -39,6 +39,5 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<Pickup> pickups;
 
-    @OneToMany(mappedBy = "store")
-    private List<User> suppliers;
+
 }

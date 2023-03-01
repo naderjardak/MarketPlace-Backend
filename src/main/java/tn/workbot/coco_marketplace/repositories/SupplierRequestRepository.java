@@ -6,4 +6,6 @@ import tn.workbot.coco_marketplace.entities.SupplierRequest;
 
 @Repository
 public interface SupplierRequestRepository extends JpaRepository<SupplierRequest,Long> {
+
+
 }

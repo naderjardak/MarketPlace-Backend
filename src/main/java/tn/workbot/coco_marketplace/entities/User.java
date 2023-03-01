@@ -96,10 +96,10 @@ private List<Pickup>PickupdeliverymenFreelancer;
 */
 
     @OneToMany(mappedBy = "supplier")
+    @JsonIgnore
     private List<SupplierRequest> supplierRequests;
 
-   @ManyToOne
-   private Store store;
+
 
 
 
