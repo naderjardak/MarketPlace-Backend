@@ -44,6 +44,7 @@ public class User implements Serializable {
     private String city;
     private String gear;
     private String DriveLicense;
+    private Float GearAge;
 
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;

@@ -4,9 +4,7 @@ import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.Store;
 
-import javax.swing.text.Position;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -71,7 +69,7 @@ public interface PickupIService {
 
     ///////////Gear Delivery Alers (Kilometre || ESSENCE)
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
-
+    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException;
 
 
 

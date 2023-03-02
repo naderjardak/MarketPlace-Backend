@@ -7,22 +7,19 @@ import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
-import tn.workbot.coco_marketplace.Api.Weather;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
-import javax.swing.text.Position;
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -637,6 +634,31 @@ public class PickupService implements PickupIService {
         }
         return kiloSum;
 
+    }
+
+    @Override
+    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException {
+        //sessionManager
+        User user=ur.findById(3L).get();
+        Float kiloSum=kilometreTotalConsommerParFreelancerDelivery();
+        double price= Float.valueOf(0);
+
+        double priceEssnceliters=2.55;
+        if(user.getGear().equals("CAR")){
+            if(user.getGearAge()>0){
+                    price=kiloSum*(5.8/100)*priceEssnceliters;
+            }
+            else if(user.getGearAge()>5){
+                    price=kiloSum*(6.9/100)*priceEssnceliters;
+            }
+            else if(user.getGearAge()>5){
+                    price=kiloSum*(7.8/100)*priceEssnceliters;
+            }
+
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String formattedNumber = decimalFormat.format(price);
+        return formattedNumber;
     }
 
 }

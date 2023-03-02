@@ -261,6 +261,11 @@ public class PickupController  {
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
         return pis.kilometreTotalConsommerParFreelancerDelivery();
     }
+    //////FraisEssenceTotalParGearConsommer
+    @GetMapping("FraisEssenceTotal")
+    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException{
+        return  pis.FraisEssenceTotal();
+    }
 
 
 }
