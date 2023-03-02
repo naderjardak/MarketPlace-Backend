@@ -81,4 +81,48 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where  p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
     public List<Product> productOfOrder(@Param("v1") Long idPickup,@Param("v2") Long idSeller);
 
+    ///////////stat Administrator
+    @Query("select count(distinct u) from User u,Role r where u.role.type='DELIVERYAGENCY'")
+    public int countAgencyAdministrator();
+    @Query("select count(distinct u) from User u,Role r where u.role.type='DELIVERYMEN'")
+    public int countDeliveryFreelancerAdministrator();
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='DELIVERED' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countPickupDeliveredTodayAdministrator();
+
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='ONTHEWAY' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countOfPickupOnTheWayTodayAdministrator();
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='RETURN' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public int countOfPickupReturnedTodayAdministrator();
+
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='DELIVERED' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public int countOfPickupDeliveredweekAdministrator();
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='ONTHEWAY' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public int countOfPickupOnTheWayweekAdministrator();
+    @Query("select count(distinct p) from Pickup p where p.statusPickupSeller='RETURN' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public int countOfPickupReturnedweekAdministrator();
+
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='DELIVERED' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public List<Pickup> sumOfPickupDeliveredTodayAdministrator();
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='ONTHEWAY' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public List<Pickup> sumOfPickupOnTheWayTodayAdministrator();
+
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='RETURN' and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    public List<Pickup> sumOfPickupReturnedTodayAdministrator();
+
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='DELIVERED' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public List<Pickup> sumOfPickupDeliveredweekAdministrator();
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='ONTHEWAY' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public List<Pickup> sumOfPickupOnTheWayweekAdministrator();
+
+    @Query("select distinct p from Pickup p where p.statusPickupSeller='RETURN' and WEEK(p.dateCreationPickup) = WEEK(CURRENT_DATE)")
+    public List<Pickup> sumOfPickupReturnedweekAdministrator();
+
+    //DeliveryAlertCar
+    @Query("select distinct p from Pickup p ,Request r,User u where r.deliveryman.id=u.id and r.pickup.id=p.id and u.id=:d5 ")
+    public List<Pickup> SumKilometreINCar(@Param("d5") Long idFreelancer);
+
+
+
+
+
 }

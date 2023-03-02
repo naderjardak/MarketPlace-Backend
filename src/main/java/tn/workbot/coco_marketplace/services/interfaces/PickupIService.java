@@ -33,11 +33,13 @@ public interface PickupIService {
     public List<Pickup> retrievePickupByBranch(Long idbranch);
     public List<Order> retrieveOrderByseller();
     public List<Pickup> retrievePickupBysellerAttent();
+    ///////////stat Seller
     public int countPickupSellerPendingToday();
     public int countPickupSelleronTheWayToday();
     public int countPickupSellerDeliveredToday();
     public int countPickupSellerReturnToday();
     public int countPickupSellerRefundedToday();
+    ///////////stat Delivery
     public int countPickupDeliveryManFreelancerPendingToday();
     public int countPickupAgencyToday();
     public int countRequestRejectedDeliveryManFreelancerToday();
@@ -51,6 +53,25 @@ public interface PickupIService {
    public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
 
    public List<Product>RetrieveProductByPickup(Long idPickup);
+   /////////////stat Administrator
+   public int countAgencyAdministrator();
+   public int countDeliveryFreelancerAdministrator();
+    public int countPickupDeliveredTodayAdministrator();
+    public int countOfPickupOnTheWayTodayAdministrator();
+    public int countOfPickupReturnedTodayAdministrator();
+    public int countOfPickupDeliveredweekAdministrator();
+    public int countOfPickupOnTheWayweekAdministrator();
+    public int countOfPickupReturnedweekAdministrator();
+   public Float sumOfPickupDeliveredTodayAdministrator();
+   public Float sumOfPickupOnTheWayTodayAdministrator();
+   public Float sumOfPickupReturnedTodayAdministrator();
+    public Float sumOfPickupDeliveredweekAdministrator();
+    public Float sumOfPickupOnTheWayweekAdministrator();
+    public Float sumOfPickupReturnedweekAdministrator();
+
+    ///////////Gear Delivery Alers (Kilometre || ESSENCE)
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
+
 
 
 

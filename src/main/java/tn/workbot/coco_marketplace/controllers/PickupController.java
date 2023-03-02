@@ -12,6 +12,7 @@ import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -182,6 +183,83 @@ public class PickupController  {
     @GetMapping("/weather/{city}")
     public double getWeather(@PathVariable String city) {
         return weatherClient.getWeather(city);
+    }
+    //////////////stat Administrator
+    @GetMapping("countAgencyAdministrator")
+    public int countAgencyAdministrator() {
+        return pis.countAgencyAdministrator();
+    }
+
+    @GetMapping("countDeliveryFreelancerAdministrator")
+    public int countDeliveryFreelancerAdministrator() {
+        return pis.countDeliveryFreelancerAdministrator();
+    }
+
+    @GetMapping("countPickupDeliveredTodayAdministrator")
+    public int countPickupDeliveredTodayAdministrator() {
+        return pis.countPickupDeliveredTodayAdministrator();
+    }
+
+    @GetMapping("countOfPickupOnTheWayTodayAdministrator")
+    public int countOfPickupOnTheWayTodayAdministrator() {
+        return pis.countOfPickupOnTheWayTodayAdministrator();
+    }
+
+    @GetMapping("countOfPickupReturnedTodayAdministrato")
+    public int countOfPickupReturnedTodayAdministrator() {
+        return pis.countOfPickupReturnedTodayAdministrator();
+    }
+
+    @GetMapping("countOfPickupDeliveredweekAdministrator")
+    public int countOfPickupDeliveredweekAdministrator() {
+        return pis.countOfPickupDeliveredweekAdministrator();
+    }
+
+    @GetMapping("countOfPickupOnTheWayweekAdministrator")
+    public int countOfPickupOnTheWayweekAdministrator() {
+        return pis.countOfPickupOnTheWayweekAdministrator();
+    }
+
+    @GetMapping("countOfPickupReturnedweekAdministrator")
+    public int countOfPickupReturnedweekAdministrator() {
+        return pis.countOfPickupReturnedweekAdministrator();
+    }
+
+    @GetMapping("sumOfPickupDeliveredTodayAdministrator")
+    public Float sumOfPickupDeliveredTodayAdministrator() {
+        return pis.sumOfPickupDeliveredTodayAdministrator();
+    }
+
+    @GetMapping("sumOfPickupOnTheWayTodayAdministrator")
+    public Float sumOfPickupOnTheWayTodayAdministrator() {
+        return pis.sumOfPickupOnTheWayTodayAdministrator();
+    }
+
+    @GetMapping("sumOfPickupReturnedTodayAdministrator")
+    public Float sumOfPickupReturnedTodayAdministrator() {
+        return pis.sumOfPickupReturnedTodayAdministrator();
+    }
+
+    @GetMapping("sumOfPickupDeliveredweekAdministrator")
+    public Float sumOfPickupDeliveredweekAdministrator() {
+        return pis.sumOfPickupDeliveredweekAdministrator();
+    }
+
+    @GetMapping("sumOfPickupOnTheWayweekAdministrator")
+    public Float sumOfPickupOnTheWayweekAdministrator() {
+        return pis.sumOfPickupOnTheWayweekAdministrator();
+    }
+
+    @GetMapping("sumOfPickupReturnedweekAdministrator")
+    public Float sumOfPickupReturnedweekAdministrator() {
+        return pis.sumOfPickupReturnedweekAdministrator();
+    }
+
+
+    ///////////Kilometre Cra
+    @GetMapping("kilometreTotalConsommerParFreelancerDelivery")
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
+        return pis.kilometreTotalConsommerParFreelancerDelivery();
     }
 
 

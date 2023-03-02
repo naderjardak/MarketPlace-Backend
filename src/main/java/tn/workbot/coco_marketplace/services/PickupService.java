@@ -506,5 +506,137 @@ public class PickupService implements PickupIService {
         }
         return products;
     }
+ ///////////////stat Administrator
+    @Override
+    public int countAgencyAdministrator() {
+        return pr.countAgencyAdministrator();
+    }
+
+    @Override
+    public int countDeliveryFreelancerAdministrator() {
+        return pr.countDeliveryFreelancerAdministrator();
+    }
+
+    @Override
+    public int countPickupDeliveredTodayAdministrator() {
+        return pr.countPickupDeliveredTodayAdministrator();
+    }
+
+    @Override
+    public int countOfPickupOnTheWayTodayAdministrator() {
+        return pr.countOfPickupOnTheWayTodayAdministrator();
+    }
+
+    @Override
+    public int countOfPickupReturnedTodayAdministrator() {
+        return pr.countOfPickupReturnedTodayAdministrator();
+    }
+
+    @Override
+    public int countOfPickupDeliveredweekAdministrator() {
+        return pr.countOfPickupDeliveredweekAdministrator();
+    }
+
+    @Override
+    public int countOfPickupOnTheWayweekAdministrator() {
+        return pr.countOfPickupOnTheWayweekAdministrator();
+    }
+
+    @Override
+    public int countOfPickupReturnedweekAdministrator() {
+        return pr.countOfPickupReturnedweekAdministrator();
+    }
+
+    @Override
+    public Float sumOfPickupDeliveredTodayAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupDeliveredTodayAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float sumOfPickupOnTheWayTodayAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupOnTheWayTodayAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float sumOfPickupReturnedTodayAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupReturnedTodayAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float sumOfPickupDeliveredweekAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupDeliveredweekAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float sumOfPickupOnTheWayweekAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupOnTheWayweekAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float sumOfPickupReturnedweekAdministrator() {
+        List<Pickup> pickups= new  ArrayList<>();
+        pickups.addAll(pr.sumOfPickupReturnedweekAdministrator());
+        Float sum= Float.valueOf(0);
+        for (Pickup p:pickups) {
+            sum=p.getSum()+sum;
+        }
+        return sum;
+    }
+
+    @Override
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
+        //session manager idUser
+        User u=ur.findById(3L).get();
+        List<Pickup> pickups=pr.SumKilometreINCar(u.getId());
+        float kiloSum=0;
+        //////
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                .build();
+        // Get the distance and travel time using the DistanceMatrixApi
+        for (Pickup p:pickups) {
+            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                    .origins(p.getGovernorate())
+                    .destinations(p.getStore().getGovernorate())
+                    .mode(TravelMode.DRIVING);
+
+            DistanceMatrix matrix = request.await();
+            Distance distance = matrix.rows[0].elements[0].distance;
+            double distanceInKm = distance.inMeters / 1000.0;
+             kiloSum= (float) distanceInKm + kiloSum;
+        }
+        return kiloSum;
+
+    }
 
 }
