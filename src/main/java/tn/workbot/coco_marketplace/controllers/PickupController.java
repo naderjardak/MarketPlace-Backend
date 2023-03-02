@@ -266,7 +266,11 @@ public class PickupController  {
     public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException{
         return  pis.FraisEssenceTotal();
     }
+    @GetMapping("LimiteCo2")
+    public double LimiteCo2() throws IOException, InterruptedException, ApiException {
+     return  pis.LimiteCo2();
+    }
 
 
-}
+    }
 

@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
+import tn.workbot.coco_marketplace.Api.PickupTwilio;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -42,6 +43,8 @@ public class PickupService implements PickupIService {
     private JavaMailSender javaMailSender;
     @Autowired
     OpenWeatherMapClient openWeatherMapClient;
+    @Autowired
+    PickupTwilio pickupTwilio;
 
     @Override
     public Pickup addPickup(Pickup pickup) {
@@ -645,13 +648,13 @@ public class PickupService implements PickupIService {
 
         double priceEssnceliters=2.55;
         if(user.getGear().equals("CAR")){
-            if(user.getGearAge()>0){
+            if(user.getGearAge()>0 && user.getGearAge()<5 ){
                     price=kiloSum*(5.8/100)*priceEssnceliters;
             }
-            else if(user.getGearAge()>5){
+            else if(user.getGearAge()>5 && user.getGearAge()<10){
                     price=kiloSum*(6.9/100)*priceEssnceliters;
             }
-            else if(user.getGearAge()>5){
+            else if(user.getGearAge()>10){
                     price=kiloSum*(7.8/100)*priceEssnceliters;
             }
 
@@ -659,6 +662,39 @@ public class PickupService implements PickupIService {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedNumber = decimalFormat.format(price);
         return formattedNumber;
+    }
+
+
+    @Override
+    public double LimiteCo2() throws IOException, InterruptedException, ApiException {
+        //sessionManager
+        User user=ur.findById(3L).get();
+        Float kiloSum=kilometreTotalConsommerParFreelancerDelivery();
+        double co2kilo= Float.valueOf(0);
+
+        double Co2Car=2.55;
+        if(user.getGear().equals("CAR")){
+            if(user.getGearAge()>0 && user.getGearAge()<5 ){
+                co2kilo=kiloSum*(5.8/100)*Co2Car;
+            }
+            else if(user.getGearAge()>5 && user.getGearAge()<10){
+                co2kilo=kiloSum*(6.9/100)*Co2Car;
+            }
+            else if(user.getGearAge()>10){
+                co2kilo=kiloSum*(7.8/100)*Co2Car;
+            }
+
+        }
+
+        if (co2kilo>1200){
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("You Consume Your Limit Of CO2");
+            mailMessage.setText("you must give the world a tree if you don't like to get a strike in COCO market");
+            javaMailSender.send(mailMessage);
+            //PickupTwilio.sendSMS("You Consume Your Limit Of CO2 ,you must give the world a tree if you don't like to get a strike in COCO market");
+            }
+        return co2kilo;
     }
 
 }

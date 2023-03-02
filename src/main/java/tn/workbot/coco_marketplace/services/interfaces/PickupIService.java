@@ -71,6 +71,9 @@ public interface PickupIService {
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
     public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException;
 
+    //////////Envoyer Un sms si vous avez cconsoumer ton limite  CO2  ,
+    public double LimiteCo2() throws IOException, InterruptedException, ApiException;
+
 
 
 
