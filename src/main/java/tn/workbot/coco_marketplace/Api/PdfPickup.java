@@ -77,12 +77,12 @@ public class PdfPickup {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
         contentStream.newLineAtOffset(50, 660);
-        contentStream.showText("FirstName: " + pickup.getOrder().getBuyer().getFirstName()+ " ---LastName: "+ pickup.getOrder().getBuyer().getLastName()+" ---  Phone Number: "+ pickup.getOrder().getBuyer().getPhoneNumber());
+        contentStream.showText("FirstName: " + pickup.getOrder().getBuyer().getFirstName()+ "   LastName: "+ pickup.getOrder().getBuyer().getLastName()+"  Phone Number: "+ pickup.getOrder().getBuyer().getPhoneNumber());
         contentStream.endText();
         // Add pickup NomStore
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
-        contentStream.newLineAtOffset(50, 640);
+        contentStream.newLineAtOffset(50, 670);
         contentStream.showText("Name Of Store: " + pickup.getStore().getName());
         contentStream.endText();
         //
@@ -92,6 +92,14 @@ public class PdfPickup {
         drawTableHeader(contentStream, tableTopY);
         drawTableRows(contentStream, tableTopY - 20, products,idPickup);
 
+        contentStream.close();
+        // Add total to footer
+        contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+        contentStream.newLineAtOffset(50, 50);
+        contentStream.showText("Total: " );
+        contentStream.endText();
         contentStream.close();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         document.save(baos);
@@ -108,7 +116,7 @@ public class PdfPickup {
         float[] columnWidths = {50, 100, 200};
 
         // Define table header row
-        String[] headers = {"Item ID", "Description", "Price"};
+        String[] headers = {"", "Description", "Price"};
 
         // Set font and font size for table header
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
@@ -123,8 +131,8 @@ public class PdfPickup {
         }
 
         // Draw table header bottom line
-        contentStream.moveTo(50, tableTopY - 10);
-        contentStream.lineTo(500, tableTopY - 10);
+        contentStream.moveTo(50, tableTopY - 15);
+        contentStream.lineTo(500, tableTopY - 15);
         contentStream.stroke();
     }
 
@@ -143,10 +151,10 @@ public class PdfPickup {
             for (Product item : ps.RetrieveProductByPickup(idPickup)) {
             contentStream.beginText();
             contentStream.newLineAtOffset(70, tableTopY);
-            contentStream.showText(item.getReference());
-            contentStream.newLineAtOffset(columnWidths[0], -2);
+            contentStream.showText("");
+            contentStream.newLineAtOffset(columnWidths[0], -5);
             contentStream.showText(item.getDescription());
-            contentStream.newLineAtOffset(columnWidths[2], -2);
+            contentStream.newLineAtOffset(columnWidths[2], -5);
             contentStream.showText(String.valueOf(item.getProductPrice()));
             contentStream.endText();
 
@@ -157,6 +165,7 @@ public class PdfPickup {
 
             tableTopY -= 20;
         }
+
     }
 
 

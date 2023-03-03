@@ -2,7 +2,9 @@ package tn.workbot.coco_marketplace.controllers;
 
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.Api.DeliveryPreduction;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PdfPickup;
 import tn.workbot.coco_marketplace.Api.Weather;
@@ -23,6 +25,8 @@ public class PickupController  {
     PdfPickup pdf;
     @Autowired
     private OpenWeatherMapClient weatherClient;
+    @Autowired
+    DeliveryPreduction dp;
 
 
     @PostMapping("addPickup")
@@ -271,6 +275,19 @@ public class PickupController  {
      return  pis.LimiteCo2();
     }
 
+
+    ///////////
+    @GetMapping("/predict/{request}")
+    public ResponseEntity<Double> predict(@RequestParam int r) {
+        // Predict the delivery sum using the linear regression model
+        double predictedTime = dp.predict((float) r);
+        return ResponseEntity.ok(predictedTime);
+    }
+    @PostMapping("/predict/{Data}")
+    public ResponseEntity<String> addDelivery() {
+        dp.addDelivery();
+        return ResponseEntity.ok("Delivery added successfully");
+    }
 
     }
 
