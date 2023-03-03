@@ -4,6 +4,7 @@ import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.User;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -73,6 +74,7 @@ public interface PickupIService {
 
     //////////Envoyer Un sms si vous avez cconsoumer ton limite  CO2  ,
     public double LimiteCo2() throws IOException, InterruptedException, ApiException;
+    public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException;
 
 
 

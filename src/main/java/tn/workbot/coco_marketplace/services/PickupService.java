@@ -669,6 +669,21 @@ public class PickupService implements PickupIService {
     public double LimiteCo2() throws IOException, InterruptedException, ApiException {
         //sessionManager
         User user=ur.findById(3L).get();
+        double co2kilo= user.getCo2();
+        if (co2kilo>1200){
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("You Consume Your Limit Of CO2");
+            mailMessage.setText("you must give the world a tree if you don't like to get a strike in COCO market");
+            javaMailSender.send(mailMessage);
+            //PickupTwilio.sendSMS("You Consume Your Limit Of CO2 ,you must give the world a tree if you don't like to get a strike in COCO market");
+            }
+        return co2kilo;
+    }
+
+    @Override
+    public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
+        User user=ur.findById(3L).get();
         Float kiloSum=kilometreTotalConsommerParFreelancerDelivery();
         double co2kilo= Float.valueOf(0);
 
@@ -685,16 +700,8 @@ public class PickupService implements PickupIService {
             }
 
         }
-
-        if (co2kilo>1200){
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("You Consume Your Limit Of CO2");
-            mailMessage.setText("you must give the world a tree if you don't like to get a strike in COCO market");
-            javaMailSender.send(mailMessage);
-            //PickupTwilio.sendSMS("You Consume Your Limit Of CO2 ,you must give the world a tree if you don't like to get a strike in COCO market");
-            }
-        return co2kilo;
+        user.setCo2(co2kilo);
+        return ur.save(user);
     }
 
 }

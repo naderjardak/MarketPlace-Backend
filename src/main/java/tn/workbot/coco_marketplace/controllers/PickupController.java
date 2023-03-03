@@ -270,13 +270,18 @@ public class PickupController  {
     public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException{
         return  pis.FraisEssenceTotal();
     }
+    //////////////calculer co2 and update in user entity
+    @PostMapping("UpdateTheCO2ConsoFreelancer")
+    public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
+        return pis.UpdateTheCO2ConsoFreelancer();
+    }
+    /////////send mail if user fet el limite
     @GetMapping("LimiteCo2")
     public double LimiteCo2() throws IOException, InterruptedException, ApiException {
      return  pis.LimiteCo2();
     }
 
-
-    ///////////
+    ///////////predict som
     @GetMapping("/predict/{request}")
     public ResponseEntity<Double> predict(@RequestParam int r) {
         // Predict the delivery sum using the linear regression model
@@ -288,6 +293,20 @@ public class PickupController  {
         dp.addDelivery();
         return ResponseEntity.ok("Delivery added successfully");
     }
+    //////////predict co2
+    @GetMapping("/predict/{co2}")
+    public ResponseEntity<Double> predictco2(@RequestParam int gearage) {
+            // Predict the CO2 using the linear regression model
+        double predictedTime = dp.predictco2((float) gearage);
+        return ResponseEntity.ok(predictedTime);
+    }
+    @PostMapping("/predict/{Dataco2}")
+    public ResponseEntity<String> addUser() {
+        dp.addUser();
+        return ResponseEntity.ok("user added successfully");
+    }
+
+
 
     }
 
