@@ -3,10 +3,11 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface SupplierRequestInterface {
-    SupplierRequest create(SupplierRequest s,Long productId);
+    SupplierRequest create(SupplierRequest s,Long productId) throws MessagingException;
 
     SupplierRequest update(SupplierRequest s);
 
@@ -21,4 +22,6 @@ public interface SupplierRequestInterface {
     List<SupplierRequest> retriveRequestsByProduct(Long idProduct);
 
     void accpetRequestBySeller(Long supplierRequestId);
+
+    //void confirmRequestDelivery(Long supplierRequestId);
 }
