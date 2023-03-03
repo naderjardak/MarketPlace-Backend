@@ -134,4 +134,17 @@ public class SupplierRequestService implements SupplierRequestInterface {
         }
 
     }
+
+    @Override
+    public void confirmRequestDelivery(Long supplierRequestId) {
+        if (supplierRequestRepository.findById(supplierRequestId).isPresent()) {
+            SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId).get();
+            Product product = supplierRequest.getProduct();
+            product.setUnityPriceFromSupplier(supplierRequest.getUnityPrice());
+            product.setQuantity(supplierRequest.getQuantity());
+            productService.update(product);
+            supplierRequest.setRequestStatus(SupplierRequestStatus.DELIVERED);
+            supplierRequestRepository.save(supplierRequest);
+        }
+    }
 }

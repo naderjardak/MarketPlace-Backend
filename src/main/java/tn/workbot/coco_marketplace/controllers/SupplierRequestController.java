@@ -56,4 +56,9 @@ public class SupplierRequestController {
         supplierRequestInterface.accpetRequestBySeller(supplierRequestId);
 
     }
+    @PutMapping("ConfirmDelivery")
+    void ConfirmDelivery(Long supplierRequestId) {
+        supplierRequestInterface.confirmRequestDelivery(supplierRequestId);
+
+    }
 }

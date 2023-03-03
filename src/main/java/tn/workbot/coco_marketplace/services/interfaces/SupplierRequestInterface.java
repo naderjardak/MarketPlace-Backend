@@ -23,5 +23,5 @@ public interface SupplierRequestInterface {
 
     void accpetRequestBySeller(Long supplierRequestId);
 
-    //void confirmRequestDelivery(Long supplierRequestId);
+    void confirmRequestDelivery(Long supplierRequestId);
 }
