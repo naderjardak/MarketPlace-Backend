@@ -8,6 +8,7 @@ import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -52,5 +53,10 @@ public class UserService implements UserInterface {
         userRepository.save(u);
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(()->new EntityNotFoundException((
+                "user not found with email =" +email)
+        ));
+    }
 
 }
