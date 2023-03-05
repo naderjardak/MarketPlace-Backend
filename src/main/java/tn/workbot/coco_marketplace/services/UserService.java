@@ -22,7 +22,14 @@ public class UserService implements UserInterface {
     @Autowired
     RoleRepository roleRepository;
 
-     PasswordEncoder passwordEncoder;
+
+    PasswordEncoder passwordEncoder;
+   @Autowired
+   public UserService(){
+       this.passwordEncoder=new BCryptPasswordEncoder();
+   }
+
+
 
     @Override
     public User Create(User u) {
