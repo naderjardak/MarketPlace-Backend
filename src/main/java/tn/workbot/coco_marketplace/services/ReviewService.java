@@ -2,10 +2,9 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.Review;
-import tn.workbot.coco_marketplace.repositories.ProductRepository;
-import tn.workbot.coco_marketplace.repositories.ReviewRepository;
+import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
+import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.ReviewInterface;
 
 import java.util.Arrays;
@@ -19,6 +18,20 @@ public class ReviewService implements ReviewInterface {
 
     @Autowired
     ProductRepository pr;
+
+    @Autowired
+    UserrRepository ur;
+
+    @Autowired
+    RoleRepository rr;
+
+    @Autowired
+    OrderRepository or;
+
+    @Autowired
+    BadWordsService badWordsService;
+
+
 
     @Override
     public List<Review> getAllReviews() {
@@ -35,9 +48,35 @@ public class ReviewService implements ReviewInterface {
         review.setCreatedAt(new Date());
         Review review1=rvp.save(review);
         Product product=pr.findById(id).get();
+        //Product reference=pr.getReferenceById(id);
+
+
         review1.setProduct(product);
-        review.setComment(review.hideBadWords(review.getComment()));
+        BadWordsService badWordsService1=new BadWordsService();
+        review.setComment(badWordsService1.hideBadWords(review.getComment()));
         rvp.save(review);
+        /*Order order=or.findById(id).get();
+        List<Pickup> pickups= order.getPickups();
+        for(Pickup p:pickups){
+            if(p.getStatusPickupBuyer().equals(StatusPickupBuyer.DELIVERED)){
+                List<Request>  requests=p.getRequests();
+                for(Request r:requests){
+                    if(r.getAgencyDeliveryMan() != null && r.getDeliveryman() ==null) {
+
+                        review.setDeliveryAgency(r.getAgencyDeliveryMan().getAgencyBranch().getDeliveryAgency());
+                    }
+                    if(r.getDeliveryman() != null && r.getAgencyDeliveryMan() ==null){
+                        review.setDeliveryFreelancer(r.getDeliveryman());
+                    }
+                }
+            }
+               rvp.save(review);
+        }*/
+
+
+
+
+
     }
 
     @Override
@@ -79,6 +118,15 @@ public class ReviewService implements ReviewInterface {
 
             return -1;
         }
+    }
+
+    @Override
+    public void AddReviewOnDelivery(Review review, Long id) {
+        //review.setCreatedAt(new Date());
+        //Review rev=rvp.save(review);
+        //Order order= or.findById(idOrder).get();
+        //order.
+
     }
 
 }

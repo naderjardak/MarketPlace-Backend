@@ -32,6 +32,9 @@ public class ClaimSavService implements ClaimSavInterface {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    MailSenderService mailSenderService;
+
     @Override
     public List<ClaimSav> getAllClaims() {
         return crp.findAll();

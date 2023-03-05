@@ -28,6 +28,8 @@ public class ClaimSavController {
     @Autowired
     UserrRepository ur;
 
+
+
     @GetMapping("GetAllClaims")
     public List<ClaimSav> getAllClaims() {
         return claimSavService.getAllClaims();
@@ -65,7 +67,7 @@ public class ClaimSavController {
 
     @GetMapping("/send-email-to-user-1")
     public String sendEmailToUser() {
-        //TEST 
+        //TEST
         User user = userService.GetById(1);
         String subject = "Example Subject";
         String message = "Hello " + user.getFirstName() + ",\n\nFrom CocoMarcet Claim Service";
