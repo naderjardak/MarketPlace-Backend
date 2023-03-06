@@ -62,50 +62,21 @@ public class OrderServices implements OrderInterface {
     @Autowired
     private JavaMailSender javaMailSender;
 
-            @Override
-            public List<Order> getAllOrders() {
-                return orderRepository.findAll();
-            }
+    @Override
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
 
-            @Override
-            public Order getOrderById(Long id) {
-                return orderRepository.findById(id).orElse(null);
-            }
-
-            @Override
-            public void createOrder(ProductQuantity productQuantity) {
-
-                //Session Manager Id ne9sa affectation mte3 id user lil order
-                User user=userrRepository.findById(1L).get();
-                Order newOrder = new Order();
-                newOrder.setBuyer(user);
-                newOrder.setStatus(StatusOrderType.BASKET);
-                if (newOrder.getProductQuantities() == null) {
-                    newOrder.setProductQuantities(new ArrayList<>());
-                }
-                newOrder.getProductQuantities().add(productQuantity);
-                newOrder.setCreationDate(new Date(System.currentTimeMillis()));
-                newOrder.setRef(" ");
-                float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
-                newOrder.setSum(sum);
-                float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-                if(weight<=1)
-                    newOrder.setDeliveryPrice(6);
-                else
-                    newOrder.setDeliveryPrice(6*weight);
-                    newOrder.setProductsWeightKg(weight);
-
-                productQuantity.setOrder(newOrder);
-                orderRepository.save(newOrder);
-                productQuantityRepository.save(productQuantity);
-            }
-
+    @Override
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
 
     @Override
     public void createOrder(ProductQuantity productQuantity) {
 
         //Session Manager Id ne9sa affectation mte3 id user lil order
-        User user = userrRepository.findById(1L).get();
+        User user=userrRepository.findById(1L).get();
         Order newOrder = new Order();
         newOrder.setBuyer(user);
         newOrder.setStatus(StatusOrderType.BASKET);
@@ -114,12 +85,23 @@ public class OrderServices implements OrderInterface {
         }
         newOrder.getProductQuantities().add(productQuantity);
         newOrder.setCreationDate(new Date(System.currentTimeMillis()));
-        float sum = productQuantity.getProduct().getProductPrice() * productQuantity.getQuantity();
+        newOrder.setRef(" ");
+        float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
         newOrder.setSum(sum);
+        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
+        if(weight<=1)
+            newOrder.setDeliveryPrice(6);
+        else
+            newOrder.setDeliveryPrice(6*weight);
+        newOrder.setProductsWeightKg(weight);
+
         productQuantity.setOrder(newOrder);
         orderRepository.save(newOrder);
         productQuantityRepository.save(productQuantity);
     }
+
+
+
 
     @Override
     public Boolean AddProductToOrder(ProductQuantity productQuantity) {
@@ -134,29 +116,29 @@ public class OrderServices implements OrderInterface {
         return true;
     }
 
-            @Override
-            public ProductQuantity UpdateQuantiyOfProduct(Long refProuct,int quantity)
-            {
-                if(quantity==0)
-                {
-                    return DeleteProductFromOrder(refProuct);
-                }
-                //Session Id (change 1L)
-                Order order= orderRepository.BasketExistance(1L);
-                ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
-                productQuantity.setQuantity(quantity);
-                productQuantityRepository.save(productQuantity);
-                float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-                weight=order.getProductsWeightKg()+weight;
-                if(weight<=1)
-                    order.setDeliveryPrice(6);
-                else
-                    order.setDeliveryPrice(6*weight);
+    @Override
+    public ProductQuantity UpdateQuantiyOfProduct(Long refProuct,int quantity)
+    {
+        if(quantity==0)
+        {
+            return DeleteProductFromOrder(refProuct);
+        }
+        //Session Id (change 1L)
+        Order order= orderRepository.BasketExistance(1L);
+        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
+        productQuantity.setQuantity(quantity);
+        productQuantityRepository.save(productQuantity);
+        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
+        weight=order.getProductsWeightKg()+weight;
+        if(weight<=1)
+            order.setDeliveryPrice(6);
+        else
+            order.setDeliveryPrice(6*weight);
 
-                order.setProductsWeightKg(weight);
-                order.setSum(SummOrder());
-                return productQuantity;
-            }
+        order.setProductsWeightKg(weight);
+        order.setSum(SummOrder());
+        return productQuantity;
+    }
 
 
     @Override
@@ -186,63 +168,63 @@ public class OrderServices implements OrderInterface {
         return orderRepository.save(order);
     }
 
-            @Override
-            public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
-                User user=userrRepository.findById(1L).get();
-                Order order= orderRepository.BasketExistance(user.getId());
+    @Override
+    public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
+        User user=userrRepository.findById(1L).get();
+        Order order= orderRepository.BasketExistance(user.getId());
 
-                if(order.getShipping()==null)
-                    return false;
+        if(order.getShipping()==null)
+            return false;
 
-                String msg="";
-                if (paymentType == PaymentType.CASH_ON_DELIVERY)
-                {
-                    //Mail api
-                    MimeMessage message = javaMailSender.createMimeMessage();
-                    MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
-                    mailMessage.setTo(user.getEmail());
-                    mailMessage.setSubject("From Coco Market");
-                    Context context = new Context();
-                    String msag="Have a nice day, your order is confirmed successfully.";
-                    context.setVariable("msg",msag);
-                    String lien="http://localhost:8081/order/validateCommand?token="+generateToken(user);
-                    context.setVariable("link",lien);
-                    String name="Thank you, "+user.getFirstName().substring(0,1).toUpperCase()+user.getFirstName().substring(1);
-                    context.setVariable("name",name);
-                    String emailContent = templateEngine.process("OrderConfirmation", context);
-                    mailMessage.setText(emailContent, true);
-                    javaMailSender.send(message);
+        String msg="";
+        if (paymentType == PaymentType.CASH_ON_DELIVERY)
+        {
+            //Mail api
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("From Coco Market");
+            Context context = new Context();
+            String msag="Have a nice day, your order is confirmed successfully.";
+            context.setVariable("msg",msag);
+            String lien="http://localhost:8081/order/validateCommand?token="+generateToken(user);
+            context.setVariable("link",lien);
+            String name="Thank you, "+user.getFirstName().substring(0,1).toUpperCase()+user.getFirstName().substring(1);
+            context.setVariable("name",name);
+            String emailContent = templateEngine.process("OrderConfirmation", context);
+            mailMessage.setText(emailContent, true);
+            javaMailSender.send(message);
 
-                }
-                else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
-                {
-                    order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
-                    order.setPayment(PaymentType.BANK_CARD);
-                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-                    orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
-                    //Twilio mna7iha 3al flous
-                    //OrderTwilioService.sendSMS(msg);
-                    List<String> refList=orderRepository.reflist();
-                    String referance="";
-                    do{
-                        referance=generateRandomNumber(10);
-                    }while (refList.contains(referance));
-                    order.setRef(referance);
-                }
-                else
-                {
-                    order.setStatus(StatusOrderType.REFUSED_PAYMENT);
-                    orderRepository.save(order);
-                    msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" you have error in Payment with card please retry with a valid card.";
-                    //Twilio mna7iha 3al flous
-                    //OrderTwilioService.sendSMS(msg);
-                    return false;
-                }
-                orderRepository.save(order);
-                return true;
-            }
+        }
+        else if(paymentType == PaymentType.BANK_CARD && cardPaiment)
+        {
+            order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
+            order.setPayment(PaymentType.BANK_CARD);
+            msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
+            orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+            //Twilio mna7iha 3al flous
+            //OrderTwilioService.sendSMS(msg);
+            List<String> refList=orderRepository.reflist();
+            String referance="";
+            do{
+                referance=generateRandomNumber(10);
+            }while (refList.contains(referance));
+            order.setRef(referance);
+        }
+        else
+        {
+            order.setStatus(StatusOrderType.REFUSED_PAYMENT);
+            orderRepository.save(order);
+            msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" you have error in Payment with card please retry with a valid card.";
+            //Twilio mna7iha 3al flous
+            //OrderTwilioService.sendSMS(msg);
+            return false;
+        }
+        orderRepository.save(order);
+        return true;
+    }
 
-  
+
 
     @Override
     public Boolean deleteOrder(Long id) {
@@ -299,25 +281,24 @@ public class OrderServices implements OrderInterface {
         return orderRepository.RankGouvernoratByNbOrders();
     }
 
-            @Value("${stripe.api.key}")
-            private String stripeApiKey;
 
-            @Override
-            public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {
-                Stripe.apiKey = stripeApiKey;
-                Map<String, Object> params = new HashMap<>();
-                params.put("name", data.getName());
-                params.put("email", data.getEmail());
-                Customer customer = Customer.create(params);
-                data.setCustemerId(customer.getId());
-                if(customer.getId()!=null)
-                {
-                    endCommandProsess(PaymentType.valueOf("BANK_CARD"),true);
-                }
-                else
-                    endCommandProsess(PaymentType.valueOf("BANK_CARD"),false);
-                return data;
-            }
+
+    @Override
+    public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {
+        Stripe.apiKey = stripeApiKey;
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", data.getName());
+        params.put("email", data.getEmail());
+        Customer customer = Customer.create(params);
+        data.setCustemerId(customer.getId());
+        if(customer.getId()!=null)
+        {
+            endCommandProsess(PaymentType.valueOf("BANK_CARD"),true);
+        }
+        else
+            endCommandProsess(PaymentType.valueOf("BANK_CARD"),false);
+        return data;
+    }
 
 
     @Override
@@ -331,99 +312,99 @@ public class OrderServices implements OrderInterface {
         orderRepository.deleteAll(orderList);
     }
 
-            @Override
-            public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
-            {
-                float aux=0;
-                if(maxPrix<minPrix)
-                {
-                  aux=maxPrix;
-                  maxPrix=minPrix;
-                  minPrix=aux;
-                }
-                if(maxPrix==0)
-                {
-                    maxPrix = orderRepository.maxProductPrice();
-                }
-                if (nameProduct==null)
-                {
-                    nameProduct="";
-                }
-                if(categorie==null)
-                {
-                    categorie="%";
-                }
-                if(mark==null)
-                {
-                    mark="";
-                }
-                if(productFiltre == ProductFiltre.TOP_RATED)
-                    return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
-                if(productFiltre == ProductFiltre.ASCENDING_PRICE)
-                    return orderRepository.researchProductASCENDINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
-                if(productFiltre == ProductFiltre.DECREASING_PRICE)
-                    return orderRepository.researchProductDECREASINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
-                if(productFiltre == ProductFiltre.MOST_REQUESTED)
-                    return orderRepository.researchProductMOSTREQUESTED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+    @Override
+    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
+    {
+        float aux=0;
+        if(maxPrix<minPrix)
+        {
+            aux=maxPrix;
+            maxPrix=minPrix;
+            minPrix=aux;
+        }
+        if(maxPrix==0)
+        {
+            maxPrix = orderRepository.maxProductPrice();
+        }
+        if (nameProduct==null)
+        {
+            nameProduct="";
+        }
+        if(categorie==null)
+        {
+            categorie="%";
+        }
+        if(mark==null)
+        {
+            mark="";
+        }
+        if(productFiltre == ProductFiltre.TOP_RATED)
+            return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+        if(productFiltre == ProductFiltre.ASCENDING_PRICE)
+            return orderRepository.researchProductASCENDINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+        if(productFiltre == ProductFiltre.DECREASING_PRICE)
+            return orderRepository.researchProductDECREASINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+        if(productFiltre == ProductFiltre.MOST_REQUESTED)
+            return orderRepository.researchProductMOSTREQUESTED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
 
-                return orderRepository.researchProductNEWARRIVAL(maxPrix, minPrix, "%" + nameProduct + "%", categorie, "%" + mark + "%");
-            }
-
-
-            @Override
-            public String validateCommand(String token) throws MessagingException
-            {
-                String email=parseToken(token);
-                if(orderRepository.findUserByEmail(email)==1)
-                {
-                    User user=userrRepository.findById(1L).get();
-                    Order order= orderRepository.BasketExistance(user.getId());
-                    order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
-                    order.setPayment(PaymentType.CASH_ON_DELIVERY);
-                    List<String> refList=orderRepository.reflist();
-                    String referance="";
-                    do{
-                        referance=generateRandomNumber(10);
-                    }while (!refList.contains(referance));
-                    order.setRef(referance);
-                    orderRepository.save(order);
-
-                    return "Your command is successfully confirmed";
-                }
-                return "Expired Link Token";
-            }
+        return orderRepository.researchProductNEWARRIVAL(maxPrix, minPrix, "%" + nameProduct + "%", categorie, "%" + mark + "%");
+    }
 
 
-            //coded with HS256
-            @Override
-            public String generateToken(User user) {
-                return Jwts.builder()
-                        .setSubject("Order Verification To Cash ON Delivery")
-                        .claim("Email", user.getEmail())
-                        .signWith(SignatureAlgorithm.HS256, "sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ")
-                        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5))
-                        .setIssuedAt(new Date(System.currentTimeMillis()))
-                        .compact();
-            }
+    @Override
+    public String validateCommand(String token) throws MessagingException
+    {
+        String email=parseToken(token);
+        if(orderRepository.findUserByEmail(email)==1)
+        {
+            User user=userrRepository.findById(1L).get();
+            Order order= orderRepository.BasketExistance(user.getId());
+            order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
+            order.setPayment(PaymentType.CASH_ON_DELIVERY);
+            List<String> refList=orderRepository.reflist();
+            String referance="";
+            do{
+                referance=generateRandomNumber(10);
+            }while (!refList.contains(referance));
+            order.setRef(referance);
+            orderRepository.save(order);
+
+            return "Your command is successfully confirmed";
+        }
+        return "Expired Link Token";
+    }
 
 
-            //uncoded
-            @Override
-            public String parseToken(String token) {
-                Jws<Claims> claims = Jwts.parser().setSigningKey("sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ").parseClaimsJws(token);
-                return claims.getBody().get("Email", String.class);
-            }
+    //coded with HS256
+    @Override
+    public String generateToken(User user) {
+        return Jwts.builder()
+                .setSubject("Order Verification To Cash ON Delivery")
+                .claim("Email", user.getEmail())
+                .signWith(SignatureAlgorithm.HS256, "sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ")
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .compact();
+    }
 
 
-            @Override
-            public String generateRandomNumber(int n) {
-                Random rand = new Random();
-                StringBuilder sb = new StringBuilder(n);
-                for (int i = 0; i < n; i++) {
-                    sb.append(rand.nextInt(10));
-                }
-                return sb.toString();
-            }
+    //uncoded
+    @Override
+    public String parseToken(String token) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey("sfsdgsgCHzqAgJGJYStdpwmoAKPTklmEFyyBOPeytXFBiIHxmpVOfGfEJZrKndJGbBvHFKxWJMOoscracHuHmCBBrvWnRlmaqcVaEpshDGtWlhOnuaLoulhINcrSwxjgfdhoQOBHlBWHHczEKeuAJbJDeOAvxaRVmhziltjjyaWgQuzTQXjomaGGWdXxcAhOoSUSCiQNpfsXTQWbalDevCDpcEXCBGWZkIsPaREvYixXTSCpcGyZfIMRZfJFAlWZ").parseClaimsJws(token);
+        return claims.getBody().get("Email", String.class);
+    }
+
+
+    @Override
+    public String generateRandomNumber(int n) {
+        Random rand = new Random();
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            sb.append(rand.nextInt(10));
+        }
+        return sb.toString();
+    }
 
 
 }
