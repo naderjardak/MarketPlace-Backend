@@ -713,7 +713,9 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
-        return null;
+        //sessionManager
+        User freelancer=ur.findById(1L).get();
+        return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
     }
 
 }

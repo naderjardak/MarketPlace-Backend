@@ -310,6 +310,10 @@ public class PickupController  {
      public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupAgencyByRequestWithStatusRequestApproved();
      }
+    @GetMapping("RetrievePickupFreelancerByRequestWithStatusRequestApproved")
+    public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
+        return pis.RetrievePickupFreelancerByRequestWithStatusRequestApproved();
+    }
 
 
     }
