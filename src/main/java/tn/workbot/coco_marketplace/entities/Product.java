@@ -50,6 +50,7 @@ public class Product {
     private int quantity;
     //kg
     private float productWeight;
+
     private int deliveryQuantity;
 
     // Define a field to indicate whether the product is currently available for purchase
@@ -85,6 +86,5 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
-
 
 }

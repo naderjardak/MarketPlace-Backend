@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 
+import javax.persistence.OrderBy;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("SELECT concat(o.buyer.FirstName,' & ',o.buyer.LastName,' ',count(o)) from Order o where o.status='ACCEPTED_PAYMENT' group by o.buyer order by count (o) desc ")
   List<String> RankUsersByOrdersAcceptedPayement();
 
-  int findByBuyerId(Long id);
+  //int findByBuyerId(Long id);
 
   @Query("SELECT o from Order o where o.buyer.id=:id and o.status='BASKET'")
   Order BasketExistance(@Param("id") Long id);
@@ -31,11 +32,29 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("SELECT o from Order o where o.status='BASKET' and o.creationDate<:date" )
   List<Order> deleteOrderByStatusAndCreationDate(@Param("date") Date date);
 
-  @Query("SELECT p from Product p where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie)")
-  List<Product> researchProduct(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.numberOfPurchase desc ")
+  List<Product> researchProductMOSTREQUESTED(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
-  @Query("SELECT max (p.productPrice) from Product p")
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.productPrice asc ")
+  List<Product> researchProductASCENDINGPRICE(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
+
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.productPrice desc ")
+  List<Product> researchProductDECREASINGPRICE(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
+
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.rating desc ")
+  List<Product> researchProductTOPRATED(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
+
+  @OrderBy("creationDate desc")
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie)")
+  List<Product> researchProductNEWARRIVAL(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
+
+  @Query("SELECT max(p.productPrice) from Product p")
   float maxProductPrice();
 
+  @Query("select count(u) from User u where u.email=:email")
+  int findUserByEmail(@Param("email") String email);
+
+  @Query("select o.ref from Order o ")
+  List<String> reflist();
 }
 

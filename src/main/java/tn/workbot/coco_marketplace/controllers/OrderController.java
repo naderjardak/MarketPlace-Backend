@@ -9,8 +9,11 @@ import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
 import tn.workbot.coco_marketplace.entities.Shipping;
+import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
+import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -39,14 +42,14 @@ public class OrderController {
     public Order AffectShippingAdressToOrder(@RequestBody Shipping shipping){return orderInterface.AffectShippingAdressToOrder(shipping);}
 
     @PostMapping("payements")
-    public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException { return orderInterface.StripePayementService(data); }
+    public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException, MessagingException { return orderInterface.StripePayementService(data); }
 
     @GetMapping("ProductResearch")
-    public List<Product> research(@RequestParam int maxPrix ,@RequestParam int minPrix ,@RequestParam(required = false) String nameProduct,@RequestParam(required = false) String categorie,@RequestParam(required = false) String mark){return orderInterface.research(maxPrix,minPrix,nameProduct,categorie,mark);}
-    /*
-    //no need for this now
-    @PutMapping("EndPaimentProcess")
-    public Boolean endCommandProsess(@RequestParam PaymentType paymentType,@RequestParam Boolean cardPaiment) {return orderInterface.endCommandProsess(paymentType,cardPaiment);}
-    */
+    public List<Product> research(@RequestParam int maxPrix ,@RequestParam int minPrix ,@RequestParam(required = false) String nameProduct,@RequestParam(required = false) String categorie,@RequestParam(required = false) String mark,@RequestParam ProductFiltre productFiltre){return orderInterface.research(maxPrix,minPrix,nameProduct,categorie,mark,productFiltre);}
 
+    @PutMapping("EndPaimentProcess")
+    public Boolean endCommandProsess(@RequestParam PaymentType paymentType, @RequestParam Boolean cardPaiment) throws MessagingException {return orderInterface.endCommandProsess(paymentType,cardPaiment);}
+
+    @GetMapping ("validateCommand")
+    public String validateCommand(@RequestParam String token) throws MessagingException {return orderInterface.validateCommand(token);}
 }

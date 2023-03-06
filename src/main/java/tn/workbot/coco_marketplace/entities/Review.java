@@ -39,7 +39,6 @@ public class Review {
 
     @ManyToOne
     private User userSender;
-
     @ManyToOne
     private User DeliveryAgency;
     @ManyToOne
