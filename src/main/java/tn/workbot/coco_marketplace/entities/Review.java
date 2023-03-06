@@ -47,7 +47,7 @@ public class Review {
     private Product product;
 
 
-    public String hideBadWords(String comment) {
+   /* public String hideBadWords(String comment) {
 
         List<String> badWords = Arrays.asList("bad", "terrible", "awful", "hate", "dislike");
 
@@ -56,5 +56,5 @@ public class Review {
         }
 
         return comment;
-    }
+    }*/
 }

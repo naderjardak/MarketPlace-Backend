@@ -5,6 +5,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,10 @@ public class OrderServices implements OrderInterface {
 
     @Autowired
     OrderMailSenderService orderMailSenderService;
+    @Value("${stripe.api.key}")
+    private String stripeApiKey;
+    @Value("${Days.To.Delete.After}")
+    private int days;
 
     @Autowired
     private TemplateEngine templateEngine;
@@ -95,19 +100,39 @@ public class OrderServices implements OrderInterface {
                 productQuantityRepository.save(productQuantity);
             }
 
-            @Override
-            public Boolean AddProductToOrder(ProductQuantity productQuantity) {
-                //Session Id (change 1L)
-                 Order order= orderRepository.BasketExistance(1L);
-                  if(order==null) {
-                      createOrder(productQuantity);
-                      return true;
-                  }
-                  order.setSum(order.getSum()+(productQuantity.getQuantity()*productQuantity.getProduct().getProductPrice()));
-                  orderRepository.save(order);
-                  return true;
-            }
 
+    @Override
+    public void createOrder(ProductQuantity productQuantity) {
+
+        //Session Manager Id ne9sa affectation mte3 id user lil order
+        User user = userrRepository.findById(1L).get();
+        Order newOrder = new Order();
+        newOrder.setBuyer(user);
+        newOrder.setStatus(StatusOrderType.BASKET);
+        if (newOrder.getProductQuantities() == null) {
+            newOrder.setProductQuantities(new ArrayList<>());
+        }
+        newOrder.getProductQuantities().add(productQuantity);
+        newOrder.setCreationDate(new Date(System.currentTimeMillis()));
+        float sum = productQuantity.getProduct().getProductPrice() * productQuantity.getQuantity();
+        newOrder.setSum(sum);
+        productQuantity.setOrder(newOrder);
+        orderRepository.save(newOrder);
+        productQuantityRepository.save(productQuantity);
+    }
+
+    @Override
+    public Boolean AddProductToOrder(ProductQuantity productQuantity) {
+        //Session Id (change 1L)
+        Order order = orderRepository.BasketExistance(1L);
+        if (order == null) {
+            createOrder(productQuantity);
+            return true;
+        }
+        order.setSum(order.getSum() + (productQuantity.getQuantity() * productQuantity.getProduct().getProductPrice()));
+        orderRepository.save(order);
+        return true;
+    }
 
             @Override
             public ProductQuantity UpdateQuantiyOfProduct(Long refProuct,int quantity)
@@ -133,34 +158,33 @@ public class OrderServices implements OrderInterface {
                 return productQuantity;
             }
 
-            @Override
-            public ProductQuantity DeleteProductFromOrder(Long refProduct) {
-                //Session Id (change 1L)
-                Order order= orderRepository.BasketExistance(1L);
-                ProductQuantity productQuantity=productQuantityRepository.findByProductReferenceAndOrderId(refProduct,order.getId());
 
-                if(productQuantity!=null) {
-                    order.getProductQuantities().remove(productQuantity);
-                    productQuantityRepository.delete(productQuantity);
-                }
-                order.setSum(SummOrder());
+    @Override
+    public ProductQuantity DeleteProductFromOrder(Long refProduct) {
+        //Session Id (change 1L)
+        Order order = orderRepository.BasketExistance(1L);
+        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
 
-                if(order.getProductQuantities().size()==0)
-                {
-                    orderRepository.deleteById(order.getId());
-                    return productQuantity;
-                }
-                orderRepository.save(order);
-                return productQuantity;
-            }
+        if (productQuantity != null) {
+            order.getProductQuantities().remove(productQuantity);
+            productQuantityRepository.delete(productQuantity);
+        }
+        order.setSum(SummOrder());
 
-            @Override
-            public Order AffectShippingAdressToOrder(Shipping shipping)
-            {
-                Order order= orderRepository.BasketExistance(1L);
-                order.setShipping(shipping);
-                return orderRepository.save(order);
-            }
+        if (order.getProductQuantities().size() == 0) {
+            orderRepository.deleteById(order.getId());
+            return productQuantity;
+        }
+        orderRepository.save(order);
+        return productQuantity;
+    }
+
+    @Override
+    public Order AffectShippingAdressToOrder(Shipping shipping) {
+        Order order = orderRepository.BasketExistance(1L);
+        order.setShipping(shipping);
+        return orderRepository.save(order);
+    }
 
             @Override
             public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
@@ -218,72 +242,62 @@ public class OrderServices implements OrderInterface {
                 return true;
             }
 
-            @Override
-            public Boolean deleteOrder(Long id) {
-                orderRepository.deleteById(id);
-                return true;
+  
+
+    @Override
+    public Boolean deleteOrder(Long id) {
+        orderRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public float SummOrder() {
+        Order order = orderRepository.BasketExistance(1L);
+        float sum = 0;
+        for (ProductQuantity pq : order.getProductQuantities()) {
+            sum += pq.getQuantity() * pq.getProduct().getProductPrice();
+        }
+        return sum;
+    }
+
+    @Override
+    public Map<String, Integer> statsByStatusType() {
+        List<Order> orderList = orderRepository.findAll();
+        Map<String, Integer> stats = new HashMap<>();
+        int BasketCount = 0;
+        int WAITING_FOR_PAYMENTCount = 0;
+        int ACCEPTED_PAYMENTCount = 0;
+        int REFUSED_PAYMENTCount = 0;
+
+        stats.put("AllCount", orderList.size());
+        for (Order o : orderList) {
+            if (o.getStatus().equals(StatusOrderType.BASKET)) {
+                BasketCount += 1;
+            } else if (o.getStatus().equals(StatusOrderType.WAITING_FOR_PAYMENT)) {
+                WAITING_FOR_PAYMENTCount += 1;
+            } else if (o.getStatus().equals(StatusOrderType.ACCEPTED_PAYMENT)) {
+                ACCEPTED_PAYMENTCount += 1;
+            } else {
+                REFUSED_PAYMENTCount += 1;
             }
+        }
+        stats.put(StatusOrderType.BASKET.toString(), BasketCount);
+        stats.put(StatusOrderType.WAITING_FOR_PAYMENT.toString(), WAITING_FOR_PAYMENTCount);
+        stats.put(StatusOrderType.ACCEPTED_PAYMENT.toString(), ACCEPTED_PAYMENTCount);
+        stats.put(StatusOrderType.REFUSED_PAYMENT.toString(), REFUSED_PAYMENTCount);
 
-            @Override
-            public float SummOrder()
-            {
-                Order order= orderRepository.BasketExistance(1L);
-                float sum=0;
-                for(ProductQuantity pq:order.getProductQuantities())
-                {
-                    sum+= pq.getQuantity()*pq.getProduct().getProductPrice();
-                }
-                return sum;
-            }
+        return stats;
+    }
 
-            @Override
-            public Map<String, Integer> statsByStatusType() {
-                List<Order> orderList=orderRepository.findAll();
-                Map<String, Integer> stats = new HashMap<>();
-                int BasketCount=0;
-                int WAITING_FOR_PAYMENTCount=0;
-                int ACCEPTED_PAYMENTCount=0;
-                int REFUSED_PAYMENTCount=0;
+    @Override
+    public List<String> statsByStatusTypeOrdred() {
+        return orderRepository.RankUsersByOrdersAcceptedPayement();
+    }
 
-                stats.put("AllCount",orderList.size());
-                for(Order o:orderList)
-                {
-                    if(o.getStatus().equals(StatusOrderType.BASKET ))
-                    {
-                        BasketCount+=1;
-                    }
-                    else if(o.getStatus().equals(StatusOrderType.WAITING_FOR_PAYMENT))
-                    {
-                        WAITING_FOR_PAYMENTCount+=1;
-                    }
-                    else if(o.getStatus().equals(StatusOrderType.ACCEPTED_PAYMENT))
-                    {
-                        ACCEPTED_PAYMENTCount+=1;
-                    }
-                    else
-                    {
-                        REFUSED_PAYMENTCount+=1;
-                    }
-                }
-                stats.put(StatusOrderType.BASKET.toString(),BasketCount);
-                stats.put(StatusOrderType.WAITING_FOR_PAYMENT.toString(),WAITING_FOR_PAYMENTCount);
-                stats.put(StatusOrderType.ACCEPTED_PAYMENT.toString(),ACCEPTED_PAYMENTCount);
-                stats.put(StatusOrderType.REFUSED_PAYMENT.toString(),REFUSED_PAYMENTCount);
-
-                return stats;
-            }
-
-            @Override
-            public List<String> statsByStatusTypeOrdred() {
-                return orderRepository.RankUsersByOrdersAcceptedPayement();
-            }
-
-
-            @Override
-            public List<Map<String,Integer>> GovernoratTopShipped()
-            {
-                return orderRepository.RankGouvernoratByNbOrders();
-            }
+    @Override
+    public List<Map<String, Integer>> GovernoratTopShipped() {
+        return orderRepository.RankGouvernoratByNbOrders();
+    }
 
             @Value("${stripe.api.key}")
             private String stripeApiKey;
@@ -305,20 +319,17 @@ public class OrderServices implements OrderInterface {
                 return data;
             }
 
-            @Value("${Days.To.Delete.After}")
-            private int days;
 
-            @Override
-            @Scheduled(cron = "0 0 5 * * ?")
-            public void deleteOrderAfterDateExmiration()
-            {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Date(System.currentTimeMillis()));
-                calendar.add(Calendar.DATE, -days);
-                Date newDate = calendar.getTime();
-                List<Order> orderList=orderRepository.deleteOrderByStatusAndCreationDate(newDate);
-                orderRepository.deleteAll(orderList);
-            }
+    @Override
+    @Scheduled(cron = "0 0 5 * * ?")
+    public void deleteOrderAfterDateExmiration() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(System.currentTimeMillis()));
+        calendar.add(Calendar.DATE, -days);
+        Date newDate = calendar.getTime();
+        List<Order> orderList = orderRepository.deleteOrderByStatusAndCreationDate(newDate);
+        orderRepository.deleteAll(orderList);
+    }
 
             @Override
             public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
@@ -413,6 +424,7 @@ public class OrderServices implements OrderInterface {
                 }
                 return sb.toString();
             }
+
 
 }
 

@@ -30,6 +30,7 @@ public class Pickup implements Serializable {
     private Boolean payed;
     private LocalDateTime dateCreationPickup;
     private float sum;
+    private int nbRequest;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)

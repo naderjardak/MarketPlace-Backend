@@ -23,3 +23,4 @@ public class Loyalty {
 
     private String link;
 }
+

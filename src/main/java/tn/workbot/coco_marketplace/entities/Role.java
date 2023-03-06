@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Role implements Serializable {
     @Enumerated(EnumType.STRING)
     private RoleType type;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<User> users;
 

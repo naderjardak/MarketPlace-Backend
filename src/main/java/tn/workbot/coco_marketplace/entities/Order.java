@@ -28,6 +28,7 @@ public class Order implements Serializable {
     private float productsWeightKg;          //weight kg
     private String orderCode;                  // code of the order
 
+
     @Enumerated(EnumType.STRING)
     private PaymentType payment;              // payment type of the order
 
