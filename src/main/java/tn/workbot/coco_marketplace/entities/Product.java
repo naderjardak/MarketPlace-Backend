@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -48,15 +48,16 @@ public class Product {
 
     // Define a field to store the quantity of the product available for purchase
     private int quantity;
-
-    private String productWeight;
+    //kg
+    private float productWeight;
 
     // Define a field to indicate whether the product is currently available for purchase
     private boolean enabled;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
     // Define a field to store any additional delivery instructions provided by the customer
     private String AdditionalDeliveryInstructions;
-
+    private int numberOfPurchase;
     // Define a field to store the current status of the product
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
@@ -74,13 +75,11 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
-    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<Review> reviews;
-
 
 
 }

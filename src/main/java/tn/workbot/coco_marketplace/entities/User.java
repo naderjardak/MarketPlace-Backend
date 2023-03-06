@@ -44,6 +44,9 @@ public class User implements Serializable {
     private String city;
     private String gear;
     private String DriveLicense;
+    private Float gearAge;
+    private double co2;
+
 
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;
@@ -60,6 +63,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "seller")
     private List<Store> stores;
 
+    @JsonIgnore
     @ManyToOne
     private Role role;
 
