@@ -51,6 +51,7 @@ public class Product {
     //kg
     private float productWeight;
     private int deliveryQuantity;
+
     // Define a field to indicate whether the product is currently available for purchase
     private boolean enabled;
     @Temporal(TemporalType.TIMESTAMP)
@@ -75,7 +76,6 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
-    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
@@ -85,5 +85,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
+
 
 }

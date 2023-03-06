@@ -24,7 +24,10 @@ public class Order implements Serializable {
 
     private String ref;                       // reference of the order
     private float sum;                        // total amount of the order
-    private String orderCode;                 // code of the order
+    private String orderCode;
+    // code of the order
+    private float deliveryPrice;
+    private float productsWeightKg;          //weight kg
 
     @Enumerated(EnumType.STRING)
     private PaymentType payment;              // payment type of the order

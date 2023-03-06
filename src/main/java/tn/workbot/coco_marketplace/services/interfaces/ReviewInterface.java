@@ -13,4 +13,6 @@ public interface ReviewInterface {
     void deleteReview(Long id);
 
     public float calculateProductRating(Long productId, int rating);
+
+    void AddReviewOnDelivery(Review review, Long id);
 }
