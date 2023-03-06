@@ -76,6 +76,8 @@ public interface PickupIService {
     public double LimiteCo2() throws IOException, InterruptedException, ApiException;
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException;
 
+    public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved();
+    public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved();
 
 
 

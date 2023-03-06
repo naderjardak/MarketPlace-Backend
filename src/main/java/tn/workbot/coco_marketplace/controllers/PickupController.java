@@ -306,6 +306,10 @@ public class PickupController  {
         return ResponseEntity.ok("user added successfully");
     }
 
+     @GetMapping("RetrievePickupAgencyByRequestWithStatusRequestApproved")
+     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
+        return pis.RetrievePickupAgencyByRequestWithStatusRequestApproved();
+     }
 
 
     }

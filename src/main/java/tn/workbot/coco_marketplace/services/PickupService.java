@@ -704,4 +704,16 @@ public class PickupService implements PickupIService {
         return ur.save(user);
     }
 
+    @Override
+    public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
+        //sessionManager
+        User agency=ur.findById(1L).get();
+        return pr.ListePickupByStatusAPPROVEDRequest(agency.getId());
+    }
+
+    @Override
+    public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
+        return null;
+    }
+
 }

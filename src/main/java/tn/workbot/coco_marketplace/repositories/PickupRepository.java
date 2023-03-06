@@ -124,6 +124,9 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select  p from Pickup p where p.nbRequest>1")
     public List<Pickup> ListePickup();
 
+    @Query("select  distinct p from Pickup p ,Request r,User u where r.pickup.id=p.id and r.requestStatus='APPROVED' and r.Agency.id=:d1")
+    public List<Pickup> ListePickupByStatusAPPROVEDRequest(@Param("d1") Long idAgency);
+
 
 
 
