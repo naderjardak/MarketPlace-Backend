@@ -17,6 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class BadWords implements Serializable {
+    ///
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
