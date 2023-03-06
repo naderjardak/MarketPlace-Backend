@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.PromotionCode;
 

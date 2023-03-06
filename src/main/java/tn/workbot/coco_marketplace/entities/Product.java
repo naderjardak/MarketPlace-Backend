@@ -39,10 +39,10 @@ public class Product {
 
     // Define a field to store the price of shipping the product
     private float deliveryPrice;
-
+    private float unityPriceFromSupplier;
     // Define a field to store the average rating of the product
     private float rating;
-
+    private boolean automaticRequestAcceptance;
     // Define a field to store the number of ratings that have been given for the product
     private int numberOfRatings;
 
@@ -50,6 +50,7 @@ public class Product {
     private int quantity;
     //kg
     private float productWeight;
+    private int deliveryQuantity;
 
     // Define a field to indicate whether the product is currently available for purchase
     private boolean enabled;
@@ -80,6 +81,10 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<SupplierRequest> supplierRequests;
 
 
 }

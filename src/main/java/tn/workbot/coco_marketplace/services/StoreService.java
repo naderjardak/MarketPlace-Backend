@@ -21,6 +21,7 @@ public class StoreService implements StoreInterface {
 
     @Override
     public Store create(Store s) {
+        s.setName(s.getName().toLowerCase());
         return storeRepository.save(s);
     }
 
