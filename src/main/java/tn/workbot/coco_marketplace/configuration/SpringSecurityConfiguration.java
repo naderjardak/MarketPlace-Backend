@@ -59,7 +59,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
+//hachage
 
     public static String encodePassword(String password) {
         return passwordEncoder.encode(password);
