@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
 import javax.persistence.*;
@@ -47,6 +46,7 @@ public class User implements Serializable {
     private Float GearAge;
     //co2 consoummer
     private  double co2;
+
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;
 
@@ -55,14 +55,14 @@ public class User implements Serializable {
     private String LevelDelivery;
 
 
-
     @OneToMany(mappedBy = "buyer")
     @JsonIgnore
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     private List<Store> stores;
 
+    @JsonIgnore
     @ManyToOne
     private Role role;
 
@@ -78,16 +78,16 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "DeliveryFreelancer")
     private List<Review> reviewsOnDF;
 
-   @OneToMany(mappedBy = "deliveryman")
-    private List<Request>requestsdeliverymen;
+    @OneToMany(mappedBy = "deliveryman")
+    private List<Request> requestsdeliverymen;
 
-   @OneToMany(mappedBy = "seller")
-    private List<Request>requestsellers;
+    @OneToMany(mappedBy = "seller")
+    private List<Request> requestsellers;
 
-   @OneToMany(mappedBy = "Agency")
-    private List<Request>requestsAgencys;
-   @OneToMany(mappedBy = "deliveryAgency")
-    private  List<AgencyBranch>agencyBranches;
+    @OneToMany(mappedBy = "Agency")
+    private List<Request> requestsAgencys;
+    @OneToMany(mappedBy = "deliveryAgency")
+    private List<AgencyBranch> agencyBranches;
 
   /* @OneToMany(mappedBy = "seller")
     private  List<Pickup>pickupsSeller;*/
@@ -99,6 +99,14 @@ private List<Pickup>PickupdeliverymenFreelancer;
     @OneToMany(mappedBy = "deliveryAgency")
     private List<Pickup>PickupAgencys;
 */
+
+    @OneToMany(mappedBy = "supplier")
+    @JsonIgnore
+    private List<SupplierRequest> supplierRequests;
+
+
+
+
 
 }
 

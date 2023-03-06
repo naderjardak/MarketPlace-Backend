@@ -15,16 +15,23 @@ import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PickupTwilio;
 import tn.workbot.coco_marketplace.entities.*;
-import tn.workbot.coco_marketplace.entities.enmus.*;
+import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
+import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.DecimalFormat;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class PickupService implements PickupIService {
@@ -69,6 +76,7 @@ public class PickupService implements PickupIService {
         pickup.setDateCreationPickup(LocalDateTime.now());
         return pr.save(pickup);
     }
+
     @Transactional
     @Override
     public void removePickup(Long id) {
@@ -159,13 +167,14 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id) {
+    public Pickup AssignPickupByStoreAndOrder(Pickup pickup, Long id) {
         //Variable Of Session Manager
         Store store2=pr.storeoforder(id,1L);
+
         Pickup pickup1 = pr.save(pickup);
         pr.countstoreorder(id);
         System.out.println(pr.countstoreorder(id));
-        if(pr.countstoreorder(id)>1) {
+        if (pr.countstoreorder(id) > 1) {
             Random random = new Random(); //java.util.Random
             pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
             pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
@@ -190,17 +199,16 @@ public class PickupService implements PickupIService {
             pickup1.setOrderOfTheSomeSeller(false);
             pickup1.setStore(store2);
             List<Product> products=pr.productoforder(id,1L);
+
             pickup1.setSum(order.getSum());
-            if(order.getPayment().equals(PaymentType.BANK_CARD)){
-                    pickup1.setPayed(true);
-            }
-            else {
+            if (order.getPayment().equals(PaymentType.BANK_CARD)) {
+                pickup1.setPayed(true);
+            } else {
                 pickup1.setPayed(false);
             }
             return pr.save(pickup1);
 
-        }
-        else {
+        } else {
             Random random = new Random(); //java.util.Random
             pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
             pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
@@ -225,17 +233,17 @@ public class PickupService implements PickupIService {
             pickup1.setStore(store2);
             pr.save(pickup1);
             List<Product> products=pr.productoforder(id,1L);
+
             float totalPrice = 0;
-            for (Product product:products) {
+            for (Product product : products) {
                 totalPrice += product.getProductPrice();
             }
             float sum = totalPrice;
             pickup1.setSum(sum);
 
-            if(order.getPayment().equals(PaymentType.BANK_CARD)){
+            if (order.getPayment().equals(PaymentType.BANK_CARD)) {
                 pickup1.setPayed(true);
-            }
-            else {
+            } else {
                 pickup1.setPayed(false);
             }
             return pr.save(pickup1);
@@ -268,9 +276,9 @@ public class PickupService implements PickupIService {
     @Override
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException {
 
-        Pickup pickup1=pr.pickupprettolivred(idPickup);
-        Request request1=  rr.findById(pickup1.getId()).get();
-        if(request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
+        Pickup pickup1 = pr.pickupprettolivred(idPickup);
+        Request request1 = rr.findById(pickup1.getId()).get();
+        if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
                     .build();
@@ -283,30 +291,27 @@ public class PickupService implements PickupIService {
             DistanceMatrix matrix = request.await();
             Distance distance = matrix.rows[0].elements[0].distance;
             if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("CAR"))
-                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("CAR"))){
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("CAR"))) {
                 double averageSpeed = 60.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
                 // Return the estimated delivery time as a Duration object
                 return Duration.ofHours((long) travelTimeInHours);
-            }
-            else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("BIKE"))
-                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("BIKE"))){
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("BIKE"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("BIKE"))) {
                 double averageSpeed = 10.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
                 // Return the estimated delivery time as a Duration object
                 return Duration.ofHours((long) travelTimeInHours);
-            }
-            else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("MOTO"))
-                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("MOTO"))){
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("MOTO"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("MOTO"))) {
                 double averageSpeed = 30.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
                 double travelTimeInHours = distanceInKm / averageSpeed;
                 // Return the estimated delivery time as a Duration object
                 return Duration.ofHours((long) travelTimeInHours);
-            }
-            else {
+            } else {
                 // Calculate the estimated travel time based on the gear information
                 double averageSpeed = 60.0; // km/h
                 double distanceInKm = distance.inMeters / 1000.0;
@@ -322,7 +327,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public int test(Long id) {
-        User user=ur.findById(id).get();
+        User user = ur.findById(id).get();
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("subject");
@@ -334,20 +339,20 @@ public class PickupService implements PickupIService {
     @Override
     public Pickup trakingbyseller(String codePickup) {
         //session varaible
-        User u=ur.findById(1L).get();
-        return pr.trakingS(codePickup,u.getId()) ;
+        User u = ur.findById(1L).get();
+        return pr.trakingS(codePickup, u.getId());
     }
 
     @Override
-    public Pickup trakingbybuyer(String codePickup,Long idBuyer) {
+    public Pickup trakingbybuyer(String codePickup, Long idBuyer) {
         //idBuyer mel session manager
-        return pr.trakingB(codePickup,idBuyer);
+        return pr.trakingB(codePickup, idBuyer);
     }
 
     @Override
     public List<Pickup> retrievePickupByDeliveryMenFreelancer() {
         //session manager
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.pickupOfDeliveryMenFreelancer(u.getId());
     }
 

@@ -1,6 +1,8 @@
 package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
@@ -8,6 +10,7 @@ import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -19,8 +22,18 @@ public class UserService implements UserInterface {
     @Autowired
     RoleRepository roleRepository;
 
+
+    PasswordEncoder passwordEncoder;
+   @Autowired
+   public UserService(){
+       this.passwordEncoder=new BCryptPasswordEncoder();
+   }
+
+
+
     @Override
     public User Create(User u) {
+        u.setPassword(this.passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
     }
 
@@ -52,5 +65,10 @@ public class UserService implements UserInterface {
         userRepository.save(u);
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(()->new EntityNotFoundException((
+                "user not found with email =" +email)
+        ));
+    }
 
 }

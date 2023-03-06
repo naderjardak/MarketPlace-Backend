@@ -22,9 +22,7 @@ import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -149,8 +147,8 @@ public class RequestService implements RequestInterface {
         return rr.retrieveRequestByPickup(idPickup);
     }
 
-    //@Scheduled(cron = "*/60 * * * * *")
-    @Scheduled(cron = "* * * * 6 *")
+
+    @Scheduled(cron = "*/60 * 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {
         System.out.println("test");
         List<Request> requests = (List<Request>) rr.findAll();
