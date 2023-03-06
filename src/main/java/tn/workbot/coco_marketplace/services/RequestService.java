@@ -72,6 +72,12 @@ public class RequestService implements RequestInterface {
 
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
         User user = ur.findById(idDeliveryAgency).get();
+        User u=pr.UserOfPickup(idPickup);
+        Pickup p=pr.findById(idPickup).get();
+        int i=pr.countrequest(u.getId());
+        i=i+1;
+        p.setNbRequest(i);
+        pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
         List<Request> requestList = (List<Request>) rr.findAll();
         Pickup pickup = pr.findById(idPickup).get();
@@ -91,7 +97,13 @@ public class RequestService implements RequestInterface {
     @Override
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
         Request request1 = rr.save(request);
-        //eliconnectetawa session id bech yet7at lena
+        //eliconnectetawa session id bech yet7at lena fel idSeller
+        User u=pr.UserOfPickup(idPickup);
+        Pickup p=pr.findById(idPickup).get();
+        int i=pr.countrequest(u.getId());
+        i=i+1;
+        p.setNbRequest(i);
+        pr.save(p);
         User user = ur.findById(idDeliveryMenFreelancer).get();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
@@ -134,6 +146,7 @@ public class RequestService implements RequestInterface {
         //na5o idPickup mel URL
         return rr.retrieveRequestByPickup(idPickup);
     }
+
 
     @Scheduled(cron = "*/60 * 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {

@@ -43,15 +43,16 @@ public class User implements Serializable {
     private String city;
     private String gear;
     private String DriveLicense;
-    private Float gearAge;
-    private double co2;
-
+    private Float GearAge;
+    //co2 consoummer
+    private  double co2;
 
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;
 
     // Define a field to store the number of ratings that have been given for the user(buyer_seller,deliveryAgency, DeliveryFreelancer)
     private int numberOfRatings;
+    private String LevelDelivery;
 
 
     @OneToMany(mappedBy = "buyer")
