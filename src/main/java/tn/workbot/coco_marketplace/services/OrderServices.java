@@ -83,6 +83,13 @@ public class OrderServices implements OrderInterface {
                 newOrder.setRef(" ");
                 float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
                 newOrder.setSum(sum);
+                float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
+                if(weight<=1)
+                    newOrder.setDeliveryPrice(6);
+                else
+                    newOrder.setDeliveryPrice(6*weight);
+                    newOrder.setProductsWeightKg(weight);
+
                 productQuantity.setOrder(newOrder);
                 orderRepository.save(newOrder);
                 productQuantityRepository.save(productQuantity);
@@ -114,7 +121,14 @@ public class OrderServices implements OrderInterface {
                 ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
                 productQuantity.setQuantity(quantity);
                 productQuantityRepository.save(productQuantity);
-                order= orderRepository.BasketExistance(1L);
+                float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
+                weight=order.getProductsWeightKg()+weight;
+                if(weight<=1)
+                    order.setDeliveryPrice(6);
+                else
+                    order.setDeliveryPrice(6*weight);
+
+                order.setProductsWeightKg(weight);
                 order.setSum(SummOrder());
                 return productQuantity;
             }

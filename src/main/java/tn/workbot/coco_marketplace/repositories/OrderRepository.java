@@ -32,7 +32,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("SELECT o from Order o where o.status='BASKET' and o.creationDate<:date" )
   List<Order> deleteOrderByStatusAndCreationDate(@Param("date") Date date);
 
-  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by (p.firstQuantity-p.quantity) desc ")
+  @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.numberOfPurchase desc ")
   List<Product> researchProductMOSTREQUESTED(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
   @Query("SELECT p from Product p,ProductQuantity where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.productPrice asc ")
