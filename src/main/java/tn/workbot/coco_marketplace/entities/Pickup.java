@@ -45,6 +45,6 @@ public class Pickup implements Serializable {
     @JsonIgnore
     @ManyToOne
     private Store store;
-
+/////////////fff
 
 }
