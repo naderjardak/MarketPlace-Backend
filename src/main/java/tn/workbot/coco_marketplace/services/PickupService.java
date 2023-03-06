@@ -9,6 +9,7 @@ import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
@@ -716,6 +717,26 @@ public class PickupService implements PickupIService {
         //sessionManager
         User freelancer=ur.findById(1L).get();
         return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
+    }
+    @Scheduled(cron = "*/30 * * * * *")
+    public void ModifyTheLevelOfDeliveryAgencyMonthly() {
+        List<User> users=pr.ListOfDeliveryAgencywithStatusPickupDelivered();
+        for (User u:users) {
+            int uu=pr.countPickupdeliveredMonthlyByAgency(u.getId());
+            if(uu>0 && uu<100){
+                 u.setLevelDelivery("Level 1");
+                  ur.save(u);            }
+            else if(uu>100 && uu<500){
+                u.setLevelDelivery("Level 2");
+                 ur.save(u);
+            }
+            else if(uu>500 ){
+                u.setLevelDelivery("Level 2");
+                 ur.save(u);
+            }
+
+        }
+
     }
 
 }

@@ -130,6 +130,12 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select  distinct p from Pickup p ,Request r,User u where r.pickup.id=p.id and r.requestStatus='APPROVED' and r.deliveryman.id=:d1")
     public List<Pickup> ListePickupByStatusAPPROVEDRequestFreelancer(@Param("d1") Long idFreelancer);
 
+    @Query("select u from User u,Request r,Pickup p where r.Agency.id=u.id  and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'")
+    public List<User> ListOfDeliveryAgencywithStatusPickupDelivered();
+
+    @Query("select count(distinct p) from Request r,Pickup p,User u where u.id=r.Agency.id and u.id=:d1 and r.Agency.id=u.id and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'and MONTH(p.dateCreationPickup) = MONTH(CURRENT_DATE)")
+    public int countPickupdeliveredMonthlyByAgency(@Param("d1") Long idAgency);
+
 
 
 

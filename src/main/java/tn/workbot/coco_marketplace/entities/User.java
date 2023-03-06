@@ -52,7 +52,7 @@ public class User implements Serializable {
 
     // Define a field to store the number of ratings that have been given for the user(buyer_seller,deliveryAgency, DeliveryFreelancer)
     private int numberOfRatings;
-
+    private String LevelDelivery;
 
 
 

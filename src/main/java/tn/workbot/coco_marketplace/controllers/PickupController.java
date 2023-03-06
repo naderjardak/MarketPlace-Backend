@@ -314,7 +314,5 @@ public class PickupController  {
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupFreelancerByRequestWithStatusRequestApproved();
     }
-
-
     }
 
