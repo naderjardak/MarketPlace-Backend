@@ -72,35 +72,6 @@ public class OrderServices implements OrderInterface {
                 return orderRepository.findById(id).orElse(null);
             }
 
-            @Override
-            public void createOrder(ProductQuantity productQuantity) {
-
-                //Session Manager Id ne9sa affectation mte3 id user lil order
-                User user=userrRepository.findById(1L).get();
-                Order newOrder = new Order();
-                newOrder.setBuyer(user);
-                newOrder.setStatus(StatusOrderType.BASKET);
-                if (newOrder.getProductQuantities() == null) {
-                    newOrder.setProductQuantities(new ArrayList<>());
-                }
-                newOrder.getProductQuantities().add(productQuantity);
-                newOrder.setCreationDate(new Date(System.currentTimeMillis()));
-                newOrder.setRef(" ");
-                float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
-                newOrder.setSum(sum);
-                float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-                if(weight<=1)
-                    newOrder.setDeliveryPrice(6);
-                else
-                    newOrder.setDeliveryPrice(6*weight);
-                    newOrder.setProductsWeightKg(weight);
-
-                productQuantity.setOrder(newOrder);
-                orderRepository.save(newOrder);
-                productQuantityRepository.save(productQuantity);
-            }
-
-
     @Override
     public void createOrder(ProductQuantity productQuantity) {
 
@@ -299,8 +270,6 @@ public class OrderServices implements OrderInterface {
         return orderRepository.RankGouvernoratByNbOrders();
     }
 
-            @Value("${stripe.api.key}")
-            private String stripeApiKey;
 
             @Override
             public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {

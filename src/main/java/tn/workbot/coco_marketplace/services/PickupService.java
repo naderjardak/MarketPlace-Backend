@@ -723,9 +723,10 @@ public class PickupService implements PickupIService {
         User freelancer=ur.findById(1L).get();
         return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
     }
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "* * * 27 * *")
     public void ModifyTheLevelOfDeliveryAgencyMonthly() {
         List<User> users=pr.ListOfDeliveryAgencywithStatusPickupDelivered();
+        System.out.println(users);
         for (User u:users) {
             int uu=pr.countPickupdeliveredMonthlyByAgency(u.getId());
             if(uu>0 && uu<100){
@@ -736,12 +737,11 @@ public class PickupService implements PickupIService {
                  ur.save(u);
             }
             else if(uu>500 ){
-                u.setLevelDelivery("Level 2");
+                u.setLevelDelivery("Top Rated Delivery");
                  ur.save(u);
             }
 
         }
-
     }
 
 }
