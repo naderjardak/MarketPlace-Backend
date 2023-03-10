@@ -18,8 +18,12 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     Pickup pickupprettolivred(@Param("v1") Long id);
     @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v2 ")
     public  int countstoreorder(@Param("v2") Long id);
-    @Query("select s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
-    public  Store storeoforder(@Param("v3") Long id,@Param("v4") Long idSeller);
+    @Query("select distinct s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and s.id=:v6 and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    public  Store storeoforder(@Param("v6") Long idStore,@Param("v3") Long id,@Param("v4") Long idSeller);
+    @Query("select distinct p from Product p,Store s where p.store.id=:v4")
+    public  List<Product> productOfTheStoreById(@Param("v4") Long IdStore);
+    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    public  int countstoreofproductinorderOfSomeseller(@Param("v3") Long id,@Param("v4") Long idSeller);
     @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
     public  List<Product> productoforder(@Param("v3") Long id, @Param("v4") Long idSeller);
     @Query("select p from Pickup  p ,Request r ,User u,Order o where p.codePickup=:v1 and p.order.buyer.id=:v3 ")
@@ -36,7 +40,7 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct p from Pickup p,Request r ,User u ,AgencyBranch ab where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 and r.agencyDeliveryMan.agencyBranch.id=:v5 ")
     public List<Pickup> pickupOfBranch(@Param("v4") Long idAgency,@Param("v5")Long idBranch);
 
-    @Query("select o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
+    @Query("select distinct o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
     public  List<Order> orderOfstore(@Param("v4") Long idSeller);
     @Query("select distinct p from Pickup p , Store s ,User u,Request r where p.store.seller.id=:id and r.pickup.id=r.id and r.requestStatus='PENDING'")
     public  List<Pickup> PickupBySeller(@Param("id") Long idSeller);

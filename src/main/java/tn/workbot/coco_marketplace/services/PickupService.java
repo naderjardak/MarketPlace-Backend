@@ -122,12 +122,12 @@ public class PickupService implements PickupIService {
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         //HADHI session variable
         User u = ur.findById(3L).get();
-        double a=openWeatherMapClient.getWeather(u.getGovernorate());
+        double a = openWeatherMapClient.getWeather(u.getGovernorate());
         List<Store> store = (List<Store>) sr.findAll();
         List<Store> storesInSameGovernorate = sr.findByGovernorate(u.getGovernorate());
         List<Pickup> pickups = new ArrayList<>();
         //ELI 3ANDHOUM BIKE MATODHA7RELHOUM KEN EL PICKUPS ELI BECH TTLVRA FEN HOUMA W STORE YABDA FARD GOVERNORATE
-        if (a>2){
+        if (a > 2) {
             if ((u.getGear().equals("BIKE")) || (u.getGear().equals("MOTO"))) {
                 for (Store s : store) {
                     if (u.getGovernorate().equals(s.getGovernorate())) {
@@ -135,13 +135,13 @@ public class PickupService implements PickupIService {
                     }
                 }
             }
-            } else if (u.getGear().equals("CAR")) {
-                for (Store storee : storesInSameGovernorate) {
-                    pickups.addAll(storee.getPickups());
-                }
-
-                return pickups;
+        } else if (u.getGear().equals("CAR")) {
+            for (Store storee : storesInSameGovernorate) {
+                pickups.addAll(storee.getPickups());
             }
+
+            return pickups;
+        }
 
         return Collections.emptyList();
     }
@@ -167,87 +167,101 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup AssignPickupByStoreAndOrder(Pickup pickup, Long id) {
+    public Pickup AssignPickupByStoreAndOrder(Pickup pickup, Long id, Long IdSotre) {
         //Variable Of Session Manager
-        Store store2=pr.storeoforder(id,1L);
-
+        Store store2 = pr.storeoforder(IdSotre, id, 1L);
         Pickup pickup1 = pr.save(pickup);
         pr.countstoreorder(id);
+        float totalPrice = 0;
+        List<Product> productList=pr.productOfTheStoreById(IdSotre);
         System.out.println(pr.countstoreorder(id));
-        if (pr.countstoreorder(id) > 1) {
-            Random random = new Random(); //java.util.Random
-            pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
-            pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-            int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
-            String prefix = "216";
-            String code = prefix + randomNumber;
-            List<Pickup> pickups = (List<Pickup>) pr.findAll();
-            //ken el code el random mawjoud y3awed yrandom code a5er hhhh
-            for (Pickup p : pickups) {
-                if (p.getCodePickup() != code) {
-                    pickup1.setCodePickup(code);
-                } else {
-                    int randomNumber1 = random.nextInt(100) + 100;
-                    String code1 = prefix + randomNumber + randomNumber1;
-                    pickup1.setCodePickup(code1);
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(id, 1L);
+        if (pr.countstoreorder(id) == 1) {
+
+
+                Random random = new Random(); //java.util.Random
+                pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+                pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+                int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+                String prefix = "216";
+                String code = prefix + randomNumber;
+                List<Pickup> pickups = (List<Pickup>) pr.findAll();
+                //ken el code el random mawjoud y3awed yrandom code a5er hhhh
+                for (Pickup p : pickups) {
+                    if (p.getCodePickup() != code) {
+                        pickup1.setCodePickup(code);
+                    } else {
+                        int randomNumber1 = random.nextInt(100) + 100;
+                        String code1 = prefix + randomNumber + randomNumber1;
+                        pickup1.setCodePickup(code1);
+                    }
                 }
-            }
-            Order order = or.findById(id).get();
-            pickup1.setOrder(order);
-            pickup1.setCodePickup(code);
-            pickup1.setDateCreationPickup(LocalDateTime.now());
-            pickup1.setOrderOfTheSomeSeller(false);
-            pickup1.setStore(store2);
-            List<Product> products=pr.productoforder(id,1L);
-
-            pickup1.setSum(order.getSum());
-            if (order.getPayment().equals(PaymentType.BANK_CARD)) {
-                pickup1.setPayed(true);
-            } else {
-                pickup1.setPayed(false);
-            }
-            return pr.save(pickup1);
-
-        } else {
-            Random random = new Random(); //java.util.Random
-            pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
-            pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-            int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
-            String prefix = "216";
-            String code = prefix + randomNumber;
-            List<Pickup> pickups = (List<Pickup>) pr.findAll();
-            for (Pickup p : pickups) {
-                if (p.getCodePickup() != code) {
-                    pickup1.setCodePickup(code);
+                Order order = or.findById(id).get();
+                pickup1.setOrder(order);
+                pickup1.setCodePickup(code);
+                pickup1.setDateCreationPickup(LocalDateTime.now());
+                pickup1.setOrderOfTheSomeSeller(false);
+                pickup1.setStore(store2);
+                // pickup1.setStore(store2);
+                pickup1.setSum(order.getSum());
+                if (order.getPayment().equals(PaymentType.BANK_CARD)) {
+                    pickup1.setPayed(true);
                 } else {
-                    int randomNumber1 = random.nextInt(100) + 100;
-                    String code1 = prefix + randomNumber + randomNumber1;
-                    pickup1.setCodePickup(code1);
+                    pickup1.setPayed(false);
                 }
+                return pr.save(pickup1);
             }
-            Order order = or.findById(id).get();
-            pickup1.setOrder(order);
-            pickup1.setCodePickup(code);
-            pickup1.setDateCreationPickup(LocalDateTime.now());
-            pickup1.setOrderOfTheSomeSeller(true);
-            pickup1.setStore(store2);
-            pr.save(pickup1);
-            List<Product> products=pr.productoforder(id,1L);
-
-            float totalPrice = 0;
-            for (Product product : products) {
-                totalPrice += product.getProductPrice();
-            }
-            float sum = totalPrice;
-            pickup1.setSum(sum);
-
-            if (order.getPayment().equals(PaymentType.BANK_CARD)) {
-                pickup1.setPayed(true);
+         else {
+            if (storeofsomeUser > 1) {
+                for (Product p:productList) {
+                    totalPrice += p.getProductPrice();
+                    pickup1.setStore(store2);
+                    pickup1.setSum(totalPrice);
+                    //Lena Na9sa bech nseti 3al produit 5atro mech men nafes el store
+                    return pr.save(pickup1);
+                }
             } else {
-                pickup1.setPayed(false);
+                Random random = new Random(); //java.util.Random
+                pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+                pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+                int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+                String prefix = "216";
+                String code = prefix + randomNumber;
+                List<Pickup> pickups = (List<Pickup>) pr.findAll();
+                for (Pickup p : pickups) {
+                    if (p.getCodePickup() != code) {
+                        pickup1.setCodePickup(code);
+                    } else {
+                        int randomNumber1 = random.nextInt(100) + 100;
+                        String code1 = prefix + randomNumber + randomNumber1;
+                        pickup1.setCodePickup(code1);
+                    }
+                }
+                Order order = or.findById(id).get();
+                pickup1.setOrder(order);
+                pickup1.setCodePickup(code);
+                pickup1.setDateCreationPickup(LocalDateTime.now());
+                pickup1.setOrderOfTheSomeSeller(true);
+                pickup1.setStore(store2);
+                pr.save(pickup1);
+                List<Product> products = pr.productoforder(id, 1L);
+
+
+                for (Product product : products) {
+                    totalPrice += product.getProductPrice();
+                }
+                float sum = totalPrice;
+                pickup1.setSum(sum);
+
+                if (order.getPayment().equals(PaymentType.BANK_CARD)) {
+                    pickup1.setPayed(true);
+                } else {
+                    pickup1.setPayed(false);
+                }
+                return pr.save(pickup1);
             }
-            return pr.save(pickup1);
         }
+         return null;
     }
 
     @Override
@@ -359,117 +373,118 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> retrievePickupByAgence() {
         //session Manager Variable
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.pickupOfAgency(u.getId());
     }
 
     @Override
     public List<Pickup> retrievePickupByBranch(Long idbranch) {
         //session manager mt3 el agence
-        User u=ur.findById(1L).get();
-        return pr.pickupOfBranch(u.getId(),idbranch);
+        User u = ur.findById(1L).get();
+        return pr.pickupOfBranch(u.getId(), idbranch);
     }
 
     @Override
     public List<Order> retrieveOrderByseller() {
         //session manager idseller
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.orderOfstore(u.getId());
     }
 
     @Override
     public List<Pickup> retrievePickupBysellerAttent() {
         /////session manager
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.PickupBySeller(u.getId());
     }
-///////stat
+
+    ///////stat
     @Override
     public int countPickupSellerPendingToday() {
         //Session Manager idSeller
-         User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.countPickupSellerPendingToday(u.getId());
     }
 
     @Override
     public int countPickupSelleronTheWayToday() {
         //Session Manager idSeller
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.countPickupSelleronTheWayToday(u.getId());
     }
 
     @Override
     public int countPickupSellerDeliveredToday() {
         //Session Manager idSeller
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.countPickupSellerDeliveredToday(u.getId());
     }
 
     @Override
     public int countPickupSellerReturnToday() {
         //Session Manager idSeller
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.countPickupSellerReturnToday(u.getId());
     }
 
     @Override
     public int countPickupSellerRefundedToday() {
         //Session Manager idSeller
-        User u=ur.findById(1L).get();
+        User u = ur.findById(1L).get();
         return pr.countPickupSellerRefundedToday(u.getId());
     }
 
     @Override
     public int countPickupDeliveryManFreelancerPendingToday() {
         //Session Manager ManFreelancer
-        User u=ur.findById(3L).get();
+        User u = ur.findById(3L).get();
         return pr.countPickupDeliveryManFreelancerPendingToday(u.getId());
     }
 
     @Override
     public int countPickupAgencyToday() {
         //Session Manager Agency
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.countPickupAgencyToday(u.getId());
     }
 
     @Override
     public int countRequestRejectedDeliveryManFreelancerToday() {
         //Session Manager DeliveryManFreelancer
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.countRequestRejectedDeliveryManFreelancerToday(u.getId());
     }
 
     @Override
     public int countRequestApprovedDeliveryManFreelancerToday() {
         //Session Manager DeliveryManFreelancer
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.countRequestApprovedDeliveryManFreelancerToday(u.getId());
     }
 
     @Override
     public int countRequestRejectedAgencyToday() {
         //Session Manager Agency
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.countRequestRejectedAgencyToday(u.getId());
     }
 
     @Override
     public int countRequestApprovedAgencyToday() {
         //Session Manager Agency
-        User u=ur.findById(4L).get();
+        User u = ur.findById(4L).get();
         return pr.countRequestApprovedAgencyToday(u.getId());
     }
 
     @Override
     public Float SumPricePickupDeliveredByFreelancerToday() {
         //Session Manager Agency
-        User u=ur.findById(3L).get();
-        List<Pickup> pickups= new  ArrayList<>();
+        User u = ur.findById(3L).get();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.SumPricePickupDeliveredByFreelancerToday(u.getId()));
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-             sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
@@ -477,12 +492,12 @@ public class PickupService implements PickupIService {
     @Override
     public Float SumPricePickupDeliveredByAgencyToday() {
         //Session Manager Agency
-        User u=ur.findById(4L).get();
-        List<Pickup> pickups= new  ArrayList<>();
+        User u = ur.findById(4L).get();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.SumPricePickupDeliveredByAgencyToday(u.getId()));
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
@@ -500,19 +515,19 @@ public class PickupService implements PickupIService {
     @Override
     public List<Product> RetrieveProductByPickup(Long idPickup) {
         //session manager idSeller
-        User u=ur.findById(1L).get();
-        Pickup p=pr.findById(idPickup).get();
-        Long i=p.getOrder().getId();
-        List<Product> products=new ArrayList<>();
-        if(pr.countstoreorder(i)>1){
-            products.addAll(pr.productofpickup(p.getId(),u.getId()));
-        }
-        else {
+        User u = ur.findById(1L).get();
+        Pickup p = pr.findById(idPickup).get();
+        Long i = p.getOrder().getId();
+        List<Product> products = new ArrayList<>();
+        if (pr.countstoreorder(i) > 1) {
+            products.addAll(pr.productofpickup(p.getId(), u.getId()));
+        } else {
             products.addAll(pr.productOfOrder(p.getId(), u.getId()));
         }
         return products;
     }
- ///////////////stat Administrator
+
+    ///////////////stat Administrator
     @Override
     public int countAgencyAdministrator() {
         return pr.countAgencyAdministrator();
@@ -555,66 +570,66 @@ public class PickupService implements PickupIService {
 
     @Override
     public Float sumOfPickupDeliveredTodayAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupDeliveredTodayAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
 
     @Override
     public Float sumOfPickupOnTheWayTodayAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupOnTheWayTodayAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
 
     @Override
     public Float sumOfPickupReturnedTodayAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupReturnedTodayAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
 
     @Override
     public Float sumOfPickupDeliveredweekAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupDeliveredweekAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
 
     @Override
     public Float sumOfPickupOnTheWayweekAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupOnTheWayweekAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
 
     @Override
     public Float sumOfPickupReturnedweekAdministrator() {
-        List<Pickup> pickups= new  ArrayList<>();
+        List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.sumOfPickupReturnedweekAdministrator());
-        Float sum= Float.valueOf(0);
-        for (Pickup p:pickups) {
-            sum=p.getSum()+sum;
+        Float sum = Float.valueOf(0);
+        for (Pickup p : pickups) {
+            sum = p.getSum() + sum;
         }
         return sum;
     }
@@ -622,15 +637,15 @@ public class PickupService implements PickupIService {
     @Override
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
         //session manager idUser
-        User u=ur.findById(3L).get();
-        List<Pickup> pickups=pr.SumKilometreINCar(u.getId());
-        float kiloSum=0;
+        User u = ur.findById(3L).get();
+        List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
+        float kiloSum = 0;
         //////
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
                 .build();
         // Get the distance and travel time using the DistanceMatrixApi
-        for (Pickup p:pickups) {
+        for (Pickup p : pickups) {
             DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
                     .origins(p.getGovernorate())
                     .destinations(p.getStore().getGovernorate())
@@ -639,7 +654,7 @@ public class PickupService implements PickupIService {
             DistanceMatrix matrix = request.await();
             Distance distance = matrix.rows[0].elements[0].distance;
             double distanceInKm = distance.inMeters / 1000.0;
-             kiloSum= (float) distanceInKm + kiloSum;
+            kiloSum = (float) distanceInKm + kiloSum;
         }
         return kiloSum;
 
@@ -648,20 +663,18 @@ public class PickupService implements PickupIService {
     @Override
     public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException {
         //sessionManager
-        User user=ur.findById(3L).get();
-        Float kiloSum=kilometreTotalConsommerParFreelancerDelivery();
-        double price= Float.valueOf(0);
+        User user = ur.findById(3L).get();
+        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
+        double price = Float.valueOf(0);
 
-        double priceEssnceliters=2.55;
-        if(user.getGear().equals("CAR")){
-            if(user.getGearAge()>0 && user.getGearAge()<5 ){
-                    price=kiloSum*(5.8/100)*priceEssnceliters;
-            }
-            else if(user.getGearAge()>5 && user.getGearAge()<10){
-                    price=kiloSum*(6.9/100)*priceEssnceliters;
-            }
-            else if(user.getGearAge()>10){
-                    price=kiloSum*(7.8/100)*priceEssnceliters;
+        double priceEssnceliters = 2.55;
+        if (user.getGear().equals("CAR")) {
+            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
+                price = kiloSum * (5.8 / 100) * priceEssnceliters;
+            } else if (user.getGearAge() > 5 && user.getGearAge() < 10) {
+                price = kiloSum * (6.9 / 100) * priceEssnceliters;
+            } else if (user.getGearAge() > 10) {
+                price = kiloSum * (7.8 / 100) * priceEssnceliters;
             }
 
         }
@@ -674,35 +687,33 @@ public class PickupService implements PickupIService {
     @Override
     public double LimiteCo2() throws IOException, InterruptedException, ApiException {
         //sessionManager
-        User user=ur.findById(3L).get();
-        double co2kilo= user.getCo2();
-        if (co2kilo>1200){
+        User user = ur.findById(3L).get();
+        double co2kilo = user.getCo2();
+        if (co2kilo > 1200) {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("You Consume Your Limit Of CO2");
             mailMessage.setText("you must give the world a tree if you don't like to get a strike in COCO market");
             javaMailSender.send(mailMessage);
             //PickupTwilio.sendSMS("You Consume Your Limit Of CO2 ,you must give the world a tree if you don't like to get a strike in COCO market");
-            }
+        }
         return co2kilo;
     }
 
     @Override
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
-        User user=ur.findById(3L).get();
-        Float kiloSum=kilometreTotalConsommerParFreelancerDelivery();
-        double co2kilo= Float.valueOf(0);
+        User user = ur.findById(3L).get();
+        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
+        double co2kilo = Float.valueOf(0);
 
-        double Co2Car=2.55;
-        if(user.getGear().equals("CAR")){
-            if(user.getGearAge()>0 && user.getGearAge()<5 ){
-                co2kilo=kiloSum*(5.8/100)*Co2Car;
-            }
-            else if(user.getGearAge()>5 && user.getGearAge()<10){
-                co2kilo=kiloSum*(6.9/100)*Co2Car;
-            }
-            else if(user.getGearAge()>10){
-                co2kilo=kiloSum*(7.8/100)*Co2Car;
+        double Co2Car = 2.55;
+        if (user.getGear().equals("CAR")) {
+            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
+                co2kilo = kiloSum * (5.8 / 100) * Co2Car;
+            } else if (user.getGearAge() > 5 && user.getGearAge() < 10) {
+                co2kilo = kiloSum * (6.9 / 100) * Co2Car;
+            } else if (user.getGearAge() > 10) {
+                co2kilo = kiloSum * (7.8 / 100) * Co2Car;
             }
 
         }
@@ -713,32 +724,32 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
         //sessionManager
-        User agency=ur.findById(1L).get();
+        User agency = ur.findById(1L).get();
         return pr.ListePickupByStatusAPPROVEDRequest(agency.getId());
     }
 
     @Override
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         //sessionManager
-        User freelancer=ur.findById(1L).get();
+        User freelancer = ur.findById(1L).get();
         return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
     }
+
     @Scheduled(cron = "* * * 27 * *")
     public void ModifyTheLevelOfDeliveryAgencyMonthly() {
-        List<User> users=pr.ListOfDeliveryAgencywithStatusPickupDelivered();
+        List<User> users = pr.ListOfDeliveryAgencywithStatusPickupDelivered();
         System.out.println(users);
-        for (User u:users) {
-            int uu=pr.countPickupdeliveredMonthlyByAgency(u.getId());
-            if(uu>0 && uu<100){
-                 u.setLevelDelivery("Level 1");
-                  ur.save(u);            }
-            else if(uu>100 && uu<500){
+        for (User u : users) {
+            int uu = pr.countPickupdeliveredMonthlyByAgency(u.getId());
+            if (uu > 0 && uu < 100) {
+                u.setLevelDelivery("Level 1");
+                ur.save(u);
+            } else if (uu > 100 && uu < 500) {
                 u.setLevelDelivery("Level 2");
-                 ur.save(u);
-            }
-            else if(uu>500 ){
+                ur.save(u);
+            } else if (uu > 500) {
                 u.setLevelDelivery("Top Rated Delivery");
-                 ur.save(u);
+                ur.save(u);
             }
 
         }

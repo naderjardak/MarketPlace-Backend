@@ -70,8 +70,8 @@ public class PickupController  {
         return pis.RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     }
     @PostMapping("AssignPickupByStoreAndOrder")
-    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id){
-        return pis.AssignPickupByStoreAndOrder(pickup,id);
+    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id,@RequestParam Long IdSotre){
+        return pis.AssignPickupByStoreAndOrder(pickup,id,IdSotre);
     }
     @PutMapping("ModifyStatusOfPickupByDelivery")
     public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {

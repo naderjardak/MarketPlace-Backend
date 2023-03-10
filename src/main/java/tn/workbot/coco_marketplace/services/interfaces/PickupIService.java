@@ -21,7 +21,7 @@ public interface PickupIService {
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
     /*public Pickup AssignPickupBySeller(Pickup pickup);*/
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
-    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id);
+    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id,Long IdSotre);
     public  Pickup ModifyStatusOfPickupByDelivery(String Status,Long idPickup);
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException;
     public int test(Long id);
