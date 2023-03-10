@@ -19,6 +19,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class SupplierRequestService implements SupplierRequestInterface {
@@ -42,16 +43,22 @@ public class SupplierRequestService implements SupplierRequestInterface {
 
     @Override
     public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
+        Random random = new Random();
+        int nbRand = random.nextInt(99999);
+        s.setReference(("REF-" + s.getProduct().getName().substring(0, 2).toUpperCase() + s.getSupplier().getBrandName().substring(0, 2).toUpperCase() + nbRand));
+
         User user = userrRepository.findById(1L).get();
         Product product = productService.getById(productId);
         s.setProduct(product);
         s.setSupplier(user);
+
         Date currentDate = new Date(); // date actuelle
         int daysToAdd = 1; // nombre de jours à ajouter
-
         // Ajouter des jours en millisecondes
         long newTimeInMillis = currentDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000);
-        boolean diff = s.getDeliveryDateTime().before(new Date(newTimeInMillis));
+        boolean diff = s.getDeliveryDate().before(new Date(newTimeInMillis));
+
+        //si les conditions sont verifié, l'offre sera accepté automatiquement
         if (product.isAutomaticRequestAcceptance() && product.getUnityPriceFromSupplier() != 0 && s.getUnityPrice() <= product.getUnityPriceFromSupplier() && s.getQuantity() == product.getDeliveryQuantity() && diff) {
             s.setRequestStatus(SupplierRequestStatus.ACCEPTED);
             product.setUnityPriceFromSupplier(s.getUnityPrice());
@@ -62,7 +69,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
         supplierRequestRepository.save(s);
         productService.update(product);
         String st = "Good Morning\n \nthe request of " + user.getBrandName() + "on " + product.getName() + " was accepted\nhere are some details : \n"
-                + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDateTime() + "\n \n Best Regards";
+                + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDate() + " At " + s.getDeliveryTime() + "\n \n Best Regards";
 //        mailSenderService.sendEmail(product.getStore().getSeller().getEmail(),"Supplier Request Accepted Automatically",st);
 
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -127,6 +134,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
                     //-1 quand la commande est confirmé et pas encore livré
                     s.getProduct().setQuantity(-1);
                 } else {
+                    // refuser les autres requests dans la liste
                     s.setRequestStatus(SupplierRequestStatus.REJECTED);
                 }
                 this.update(s);
@@ -136,6 +144,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
     }
 
     @Override
+    //confirm request after delivering the products
     public void confirmRequestDelivery(Long supplierRequestId) {
         if (supplierRequestRepository.findById(supplierRequestId).isPresent()) {
             SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId).get();

@@ -1,51 +1,53 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.ProductCategory;
-import tn.workbot.coco_marketplace.entities.Store;
-import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
+import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
 public class ProductService implements ProductInterface {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderStatsPDFGenerator.class);
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     StoreService storeService;
-
     @Autowired
     StoreRepository storeRepository;
-
     @Autowired
     ProductCategoryService productCategoryService;
-
     @Autowired
     ProductCategoryRepository productCategoryRepository;
-
     @Autowired
     PromotionCodeRepository promotionCodeRepository;
-
     @Autowired
     OrderMailSenderService mailSenderService;
-
     @Autowired
     UserrRepository userrRepository;
-
+    @Autowired
+    SupplierRequestRepository supplierRequestRepository;
 
     @Override
     public Product create(Product p) {
@@ -72,12 +74,10 @@ public class ProductService implements ProductInterface {
         return productRepository.save(p);
     }
 
-
     @Override
     public Product update(Product p) {
         return productRepository.save(p);
     }
-
 
     @Override
     public List<Product> retrieveAll() {
@@ -133,6 +133,96 @@ public class ProductService implements ProductInterface {
 
 
         return this.create(p);
+    }
+
+    @Override
+    public ByteArrayInputStream allSupplierRequestsOnProduct(Long id) {
+
+        Product product = productRepository.findById(id).get();
+        List<SupplierRequest> supplierRequests = supplierRequestRepository.findSupplierRequestsByProductId(id);
+
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try {
+
+            com.itextpdf.text.pdf.PdfWriter.getInstance(document, out);
+            document.open();
+
+            // Add Text to PDF file ->
+            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.DARK_GRAY);
+            Font small = FontFactory.getFont(FontFactory.COURIER, 9, BaseColor.BLUE);
+
+            Paragraph para = new Paragraph("Product " + product.getName().toUpperCase() + " supplier requests", font);
+            para.setAlignment(Element.ALIGN_CENTER);
+            document.add(para);
+            document.add(Chunk.NEWLINE);
+            PdfPTable table = new PdfPTable(6);
+            // Add PDF Table Header ->
+            Stream.of("REF", "Supplier", "Quatity", "Unity Price", "Shipping date", "Status")
+                    .forEach(headerTitle -> {
+                        PdfPCell header = new PdfPCell();
+                        Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+                        ;
+                        header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        header.setBorderWidth(1);
+                        header.setBorderColor(BaseColor.BLACK);
+                        header.setPhrase(new Phrase(headerTitle, headFont));
+                        table.addCell(header);
+                    });
+
+            for (SupplierRequest supp : supplierRequests) {
+
+                //String charOnly= stat.replaceAll("[^A-z]", "");
+                PdfPCell ref = new PdfPCell(new Phrase(supp.getReference()));
+                ref.setPaddingLeft(4);
+                ref.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                ref.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(ref);
+
+                PdfPCell supplier = new PdfPCell(new Phrase(supp.getSupplier().getBrandName()));
+                supplier.setPaddingLeft(4);
+                supplier.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                supplier.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(supplier);
+
+                PdfPCell quatity = new PdfPCell(new Phrase(String.valueOf(supp.getQuantity())));
+                quatity.setPaddingLeft(4);
+                quatity.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                quatity.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(quatity);
+
+                PdfPCell unityPrice = new PdfPCell(new Phrase(String.valueOf(supp.getUnityPrice())));
+                unityPrice.setPaddingLeft(4);
+                unityPrice.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                unityPrice.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(unityPrice);
+
+                PdfPCell shippingDate = new PdfPCell(new Phrase(String.valueOf(supp.getDeliveryDate())));
+                shippingDate.setPaddingLeft(4);
+                shippingDate.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                shippingDate.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(shippingDate);
+
+                PdfPCell status = new PdfPCell(new Phrase(String.valueOf(supp.getRequestStatus())));
+                status.setPaddingLeft(4);
+                status.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                status.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(status);
+            }
+
+            Paragraph p = new Paragraph("\n" + new Date(System.currentTimeMillis()), small);
+            document.add(table);
+            document.add(p);
+            document.close();
+
+
+        } catch (DocumentException e) {
+            logger.error(e.toString());
+        }
+
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
 

@@ -1,10 +1,8 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
-import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.PromotionCode;
 
-import java.util.Date;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface ProductInterface {
@@ -21,6 +19,8 @@ public interface ProductInterface {
 
 
     Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName);
+
+    ByteArrayInputStream allSupplierRequestsOnProduct(Long id);
 
 
 

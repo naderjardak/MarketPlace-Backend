@@ -7,7 +7,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
@@ -16,7 +19,9 @@ import tn.workbot.coco_marketplace.repositories.StoreRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -93,5 +98,21 @@ public class ProductController {
             productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat);
         }
     }
+
+    @GetMapping(value = "allSupplierRequestsOnProduct", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> allSupplierRequestsOnProduct(Long id) throws IOException {
+
+        ByteArrayInputStream pdf = productInterface.allSupplierRequestsOnProduct(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/pdf");
+        headers.add("Content-Disposition", "attachment; filename=" + new Date(System.currentTimeMillis()) + ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(pdf));
+    }
+
 
 }

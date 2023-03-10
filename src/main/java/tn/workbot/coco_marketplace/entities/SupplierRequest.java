@@ -23,9 +23,11 @@ public class SupplierRequest {
     private Long id;
 
     private float unityPrice;
-    @Temporal(TemporalType.TIME)
-    private Date deliveryDateTime;
+    @Temporal(TemporalType.DATE)
+    private Date deliveryDate;
     private int quantity;
+    @Temporal(TemporalType.TIME)
+    private Date deliveryTime;
 
     @Enumerated(EnumType.STRING)
     private SupplierRequestStatus requestStatus;
@@ -36,5 +38,7 @@ public class SupplierRequest {
     @ManyToOne
     @JsonIgnore
     private User supplier;
+
+    private String reference;
 
 }
