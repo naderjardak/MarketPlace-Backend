@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
@@ -54,6 +55,7 @@ public class PickupService implements PickupIService {
     @Autowired
     PickupTwilio pickupTwilio;
 
+
     @Override
     public Pickup addPickup(Pickup pickup) {
         Random random = new Random(); //java.util.Random
@@ -80,7 +82,7 @@ public class PickupService implements PickupIService {
     @Transactional
     @Override
     public void removePickup(Long id) {
-        Pickup pickup = pr.findById(id).orElseThrow(() -> new NotFoundException("Pickup not found"));
+        Pickup pickup = pr.findById(id).get();
         String PICKED = "PICKED";
         if (!pickup.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)) {
             throw new IllegalStateException("Cannot remove pickup with status other than PICKED");
@@ -125,6 +127,7 @@ public class PickupService implements PickupIService {
         double a = openWeatherMapClient.getWeather(u.getGovernorate());
         List<Store> store = (List<Store>) sr.findAll();
         List<Store> storesInSameGovernorate = sr.findByGovernorate(u.getGovernorate());
+
         List<Pickup> pickups = new ArrayList<>();
         //ELI 3ANDHOUM BIKE MATODHA7RELHOUM KEN EL PICKUPS ELI BECH TTLVRA FEN HOUMA W STORE YABDA FARD GOVERNORATE
         if (a > 2) {
@@ -135,15 +138,14 @@ public class PickupService implements PickupIService {
                     }
                 }
             }
-        } else if (u.getGear().equals("CAR")) {
+        }
+        if (u.getGear().equals("CAR")) {
             for (Store storee : storesInSameGovernorate) {
+
                 pickups.addAll(storee.getPickups());
             }
-
-            return pickups;
         }
-
-        return Collections.emptyList();
+        return pickups;
     }
 
 
@@ -153,7 +155,6 @@ public class PickupService implements PickupIService {
         User u = ur.findById(4L).get();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
-        List<AgencyDeliveryMan> agencyDeliveryManArrayList = new ArrayList<>();
         ArrayList<Pickup> store = new ArrayList<>();
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
@@ -170,64 +171,75 @@ public class PickupService implements PickupIService {
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup, Long id, Long IdSotre) {
         //Variable Of Session Manager
         Store store2 = pr.storeoforder(IdSotre, id, 1L);
+        Store storeer = sr.findById(IdSotre).get();
         Pickup pickup1 = pr.save(pickup);
+        Order order = or.findById(id).get();
+        List<Pickup> pickups = (List<Pickup>) pr.findAll();
+        Random random = new Random(); //java.util.Random
+        int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
+        String prefix = "216";
+        String code = prefix + randomNumber;
         pr.countstoreorder(id);
         float totalPrice = 0;
-        List<Product> productList=pr.productOfTheStoreById(IdSotre);
+        List<Product> productList = pr.productOfTheStoreById(IdSotre);
         System.out.println(pr.countstoreorder(id));
         int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(id, 1L);
         if (pr.countstoreorder(id) == 1) {
 
+            pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
+            pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
+            ///
 
-                Random random = new Random(); //java.util.Random
-                pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
-                pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-                int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
-                String prefix = "216";
-                String code = prefix + randomNumber;
-                List<Pickup> pickups = (List<Pickup>) pr.findAll();
-                //ken el code el random mawjoud y3awed yrandom code a5er hhhh
-                for (Pickup p : pickups) {
-                    if (p.getCodePickup() != code) {
-                        pickup1.setCodePickup(code);
-                    } else {
-                        int randomNumber1 = random.nextInt(100) + 100;
-                        String code1 = prefix + randomNumber + randomNumber1;
-                        pickup1.setCodePickup(code1);
-                    }
-                }
-                Order order = or.findById(id).get();
-                pickup1.setOrder(order);
-                pickup1.setCodePickup(code);
-                pickup1.setDateCreationPickup(LocalDateTime.now());
-                pickup1.setOrderOfTheSomeSeller(false);
-                pickup1.setStore(store2);
-                // pickup1.setStore(store2);
-                pickup1.setSum(order.getSum());
-                if (order.getPayment().equals(PaymentType.BANK_CARD)) {
-                    pickup1.setPayed(true);
+
+            //ken el code el random mawjoud y3awed yrandom code a5er hhhh
+            for (Pickup p : pickups) {
+                if (p.getCodePickup() != code) {
+                    pickup1.setCodePickup(code);
                 } else {
-                    pickup1.setPayed(false);
+                    int randomNumber1 = random.nextInt(100) + 100;
+                    String code1 = prefix + randomNumber + randomNumber1;
+                    pickup1.setCodePickup(code1);
                 }
-                return pr.save(pickup1);
             }
-         else {
-            if (storeofsomeUser > 1) {
-                for (Product p:productList) {
-                    totalPrice += p.getProductPrice();
-                    pickup1.setStore(store2);
-                    pickup1.setSum(totalPrice);
-                    //Lena Na9sa bech nseti 3al produit 5atro mech men nafes el store
-                    return pr.save(pickup1);
-                }
+            pickup1.setCodePickup(code);
+            //
+            pickup1.setOrder(order);
+            pickup1.setDateCreationPickup(LocalDateTime.now());
+            pickup1.setOrderOfTheSomeSeller(false);
+            pickup1.setStore(store2);
+            // pickup1.setStore(store2);
+            pickup1.setSum(order.getSum());
+            if (order.getPayment().equals(PaymentType.BANK_CARD)) {
+                pickup1.setPayed(true);
             } else {
-                Random random = new Random(); //java.util.Random
+                pickup1.setPayed(false);
+            }
+        } else {
+            if (storeofsomeUser > 1) {
+                for (Product p : productList) {
+                    totalPrice += p.getProductPrice();
+                    pickup1.setStore(storeer);
+                    pickup1.setOrder(order);
+
+                    //ken el code el random mawjoud y3awed yrandom code a5er hhhh
+                    for (Pickup pc : pickups) {
+                        if (pc.getCodePickup() != code) {
+                            pickup1.setCodePickup(code);
+                        } else {
+                            int randomNumber1 = random.nextInt(100) + 100;
+                            String code1 = prefix + randomNumber + randomNumber1;
+                            pickup1.setCodePickup(code1);
+                        }
+                    }
+                    pickup1.setCodePickup(code);
+                    pickup1.setSum(totalPrice);
+                }
+
+            } else {
+
                 pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
                 pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-                int randomNumber = random.nextInt(9000) + 1000;  // generates a random number between 1000 and 9999
-                String prefix = "216";
-                String code = prefix + randomNumber;
-                List<Pickup> pickups = (List<Pickup>) pr.findAll();
+
                 for (Pickup p : pickups) {
                     if (p.getCodePickup() != code) {
                         pickup1.setCodePickup(code);
@@ -237,7 +249,6 @@ public class PickupService implements PickupIService {
                         pickup1.setCodePickup(code1);
                     }
                 }
-                Order order = or.findById(id).get();
                 pickup1.setOrder(order);
                 pickup1.setCodePickup(code);
                 pickup1.setDateCreationPickup(LocalDateTime.now());
@@ -258,10 +269,9 @@ public class PickupService implements PickupIService {
                 } else {
                     pickup1.setPayed(false);
                 }
-                return pr.save(pickup1);
             }
         }
-         return null;
+        return pr.save(pickup1);
     }
 
     @Override
@@ -395,6 +405,7 @@ public class PickupService implements PickupIService {
     public List<Pickup> retrievePickupBysellerAttent() {
         /////session manager
         User u = ur.findById(1L).get();
+        System.out.println( pr.PickupBySeller(u.getId()));
         return pr.PickupBySeller(u.getId());
     }
 

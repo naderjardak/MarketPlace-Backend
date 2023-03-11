@@ -72,10 +72,11 @@ public class RequestService implements RequestInterface {
 
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
         User user = ur.findById(idDeliveryAgency).get();
-        User u=pr.UserOfPickup(idPickup);
-        Pickup p=pr.findById(idPickup).get();
-        int i=pr.countrequest(u.getId());
-        i=i+1;
+        //eli fou9o sessionManger
+        User u = pr.UserOfPickup(idPickup);
+        Pickup p = pr.findById(idPickup).get();
+        int i = pr.countrequest(u.getId());
+        i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
@@ -98,10 +99,10 @@ public class RequestService implements RequestInterface {
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
-        User u=pr.UserOfPickup(idPickup);
-        Pickup p=pr.findById(idPickup).get();
-        int i=pr.countrequest(u.getId());
-        i=i+1;
+        User u = pr.UserOfPickup(idPickup);
+        Pickup p = pr.findById(idPickup).get();
+        int i = pr.countrequest(u.getId());
+        i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
         User user = ur.findById(idDeliveryMenFreelancer).get();
@@ -127,6 +128,7 @@ public class RequestService implements RequestInterface {
         if (rr.verifier(idPickup) == 1) {
             for (Request r : requestsPending) {
                 r.setRequestStatus(RequestStatus.valueOf("REJECTED"));
+                r.setRequestDate(LocalDateTime.now());
             }
         }
         request.setRequestDate(LocalDateTime.now());
@@ -148,7 +150,7 @@ public class RequestService implements RequestInterface {
     }
 
 
-    @Scheduled(cron = "*/60 * 11 * * *")
+    @Scheduled(cron = "0 0 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {
         System.out.println("test");
         List<Request> requests = (List<Request>) rr.findAll();
@@ -160,32 +162,56 @@ public class RequestService implements RequestInterface {
                 if (requestDate.isAfter(now.minusMinutes(1)) && requestDate.isBefore(now.plusMinutes(1))) {
                     MimeMessage message = javaMailSender.createMimeMessage();
                     MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
-                    mailMessage.setTo(r.getDeliveryman().getEmail());
-                    mailMessage.setSubject("Request Status");
-                    Context context = new Context();
-                    String emailContent = templateEngine.process("emailRequest", context);
-                    mailMessage.setText(emailContent, true);
-                    javaMailSender.send(message);
+                    if (r.getAgency() != null) {
+                        mailMessage.setTo(r.getAgency().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context context = new Context();
+                        context.setVariable("name", "Congradulations your request is accepted");
+                        String emailContent = templateEngine.process("emailRequest", context);
+                        mailMessage.setText(emailContent, true);
+                        javaMailSender.send(message);
+                    }
+
+
+                    if (r.getDeliveryman() != null) {
+                        mailMessage.setTo(r.getDeliveryman().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context contextt = new Context();
+                        contextt.setVariable("name", "Congradulations your request is accepted");
+                        String emailContentt = templateEngine.process("emailRequest", contextt);
+                        mailMessage.setText(emailContentt, true);
+                        javaMailSender.send(message);
+                    }
+
                 }
             } else if (r.getRequestStatus().equals(RequestStatus.REJECTED)) {
                 LocalDateTime requestDate = r.getRequestDate();
 
                 if (requestDate.isAfter(now.minusMinutes(1)) && requestDate.isBefore(now.plusMinutes(1))) {
-                    SimpleMailMessage mailMessage = new SimpleMailMessage();
-                    mailMessage.setTo(r.getDeliveryman().getEmail());
-                    mailMessage.setSubject("Request Status");
-                    mailMessage.setText("Rejected");
-                    javaMailSender.send(mailMessage);
-                } else if (r.getRequestStatus().equals(RequestStatus.PENDING)) {
-                    LocalDateTime requestDate1 = r.getRequestDate();
+                    MimeMessage message = javaMailSender.createMimeMessage();
+                    MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
+                    if (r.getAgency() != null) {
+                        mailMessage.setTo(r.getAgency().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context context = new Context();
+                        context.setVariable("name", "Sorry your request is Rejected");
+                        String emailContent = templateEngine.process("emailRequest", context);
+                        mailMessage.setText(emailContent, true);
+                        javaMailSender.send(message);
+                    }
 
-                    if (requestDate1.isAfter(now.minusMinutes(1)) && requestDate1.isBefore(now.plusMinutes(1))) {
-                        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+                    if (r.getDeliveryman() != null) {
                         mailMessage.setTo(r.getDeliveryman().getEmail());
                         mailMessage.setSubject("Request Status");
-                        mailMessage.setText("Rejected");
-                        javaMailSender.send(mailMessage);
+
+                        Context contextt = new Context();
+                        contextt.setVariable("name","Sorry your request is Rejected");
+                        String emailContentt = templateEngine.process("emailRequest", contextt);
+                        mailMessage.setText(emailContentt, true);
+                        javaMailSender.send(message);
                     }
+
                 }
             }
         }
