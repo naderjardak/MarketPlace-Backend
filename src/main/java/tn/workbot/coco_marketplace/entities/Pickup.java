@@ -2,12 +2,12 @@ package tn.workbot.coco_marketplace.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,6 +31,8 @@ public class Pickup implements Serializable {
     private LocalDateTime dateCreationPickup;
     private float sum;
     private int nbRequest;
+    private String deliveryTimeInHoursBuyer;
+    private String deliveryTimeInHoursSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)

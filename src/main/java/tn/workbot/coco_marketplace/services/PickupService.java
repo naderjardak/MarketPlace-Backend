@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PickupTwilio;
+import tn.workbot.coco_marketplace.Api.ScraperEssence;
 import tn.workbot.coco_marketplace.entities.*;
-import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
-import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
-import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
-import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
+import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
@@ -54,6 +52,8 @@ public class PickupService implements PickupIService {
     OpenWeatherMapClient openWeatherMapClient;
     @Autowired
     PickupTwilio pickupTwilio;
+    @Autowired
+    ScraperEssence se;
 
 
     @Override
@@ -189,8 +189,6 @@ public class PickupService implements PickupIService {
             pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
             pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
             ///
-
-
             //ken el code el random mawjoud y3awed yrandom code a5er hhhh
             for (Pickup p : pickups) {
                 if (p.getCodePickup() != code) {
@@ -206,8 +204,7 @@ public class PickupService implements PickupIService {
             pickup1.setOrder(order);
             pickup1.setDateCreationPickup(LocalDateTime.now());
             pickup1.setOrderOfTheSomeSeller(false);
-            pickup1.setStore(store2);
-            // pickup1.setStore(store2);
+            pickup1.setStore(storeer);
             pickup1.setSum(order.getSum());
             if (order.getPayment().equals(PaymentType.BANK_CARD)) {
                 pickup1.setPayed(true);
@@ -301,7 +298,7 @@ public class PickupService implements PickupIService {
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException {
 
         Pickup pickup1 = pr.pickupprettolivred(idPickup);
-        Request request1 = rr.findById(pickup1.getId()).get();
+        Request request1 = pr.Requestprettolivred(idPickup);
         if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
@@ -525,17 +522,9 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Product> RetrieveProductByPickup(Long idPickup) {
-        //session manager idSeller
-        User u = ur.findById(1L).get();
-        Pickup p = pr.findById(idPickup).get();
-        Long i = p.getOrder().getId();
-        List<Product> products = new ArrayList<>();
-        if (pr.countstoreorder(i) > 1) {
-            products.addAll(pr.productofpickup(p.getId(), u.getId()));
-        } else {
-            products.addAll(pr.productOfOrder(p.getId(), u.getId()));
-        }
-        return products;
+        List<Product> s=pr.ProductBystorebyPickup(idPickup);
+        System.out.println(s);
+        return s;
     }
 
     ///////////////stat Administrator
@@ -650,41 +639,57 @@ public class PickupService implements PickupIService {
         //session manager idUser
         User u = ur.findById(3L).get();
         List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
+        List<Pickup> pickups1=pr.AgencyINCar(u.getId());
         float kiloSum = 0;
         //////
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
                 .build();
         // Get the distance and travel time using the DistanceMatrixApi
-        for (Pickup p : pickups) {
-            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                    .origins(p.getGovernorate())
-                    .destinations(p.getStore().getGovernorate())
-                    .mode(TravelMode.DRIVING);
+        if(u.getRole().getType().equals(RoleType.DELIVERYMEN)){
+            for (Pickup p : pickups) {
+                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                        .origins(p.getGovernorate())
+                        .destinations(p.getStore().getGovernorate())
+                        .mode(TravelMode.DRIVING);
 
-            DistanceMatrix matrix = request.await();
-            Distance distance = matrix.rows[0].elements[0].distance;
-            double distanceInKm = distance.inMeters / 1000.0;
-            kiloSum = (float) distanceInKm + kiloSum;
+                DistanceMatrix matrix = request.await();
+                Distance distance = matrix.rows[0].elements[0].distance;
+                double distanceInKm = distance.inMeters / 1000.0;
+                kiloSum = (float) distanceInKm + kiloSum;
+            }
         }
+        else if(u.getRole().getType().equals(RoleType.DELIVERYAGENCY)){
+            for (Pickup p : pickups1) {
+                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                        .origins(p.getGovernorate())
+                        .destinations(p.getStore().getGovernorate())
+                        .mode(TravelMode.DRIVING);
+
+                DistanceMatrix matrix = request.await();
+                Distance distance = matrix.rows[0].elements[0].distance;
+                double distanceInKm = distance.inMeters / 1000.0;
+                kiloSum = (float) distanceInKm + kiloSum;
+            }
+        }
+
         return kiloSum;
 
     }
 
     @Override
-    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException {
+    public String FraisEssenceTotal() throws Exception {
         //sessionManager
         User user = ur.findById(3L).get();
         Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
         double price = Float.valueOf(0);
-
-        double priceEssnceliters = 2.55;
+        double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
         if (user.getGear().equals("CAR")) {
             if (user.getGearAge() > 0 && user.getGearAge() < 5) {
                 price = kiloSum * (5.8 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() > 5 && user.getGearAge() < 10) {
+            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
                 price = kiloSum * (6.9 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() > 10) {
+            } else if (user.getGearAge() >= 10) {
                 price = kiloSum * (7.8 / 100) * priceEssnceliters;
             }
 
@@ -721,9 +726,9 @@ public class PickupService implements PickupIService {
         if (user.getGear().equals("CAR")) {
             if (user.getGearAge() > 0 && user.getGearAge() < 5) {
                 co2kilo = kiloSum * (5.8 / 100) * Co2Car;
-            } else if (user.getGearAge() > 5 && user.getGearAge() < 10) {
+            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
                 co2kilo = kiloSum * (6.9 / 100) * Co2Car;
-            } else if (user.getGearAge() > 10) {
+            } else if (user.getGearAge() >= 10) {
                 co2kilo = kiloSum * (7.8 / 100) * Co2Car;
             }
 

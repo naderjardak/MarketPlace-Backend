@@ -4,10 +4,7 @@ import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.workbot.coco_marketplace.Api.DeliveryPreduction;
-import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
-import tn.workbot.coco_marketplace.Api.PdfPickup;
-import tn.workbot.coco_marketplace.Api.Weather;
+import tn.workbot.coco_marketplace.Api.*;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
@@ -27,6 +24,8 @@ public class PickupController  {
     private OpenWeatherMapClient weatherClient;
     @Autowired
     DeliveryPreduction dp;
+    @Autowired
+    ScraperEssence sce;
 
 
     @PostMapping("addPickup")
@@ -268,7 +267,7 @@ public class PickupController  {
     }
     //////FraisEssenceTotalParGearConsommer
     @GetMapping("FraisEssenceTotal")
-    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException{
+    public String FraisEssenceTotal() throws Exception {
         return  pis.FraisEssenceTotal();
     }
     //////////////calculer co2 and update in user entity
@@ -314,6 +313,10 @@ public class PickupController  {
     @GetMapping("RetrievePickupFreelancerByRequestWithStatusRequestApproved")
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupFreelancerByRequestWithStatusRequestApproved();
+    }
+    @GetMapping("/scrape")
+    public String scrapePage(@RequestParam String url) throws Exception {
+        return sce.scrapePage(url);
     }
 
     }

@@ -1,7 +1,12 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.Distance;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +26,8 @@ import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,10 +120,61 @@ public class RequestService implements RequestInterface {
         request1.setRequestDate(LocalDateTime.now());
         return rr.save(request);
     }
+    public String calculateDeliveryTime(Long idPickup, Long idRequest) throws IOException, InterruptedException, ApiException {
+
+        Pickup pickup1 = pr.pickupprettolivred(idPickup);
+        Request request1 = rr.findById(idRequest).get();
+        if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
+            GeoApiContext context = new GeoApiContext.Builder()
+                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .build();
+            // Get the distance and travel time using the DistanceMatrixApi
+            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                    .origins(pickup1.getGovernorate())
+                    .destinations(pickup1.getStore().getGovernorate())
+                    .mode(TravelMode.DRIVING);
+
+            DistanceMatrix matrix = request.await();
+            Distance distance = matrix.rows[0].elements[0].distance;
+            if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("CAR"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("CAR"))) {
+                double averageSpeed = 80.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("BIKE"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("BIKE"))) {
+                double averageSpeed = 10.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("MOTO"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("MOTO"))) {
+                double averageSpeed = 30.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else {
+                // Calculate the estimated travel time based on the gear information
+                double averageSpeed = 60.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            }
+
+        }
+        return null;
+
+    }
 
     @Override
-    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) {
+    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) throws IOException, InterruptedException, ApiException {
         Request request = rr.findById(idRequest).get();
+        Pickup pickup=pr.findById(idPickup).get();
         //session manager el idmt3 seller bech njibo el id mt3 el pickup wel request mel url wel status yda5elha houwa
         User seller = ur.findById(idSeller).get();
         List<Request> requestsPending = new ArrayList<>();
@@ -134,6 +192,9 @@ public class RequestService implements RequestInterface {
         request.setRequestDate(LocalDateTime.now());
         request.setRequestStatus(RequestStatus.valueOf(status));
         request.setSeller(seller);
+        String deliverytime=calculateDeliveryTime(idPickup,idRequest);
+        pickup.setDeliveryTimeInHoursBuyer(deliverytime);
+        pr.save(pickup);
         return rr.save(request);
     }
 

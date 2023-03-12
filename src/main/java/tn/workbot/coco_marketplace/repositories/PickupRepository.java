@@ -16,6 +16,9 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     List<Store> storesofuser(@Param("v1") Long id);
     @Query("select p from Pickup p,Request r where p.id=r.pickup.id and p.id=:v1  and r.requestStatus='APPROVED'")
     Pickup pickupprettolivred(@Param("v1") Long id);
+
+    @Query("select r from Request r,Pickup p where r.pickup.id=p.id and p.id=:v1  ")
+    Request Requestprettolivred(@Param("v1") Long id);
     @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v2 ")
     public  int countstoreorder(@Param("v2") Long id);
     @Query("select distinct s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and s.id=:v6 and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
@@ -24,6 +27,8 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     public  List<Product> productOfTheStoreById(@Param("v4") Long IdStore);
     @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
     public  int countstoreofproductinorderOfSomeseller(@Param("v3") Long id,@Param("v4") Long idSeller);
+    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id  and s.seller.id=u.id and u.id=:v4")
+    public  int countstoreofproductinorderOfSomesellerr(@Param("v4") Long idSeller);
     @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
     public  List<Product> productoforder(@Param("v3") Long id, @Param("v4") Long idSeller);
     @Query("select p from Pickup  p ,Request r ,User u,Order o where p.codePickup=:v1 and p.order.buyer.id=:v3 ")
@@ -80,9 +85,9 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select  distinct(p) from Pickup p,Request r,User u where  r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.Agency.id=:v1   and DATE(r.RequestDate) = CURRENT_DATE ")
     public List<Pickup> SumPricePickupDeliveredByAgencyToday(@Param("v1") Long idAFreelancer);
 
-    @Query("select distinct p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
+    @Query("select  p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
     public  List<Product> productofpickup(@Param("v1") Long idPickup,@Param("v2") Long idSeller);
-    @Query("select distinct p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where  p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
+    @Query("select  p from Product p,ProductQuantity pq,Order o,Pickup pi ,Store s,User u where  p.id=pq.product.id and o.id=pq.order.id and o.id=pi.order.id and pi.id=:v1 and s.seller.id=u.id and s.seller.id=:v2")
     public List<Product> productOfOrder(@Param("v1") Long idPickup,@Param("v2") Long idSeller);
 
     ///////////stat Administrator
@@ -122,8 +127,11 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     public List<Pickup> sumOfPickupReturnedweekAdministrator();
 
     //DeliveryAlertCar
-    @Query("select distinct p from Pickup p ,Request r,User u where r.deliveryman.id=u.id and r.pickup.id=p.id and u.id=:d5 ")
+    @Query("select distinct p from Pickup p ,Request r,User u where r.deliveryman.id=u.id and r.pickup.id=p.id and r.requestStatus='APPROVED' and u.id=:d5  ")
     public List<Pickup> SumKilometreINCar(@Param("d5") Long idFreelancer);
+
+    @Query("select distinct p from Pickup p ,Request r,User u where r.Agency.id=u.id and r.pickup.id=p.id and r.requestStatus='APPROVED' and u.id=:d5 ")
+    public List<Pickup> AgencyINCar(@Param("d5") Long idAgency);
 
     @Query("select  p from Pickup p where p.nbRequest>1")
     public List<Pickup> ListePickup();
@@ -140,6 +148,8 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select count(distinct p) from Request r,Pickup p,User u where u.id=r.Agency.id and u.id=:d1 and r.Agency.id=u.id and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'")
     public int countPickupdeliveredMonthlyByAgency(@Param("d1") Long idAgency);
 
+    @Query("select distinct pp from Product pp,Store s,Pickup p where p.store.id=s.id and p.id=:v1 and pp.store.id=s.id")
+    public List<Product> ProductBystorebyPickup(@Param("v1") Long idPickup);
 
 
 
