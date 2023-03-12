@@ -77,6 +77,7 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")

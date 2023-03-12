@@ -47,8 +47,9 @@ public class LoyaltyService implements LoyaltyInterface {
         if (loyalty.getLink() == null) {
             return ResponseEntity.notFound().build();
         }
-        if (loyalty.getLastActivity().plusDays(3).isBefore(LocalDateTime.now())) {
-            loyalty.setPoints(loyalty.getPoints() + 1);
+        if (loyalty.getLastActivity().plusDays(1).isBefore(LocalDateTime.now())) {
+            int pt=loyalty.getPoints();
+            loyalty.setPoints(pt+1);
             loyalty.setLastActivity(LocalDateTime.now());
             loyaltyRepository.save(loyalty);
             //redirection to coco signe in page

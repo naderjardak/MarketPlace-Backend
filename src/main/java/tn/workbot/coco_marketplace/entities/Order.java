@@ -53,4 +53,7 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "order")
     private List<ProductQuantity> productQuantities;
 
+    @OneToMany
+    private List<PromotionCode> promotionCodeList;
+
 }
