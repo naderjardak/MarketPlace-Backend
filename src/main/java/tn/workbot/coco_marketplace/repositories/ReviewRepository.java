@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query("select r from Review r group by r.createdAt,r.emotionStatus ")
+    @Query("select r from Review r group by r.createdAt,r.emotionStatus")
     List<Review> ClassifyReviewsByDateAndEmotons();
-
+//ghj
 
 }
