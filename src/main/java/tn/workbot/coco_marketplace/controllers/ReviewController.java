@@ -26,8 +26,8 @@ public class ReviewController {
     }
 
     @PostMapping("AddReview")
-    public void addReview(@RequestBody Review review,@RequestParam Long id){
-        reviewService.addReview(review,id);
+    public void addReview(@RequestBody Review review,@RequestParam Long id,@RequestParam int rating){
+        reviewService.addReview(review,id,rating);
     }
 
     @PutMapping("UpdateReview")
@@ -45,6 +45,13 @@ public class ReviewController {
     {
         return reviewService.calculateProductRating(productId, rating);
     }
+
+
+    @GetMapping("ClassifyReviewByDateAndEmotions")
+    public List<Review> ClassifyReviewsByDateAndEmotons(){
+        return reviewService.ClassifyReviewsByDateAndEmotons();
+    }
+
 
 
 }

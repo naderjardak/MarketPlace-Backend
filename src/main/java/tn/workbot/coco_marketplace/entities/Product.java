@@ -1,7 +1,11 @@
 package tn.workbot.coco_marketplace.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import  com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;

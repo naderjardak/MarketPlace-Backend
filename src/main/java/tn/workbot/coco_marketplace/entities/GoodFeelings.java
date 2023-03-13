@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class BadWords implements Serializable {
+public class GoodFeelings implements Serializable {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
 
-    private String word;
+    private String name;
 }

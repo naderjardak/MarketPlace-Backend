@@ -2,6 +2,8 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
+import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.ClaimSav;
 
 
@@ -48,10 +50,14 @@ public class ClaimSavService implements ClaimSavInterface {
     @Override
     public void addClaim(ClaimSav claim,Long idProductQuantity) {
         claim.setCreatedAt(new Date());
+        claim.setStatus(ClaimSavStatusType.NONTRAITE);
         User user = ur.findById(1L).get();
         claim.setUser(user);
-        ProductQuantity productQuantity=productQuantityRepository.findById(1L).get();
+        ProductQuantity productQuantity=productQuantityRepository.findById(idProductQuantity).get();
         claim.setProductQuantity(productQuantity);
+        String subject = "";
+        String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim has been registred successfully you will recieve a message when your claim is treated, Thank you";
+        mailSenderService.sendEmail(user.getEmail(),subject,message);
         crp.save(claim);
 
 
@@ -65,6 +71,9 @@ public class ClaimSavService implements ClaimSavInterface {
         claim.setUpdatedAt(new Date());
         //Session Manager
         User user = ur.findById(1L).get();
+        //String subject = "";
+        //String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim has been updated successfully you will recieve a message when your claim is treated, Thank you";
+        //mailSenderService.sendEmail(user.getEmail(),subject,message);
         crp.save(claim);
     }
 
@@ -72,6 +81,26 @@ public class ClaimSavService implements ClaimSavInterface {
     public void deleteClaim(Long id) {
         crp.deleteById(id);
     }
+
+    @Override
+    public void modifyClaimStatus(Long id, ClaimSavStatusType newStatus) {
+        ClaimSav claimSav = crp.findById(id).orElseThrow(() -> new NotFoundException("ClaimSav not found"));
+
+        if (newStatus == ClaimSavStatusType.APPROVED) {
+
+        } else if (newStatus == ClaimSavStatusType.REJECTED) {
+
+        } else if (newStatus == ClaimSavStatusType.COMPLETED) {
+
+        }
+
+        claimSav.setStatus(newStatus);
+        //String subject = "";
+        //String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim has been updated successfully you will recieve a message when your claim is treated, Thank you";
+        //mailSenderService.sendEmail(user.getEmail(),subject,message);
+        crp.save(claimSav);
+    }
+
 
     @Override
     public List<ClaimSav> getClaimsByTypeAndStatus(ClaimSavType type, ClaimSavStatusType status) {

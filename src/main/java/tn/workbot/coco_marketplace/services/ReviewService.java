@@ -4,13 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.ReviewEmotionStatus;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.ReviewInterface;
 
-import java.util.Arrays;
+
 import java.util.Date;
 import java.util.List;
+
+
 @Service
 public class ReviewService implements ReviewInterface {
 
@@ -33,6 +36,12 @@ public class ReviewService implements ReviewInterface {
     @Autowired
     BadWordsService badWordsService;
 
+    @Autowired
+    GoodFeelingsRepository goodFeelingsRepository;
+
+    @Autowired
+    BadFeelingsRepository badFeelingsRepository;
+
 
 
     @Override
@@ -46,19 +55,21 @@ public class ReviewService implements ReviewInterface {
     }
 
     @Override
-    public void addReview(Review review,Long id) {
+    public void addReview(Review review,Long id,int rating) {
         review.setCreatedAt(new Date());
         Review review1=rvp.save(review);
         Product product=pr.findById(id).get();
         //Product reference=pr.getReferenceById(id);
 
+        calculateProductRating(id,rating);
 
         review1.setProduct(product);
-        BadWordsService badWordsService1=new BadWordsService();
-        review.setComment(badWordsService1.hideBadWords(review.getComment()));
+        review.setComment(badWordsService.hideBadWords(review.getComment()));
+        ReviewEmotionStatus emotion = detectReviewEmotion(review.getComment());
+        review.setEmotionStatus(emotion);
         rvp.save(review);
 
-        /*Order order=or.findById(id).get();
+        Order order=or.findById(id).get();
         List<Pickup> pickups= order.getPickups();
         for(Pickup p:pickups){
             if(p.getStatusPickupBuyer().equals(StatusPickupBuyer.DELIVERED)){
@@ -74,7 +85,7 @@ public class ReviewService implements ReviewInterface {
                 }
             }
                rvp.save(review);
-        }*/
+        }
 
 
 
@@ -131,5 +142,42 @@ public class ReviewService implements ReviewInterface {
         //order.
 
     }
+
+    @Override
+    public ReviewEmotionStatus detectReviewEmotion(String reviewText) {
+        List<GoodFeelings> goodFeelingsList = goodFeelingsRepository.findAll();
+        List<BadFeelings> badFeelingsList = badFeelingsRepository.findAll();
+
+        int goodCount = 0;
+        int badCount = 0;
+        for (String word : reviewText.split("\\W+")) {
+            for (GoodFeelings goodFeelings : goodFeelingsList) {
+                if (goodFeelings.getName().equalsIgnoreCase(word)) {
+                    goodCount++;
+                    break;
+                }
+            }
+            for (BadFeelings badFeelings : badFeelingsList) {
+                if (badFeelings.getName().equalsIgnoreCase(word)) {
+                    badCount++;
+                    break;
+                }
+            }
+        }
+
+        if (goodCount > badCount) {
+            return ReviewEmotionStatus.HAPPY;
+        } else if (badCount > goodCount) {
+            return ReviewEmotionStatus.UNHAPPY;
+        } else {
+            return ReviewEmotionStatus.NEUTRAL;
+        }
+    }
+
+    @Override
+    public List<Review> ClassifyReviewsByDateAndEmotons() {
+        return rvp.ClassifyReviewsByDateAndEmotons();
+    }
+
 
 }
