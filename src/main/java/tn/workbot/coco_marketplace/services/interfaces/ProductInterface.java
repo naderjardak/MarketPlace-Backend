@@ -20,7 +20,7 @@ public interface ProductInterface {
 
     Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName,String storeName) throws Exception;
 
-    ByteArrayInputStream allSupplierRequestsOnProduct(Long id);
+    ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String status);
 
 
 

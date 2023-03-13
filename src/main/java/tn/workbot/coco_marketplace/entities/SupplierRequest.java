@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.Hibernate;
 import tn.workbot.coco_marketplace.entities.enmus.SupplierRequestStatus;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -36,9 +37,20 @@ public class SupplierRequest {
     private Product product;
 
     @ManyToOne
-    @JsonIgnore
     private User supplier;
 
     private String reference;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        SupplierRequest that = (SupplierRequest) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

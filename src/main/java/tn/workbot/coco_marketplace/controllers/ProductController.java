@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -100,9 +101,9 @@ public class ProductController {
     }
 
     @GetMapping(value = "allSupplierRequestsOnProduct", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> allSupplierRequestsOnProduct(Long id) throws IOException {
+    public ResponseEntity<InputStreamResource> allSupplierRequestsOnProduct(Long id, @Schema(allowableValues = {"ALL","ACCEPTED", "REJECTED","DELIVERED", "PENDING"}) String status) throws IOException {
 
-        ByteArrayInputStream pdf = productInterface.allSupplierRequestsOnProduct(id);
+        ByteArrayInputStream pdf = productInterface.allSupplierRequestsOnProduct(id,status);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
         headers.add("Content-Disposition", "attachment; filename=" + new Date(System.currentTimeMillis()) + ".pdf");

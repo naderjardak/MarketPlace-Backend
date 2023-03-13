@@ -32,12 +32,12 @@ public class SupplierRequestController {
     }
 
     @GetMapping("getRequestById")
-    SupplierRequest getById(Long id) {
+    SupplierRequest getById(@RequestParam Long id) {
         return supplierRequestInterface.getById(id);
     }
 
     @DeleteMapping("DeleteRequest")
-    void delete(Long id) throws Exception {
+    void delete(@RequestParam Long id) throws Exception {
         supplierRequestInterface.deleteById(id);
     }
 
@@ -47,17 +47,17 @@ public class SupplierRequestController {
     }
 
     @GetMapping("retriveRequestsByProduct")
-    List<SupplierRequest> retriveRequestsByProduct(Long idProduct) {
+    List<SupplierRequest> retriveRequestsByProduct(@RequestParam Long idProduct) {
         return supplierRequestInterface.retriveRequestsByProduct(idProduct);
     }
 
     @PutMapping("AcceptRequest")
-    void accpetRequestBySeller(Long supplierRequestId) {
+    void accpetRequestBySeller(@RequestParam Long supplierRequestId) {
         supplierRequestInterface.accpetRequestBySeller(supplierRequestId);
 
     }
     @PutMapping("ConfirmDelivery")
-    void ConfirmDelivery(Long supplierRequestId) {
+    void ConfirmDelivery(@RequestParam Long supplierRequestId) {
         supplierRequestInterface.confirmRequestDelivery(supplierRequestId);
 
     }

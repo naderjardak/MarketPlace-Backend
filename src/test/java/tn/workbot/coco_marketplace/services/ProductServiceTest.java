@@ -14,12 +14,11 @@ import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
+import tn.workbot.coco_marketplace.entities.enmus.SupplierRequestStatus;
 import tn.workbot.coco_marketplace.repositories.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.ByteArrayInputStream;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -44,7 +43,11 @@ class ProductServiceTest {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
-//    @MockBean
+    @Autowired
+    private SupplierRequestRepository supplierRequestRepository;
+
+
+    //    @MockBean
 //    private UserrRepository userrRepositoryMock;
     @MockBean
     private OrderMailSenderService mailSenderService;
@@ -250,9 +253,6 @@ class ProductServiceTest {
         assertEquals(product, savedProduct);
     }
 
-    @Test
-    void allSupplierRequestsOnProduct() {
-    }
 
     @Test
     public void testProductsOutOfStock() {
@@ -329,4 +329,36 @@ class ProductServiceTest {
         // Verify that sendEmail was not called for user2
         verify(mailSenderService, never()).sendEmail(eq("user2@test.com"), anyString(), anyString());
     }
+
+    @Test
+    public void shoufldReturnPDF() {
+
+        String suppStatus = "DELIVERED";
+        Product product = new Product();
+
+        product.setName("Test product");
+        productRepository.save(product);
+
+        SupplierRequest supplierRequest1 = new SupplierRequest();
+        supplierRequest1.setReference("REF001");
+        supplierRequest1.setQuantity(10);
+        supplierRequest1.setUnityPrice(100.0F);
+        supplierRequest1.setDeliveryDate(new Date());
+        supplierRequest1.setRequestStatus(SupplierRequestStatus.DELIVERED);
+        supplierRequestRepository.save(supplierRequest1);
+        SupplierRequest supplierRequest2 = new SupplierRequest();
+        supplierRequest2.setReference("REF002");
+        supplierRequest2.setQuantity(20);
+        supplierRequest2.setUnityPrice(200.0F);
+        supplierRequest2.setDeliveryDate(new Date());
+        supplierRequest2.setRequestStatus(SupplierRequestStatus.ACCEPTED);
+        supplierRequestRepository.save(supplierRequest2);
+
+        // Act
+        ByteArrayInputStream inputStream = productService.allSupplierRequestsOnProduct(product.getId(), suppStatus);
+
+        // Assert
+        assertNotNull(inputStream);
+    }
 }
+

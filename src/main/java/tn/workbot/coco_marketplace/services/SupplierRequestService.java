@@ -43,7 +43,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
 
     @Override
     public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
-        User user = userrRepository.findById(1L).get();
+        User user = userrRepository.findAll().iterator().next();
         Product product = productService.getById(productId);
 
         Random random = new Random();
@@ -66,23 +66,28 @@ public class SupplierRequestService implements SupplierRequestInterface {
             product.setUnityPriceFromSupplier(s.getUnityPrice());
             //-1 quand la commande est confirmé et pas encore livré
             product.setQuantity(-1);
-        } else
-            s.setRequestStatus(SupplierRequestStatus.WAITING_FOR_VALIDATION);
-        supplierRequestRepository.save(s);
-        productService.update(product);
-        String st = "Good Morning\n \nthe request of " + user.getBrandName() + "on " + product.getName() + " was accepted\nhere are some details : \n"
-                + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDate() + " At " + s.getDeliveryTime() + "\n \n Best Regards";
-//        mailSenderService.sendEmail(product.getStore().getSeller().getEmail(),"Supplier Request Accepted Automatically",st);
 
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
-        mailMessage.setTo(product.getStore().getSeller().getEmail());
-        mailMessage.setSubject("Supplier Request Accepted Automatically");
-        Context context = new Context();
-        context.setVariable("messageContent", st);
-        String emailContent = templateEngine.process("AcceptedSupplierRequestEmail", context);
-        mailMessage.setText(emailContent, true);
-        javaMailSender.send(message);
+            String st = "Good Morning\n \nthe request of " + user.getBrandName() + "on " + product.getName() + " was accepted\nhere are some details : \n"
+                    + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDate() + " At " + s.getDeliveryTime() + "\n \n Best Regards";
+
+            supplierRequestRepository.save(s);
+            productService.update(product);
+
+            //productService.update(product);
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
+            mailMessage.setTo(product.getStore().getSeller().getEmail());
+            mailMessage.setSubject("Supplier Request Accepted Automatically");
+            Context context = new Context();
+            context.setVariable("messageContent", st);
+            String emailContent = templateEngine.process("AcceptedSupplierRequestEmail", context);
+            mailMessage.setText(emailContent, true);
+            javaMailSender.send(message);
+        } else {
+            s.setRequestStatus(SupplierRequestStatus.WAITING_FOR_VALIDATION);
+            supplierRequestRepository.save(s);
+            productService.update(product);
+        }
         return s;
     }
 

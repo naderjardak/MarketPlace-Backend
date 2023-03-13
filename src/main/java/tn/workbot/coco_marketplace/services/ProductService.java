@@ -14,6 +14,7 @@ import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
+import tn.workbot.coco_marketplace.entities.enmus.SupplierRequestStatus;
 import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
@@ -143,10 +144,18 @@ public class ProductService implements ProductInterface {
     }
 
     @Override
-    public ByteArrayInputStream allSupplierRequestsOnProduct(Long id) {
+    public ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String suppStatus) {
 
         Product product = productRepository.findById(id).get();
         List<SupplierRequest> supplierRequests = supplierRequestRepository.findSupplierRequestsByProductId(id);
+        if(suppStatus.equals("DELIVERED"))
+            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.DELIVERED)).toList();
+        if(suppStatus.equals("ACCEPTED"))
+            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.ACCEPTED)).toList();
+        if(suppStatus.equals("PENDING"))
+            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.WAITING_FOR_VALIDATION)).toList();
+        if(suppStatus.equals("REJECTED"))
+            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.REJECTED)).toList();
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -166,7 +175,7 @@ public class ProductService implements ProductInterface {
             document.add(Chunk.NEWLINE);
             PdfPTable table = new PdfPTable(6);
             // Add PDF Table Header ->
-            Stream.of("REF", "Supplier", "Quatity", "Unity Price", "Shipping date", "Status")
+            Stream.of("REF", "Supplier", "Quantity", "Unity Price", "Shipping date", "Status")
                     .forEach(headerTitle -> {
                         PdfPCell header = new PdfPCell();
                         Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
