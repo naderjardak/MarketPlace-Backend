@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/pickup")
 public class PickupController  {
     @Autowired
     PickupIService pis;
