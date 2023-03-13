@@ -13,19 +13,16 @@ import org.springframework.stereotype.Component;
 public class OrderLogFile {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    // Log method entry
     @Before("execution(* tn.workbot.coco_marketplace.services.interfaces.OrderInterface.*(..))")
     public void logMethodEntry(JoinPoint joinPoint) {
         logger.info("Entering method: {}", joinPoint.getSignature().getName());
     }
 
-    // Log method exit
     @After("execution(* tn.workbot.coco_marketplace.services.interfaces.OrderInterface.*(..))")
     public void logMethodExit(JoinPoint joinPoint) {
         logger.info("Exiting method: {}", joinPoint.getSignature().getName());
     }
 
-    // Add additional logging for specific methods
     @Before("execution(* tn.workbot.coco_marketplace.services.interfaces.OrderInterface.endCommandProsess(..))")
     public void logEndCommandProsessEntry(JoinPoint joinPoint) {
         logger.debug("Starting payment process");
