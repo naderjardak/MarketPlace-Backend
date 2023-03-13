@@ -71,7 +71,7 @@ public class PickupService implements PickupIService {
             } else {
                 int randomNumber1 = random.nextInt(100) + 100;
                 String code1 = prefix + randomNumber + randomNumber1;
-                pickup.setCodePickup(code1);
+                pickup.setCodePickup(code1);//
             }
         }
         pickup.setCodePickup(code);
