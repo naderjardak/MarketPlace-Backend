@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
@@ -50,6 +51,8 @@ public class ProductService implements ProductInterface {
 
     @Override
     public Product create(Product p, String storeName) throws Exception {
+        if (p.getProductCategory() == null)
+            throw new Exception("Missing Category");
         //TODO : get user by session id
         User user = userrRepository.findAll().iterator().next();
         Store store = storeRepository.findByNameAndSeller(storeName, user);
@@ -126,8 +129,9 @@ public class ProductService implements ProductInterface {
         if (category != null && subCategory == null) {
             subCategory = new ProductCategory();
             subCategory.setName(subCatName);
-            subCategory.setCategory(category);
             productCategoryRepository.save(subCategory);
+            subCategory.setCategory(category);
+            productCategoryRepository.save(category);
 
 
         }
@@ -229,23 +233,24 @@ public class ProductService implements ProductInterface {
     }
 
 
+    @Scheduled(cron = "0 0 8 * * *")
     void productsOutOfStock() {
-        List<User> userList = userrRepository.findUserByRoleType(RoleType.ADMINISTRTOR);
+        List<User> userList = userrRepository.findUserByRoleType(RoleType.SELLER);
         for (User user : userList) {
             StringBuilder s = new StringBuilder("Products Out Of Stock");
             int i = 0;
             for (Store store : user.getStores()) {
-                s.append("\n ").append("STORE : ").append(store.getName());
+                s.append("\n").append("STORE : ").append(store.getName());
                 for (Product p : store.getProducts()) {
                     if (p.getQuantity() == 0) {
-                        s.append("`\n").append("   ").append(p.getReference()).append(" : ").append(p.getName());
+                        s.append("\n").append("   ").append(p.getReference()).append(" : ").append(p.getName());
                         i++;
 
                     }
                 }
             }
             if (i > 0) {
-                //mailSenderService.sendEmail(user.getEmail(),"Products Out Of Stock",s.toString());
+                mailSenderService.sendEmail(user.getEmail(), "Products Out Of Stock", s.toString());
                 log.info(s.toString());
             } else {
                 log.info("no products out of stock");
