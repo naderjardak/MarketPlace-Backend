@@ -1,11 +1,13 @@
 package tn.workbot.coco_marketplace.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import tn.workbot.coco_marketplace.entities.enmus.ReviewEmotionStatus;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -26,9 +28,14 @@ public class Review {
 
 
 
+    @JsonIgnore
     private int rating;
 
     private String comment;
+
+    @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    private ReviewEmotionStatus emotionStatus;
 
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -38,23 +45,19 @@ public class Review {
 
 
     @ManyToOne
+    @JsonIgnore
     private User userSender;
+
+    @JsonIgnore
     @ManyToOne
     private User DeliveryAgency;
     @ManyToOne
+    @JsonIgnore
     private User DeliveryFreelancer;
     @ManyToOne
+    @JsonIgnore
     private Product product;
 
 
-   /* public String hideBadWords(String comment) {
 
-        List<String> badWords = Arrays.asList("bad", "terrible", "awful", "hate", "dislike");
-
-        for (String badWord : badWords) {
-            comment = comment.toLowerCase(Locale.ROOT).replaceAll("(?i)" + badWord, "*".repeat(badWord.length()));
-        }
-
-        return comment;
-    }*/
 }

@@ -23,7 +23,4 @@ public class CocoMarketplaceApplication {
         SpringApplication.run(CocoMarketplaceApplication.class, args);
     }
 
-
-
-
 }

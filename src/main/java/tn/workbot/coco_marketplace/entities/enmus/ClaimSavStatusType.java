@@ -4,5 +4,6 @@ public enum ClaimSavStatusType {
     PENDING,
     APPROVED,
     REJECTED,
-    COMPLETED
+    COMPLETED,
+    NONTRAITE
 }

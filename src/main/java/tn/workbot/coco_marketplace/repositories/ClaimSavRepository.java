@@ -8,9 +8,13 @@ import tn.workbot.coco_marketplace.entities.ClaimSav;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavType;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ClaimSavRepository extends JpaRepository<ClaimSav,Long> {
     @Query("SELECT c FROM ClaimSav c WHERE c.claimSavType = :type AND c.status = :status")
-    List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);}
+    List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);
+
+}

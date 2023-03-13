@@ -13,5 +13,7 @@ public interface ClaimSavInterface {
     void updateClaim(ClaimSav claim);
     void deleteClaim(Long id);
 
+    public void modifyClaimStatus(Long id, ClaimSavStatusType newStatus);
+
     public List<ClaimSav> getClaimsByTypeAndStatus(ClaimSavType type, ClaimSavStatusType status);
 }
