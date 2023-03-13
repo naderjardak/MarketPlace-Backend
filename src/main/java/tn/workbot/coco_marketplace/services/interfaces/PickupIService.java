@@ -21,7 +21,7 @@ public interface PickupIService {
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
     /*public Pickup AssignPickupBySeller(Pickup pickup);*/
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
-    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id);
+    public Pickup AssignPickupByStoreAndOrder(Pickup pickup,Long id,Long IdSotre);
     public  Pickup ModifyStatusOfPickupByDelivery(String Status,Long idPickup);
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException;
     public int test(Long id);
@@ -70,7 +70,7 @@ public interface PickupIService {
 
     ///////////Gear Delivery Alers (Kilometre || ESSENCE)
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
-    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException;
+    public String FraisEssenceTotal() throws Exception;
 
     //////////Envoyer Un sms si vous avez cconsoumer ton limite  CO2  ,
     public double LimiteCo2() throws IOException, InterruptedException, ApiException;
@@ -78,7 +78,6 @@ public interface PickupIService {
 
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved();
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved();
-
 
 
 

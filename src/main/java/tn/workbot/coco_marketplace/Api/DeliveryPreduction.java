@@ -26,9 +26,10 @@ public class DeliveryPreduction {
         // Add the delivery data to the linear regression model
         List<Pickup>pickups=pr.ListePickup();
         for (Pickup pickup:pickups) {
-            regressionModel.addData(pickup.getNbRequest(),pickup.getSum());
+            if(pickup.getNbRequest()!=0){
+                regressionModel.addData(pickup.getNbRequest(),pickup.getSum());
+            }
         }
-
     }
 
     public double predict(Float r) {
@@ -40,7 +41,9 @@ public class DeliveryPreduction {
         // Add the user data to the linear regression model
         List<User> userList= (List<User>) ur.findAll();
         for (User u:userList) {
-            regressionModel.addData(u.getGearAge(),u.getCo2());
+            if(u.getGearAge()!=null) {
+                regressionModel.addData(u.getGearAge(), u.getCo2());
+            }
         }
     }
     public double predictco2(Float gearAge) {

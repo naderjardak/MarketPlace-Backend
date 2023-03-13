@@ -62,6 +62,7 @@ public class OrderServices implements OrderInterface {
     @Autowired
     private JavaMailSender javaMailSender;
 
+
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -280,6 +281,7 @@ public class OrderServices implements OrderInterface {
     public List<Map<String, Integer>> GovernoratTopShipped() {
         return orderRepository.RankGouvernoratByNbOrders();
     }
+
 
 
 
