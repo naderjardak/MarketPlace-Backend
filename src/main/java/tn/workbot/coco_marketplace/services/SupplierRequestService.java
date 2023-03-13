@@ -43,12 +43,14 @@ public class SupplierRequestService implements SupplierRequestInterface {
 
     @Override
     public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
-        Random random = new Random();
-        int nbRand = random.nextInt(99999);
-        s.setReference(("REF-" + s.getProduct().getName().substring(0, 2).toUpperCase() + s.getSupplier().getBrandName().substring(0, 2).toUpperCase() + nbRand));
-
         User user = userrRepository.findById(1L).get();
         Product product = productService.getById(productId);
+
+        Random random = new Random();
+        int nbRand = random.nextInt(99999);
+        s.setReference(("REF-" + product.getName().substring(0, 2).toUpperCase() + user.getBrandName().substring(0, 2).toUpperCase() + nbRand));
+
+
         s.setProduct(product);
         s.setSupplier(user);
 

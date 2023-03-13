@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductInterface {
 
-    Product create(Product p);
+    Product create(Product p,String storeName) throws Exception;
     Product update(Product p);
     List<Product> retrieveAll();
 
@@ -15,10 +15,10 @@ public interface ProductInterface {
 
     void delete(Product p);
 
-    Product createAndAssignToStore(Product p,Long idStore);
+    //Product createAndAssignToStore(Product p,Long idStore);
 
 
-    Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName);
+    Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName,String storeName) throws Exception;
 
     ByteArrayInputStream allSupplierRequestsOnProduct(Long id);
 

@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
@@ -50,8 +49,12 @@ public class ProductService implements ProductInterface {
     SupplierRequestRepository supplierRequestRepository;
 
     @Override
-    public Product create(Product p) {
-        User user = userrRepository.findById(1L).get();
+    public Product create(Product p, String storeName) throws Exception {
+        //TODO : get user by session id
+        User user = userrRepository.findAll().iterator().next();
+        Store store = storeRepository.findByNameAndSeller(storeName, user);
+        if (store == null)
+            throw new Exception("Store not found");
 
         if (p.getProductWeight() <= 1) {
             p.setDeliveryPrice(6);
@@ -68,8 +71,7 @@ public class ProductService implements ProductInterface {
         p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
-        //a verifier en premier en cas de probleme!!!!
-        p.setStore(storeRepository.findStoreByNameAndAndSeller(p.getStore().getName(), user));
+        p.setStore(store);
 
         return productRepository.save(p);
     }
@@ -98,16 +100,16 @@ public class ProductService implements ProductInterface {
         productRepository.delete(p);
     }
 
-    @Override
-    public Product createAndAssignToStore(Product p, Long idStore) {
-        Store store = storeService.getById(idStore);
-        p.setStore(store);
-        return this.create(p);
+//    @Override
+//    public Product createAndAssignToStore(Product p, Long idStore) {
+//        Store store = storeService.getById(idStore);
+//        p.setStore(store);
+//        return this.create(p);
+//
+//    }
 
-    }
-
     @Override
-    public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName) {
+    public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, String storeName) throws Exception {
 
         ProductCategory category = productCategoryRepository.findByName(categoryName);
         ProductCategory subCategory = productCategoryRepository.findByNameAndCategoryName(subCatName, categoryName);
@@ -129,10 +131,11 @@ public class ProductService implements ProductInterface {
 
 
         }
+        //cascade
         p.setProductCategory(subCategory);
 
 
-        return this.create(p);
+        return this.create(p, storeName);
     }
 
     @Override
@@ -226,7 +229,6 @@ public class ProductService implements ProductInterface {
     }
 
 
-    @Scheduled(cron = "0 0 8 * * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.ADMINISTRTOR);
         for (User user : userList) {

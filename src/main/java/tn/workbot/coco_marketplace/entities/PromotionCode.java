@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class PromotionCode {
     private Date EndtDate;
 
     @ManyToOne
+    @JsonIgnore
     private Product product;
 
     //  percentage

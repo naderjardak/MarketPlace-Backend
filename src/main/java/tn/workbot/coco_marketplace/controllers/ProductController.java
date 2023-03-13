@@ -48,8 +48,8 @@ public class ProductController {
     }
 
     @PostMapping("SaveProduct")
-    public Product createProduct(@RequestBody Product p) {
-        return productInterface.create(p);
+    public Product createProduct(@RequestBody Product p,@RequestParam String storeName) throws Exception {
+        return productInterface.create(p,storeName);
     }
 
     @PutMapping("UpdateProduct")
@@ -63,15 +63,15 @@ public class ProductController {
     }
 
     @PostMapping("CreateProductAndAssignCatAndSub")
-    public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName) {
-        return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName);
+    public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName,@RequestParam String storeName) throws Exception {
+        return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName, storeName);
 
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(description = "Upload Excel File of Products ")
     //@ImplicitParam(name = "file", value = "File to upload", required = true, dataType = "java.io.File", paramType = "formData")
-    public void mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+    public void mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws Exception {
 
         User user = userInterface.GetById(1);
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
@@ -89,13 +89,13 @@ public class ProductController {
             String cat = (row.getCell(4).getStringCellValue());
             String subCat = (row.getCell(5).getStringCellValue());
             String storeName = row.getCell(7).getStringCellValue().toLowerCase();
-            p.setStore(storeRepository.findStoreByNameAndAndSeller(storeName, user));
+            //p.setStore(storeRepository.findStoreByNameAndAndSeller(storeName, user));
             p.setDescription(row.getCell(6).getStringCellValue());
             p.setAdditionalDeliveryInstructions(row.getCell(8).getStringCellValue());
 
             log.info(p.getName());
 
-            productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat);
+            productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat,storeName);
         }
     }
 

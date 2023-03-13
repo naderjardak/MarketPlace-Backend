@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -60,7 +61,7 @@ public class User implements Serializable {
     private List<Order> orders;
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
-    private List<Store> stores;
+    private Set<Store> stores;
 
     @JsonIgnore
     @ManyToOne
