@@ -176,6 +176,7 @@ public class OrderServices implements OrderInterface {
     @Override
     public Order AffectShippingAdressToOrder(Shipping shipping) {
         Order order = orderRepository.BasketExistance(1L);
+        shipping=shippingRepository.save(shipping);
         order.setShipping(shipping);
         return orderRepository.save(order);
     }
@@ -184,7 +185,6 @@ public class OrderServices implements OrderInterface {
     public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
         User user=userrRepository.findById(1L).get();
         Order order= orderRepository.BasketExistance(user.getId());
-
         if(order.getShipping()==null)
             return false;
 

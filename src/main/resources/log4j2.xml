@@ -1,0 +1,25 @@
+<configuration>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>myapp.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%n%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="error">
+        <appender-ref ref="FILE" />
+    </root>
+
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <jmxConfigurator />
+
+    <contextListener class="ch.qos.logback.core.joran.spi.JoranConfigurator"/>
+
+    <listener class="ch.qos.logback.core.rolling.helper.FileDeleteAction"/>
+    <listener class="ch.qos.logback.core.rolling.helper.CleanHistoryOnStartListener"/>
+
+</configuration>
+

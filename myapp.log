@@ -1,0 +1,73 @@
+2023-03-13 09:49:49.667  INFO 15920 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 17.0.2 on PC-NaderJardak with PID 15920 (C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend\target\classes started by ADMIN in C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend)
+2023-03-13 09:49:49.669  INFO 15920 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-13 09:49:50.266  INFO 15920 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-13 09:49:50.368  INFO 15920 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 95 ms. Found 22 JPA repository interfaces.
+2023-03-13 09:49:50.820  INFO 15920 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-13 09:49:50.826  INFO 15920 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-13 09:49:50.826  INFO 15920 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-13 09:49:50.932  INFO 15920 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-13 09:49:50.933  INFO 15920 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1216 ms
+2023-03-13 09:49:51.078  INFO 15920 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-13 09:49:51.108  INFO 15920 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-13 09:49:51.192  INFO 15920 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-13 09:49:51.246  INFO 15920 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-13 09:49:51.322  INFO 15920 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-13 09:49:51.328  INFO 15920 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-13 09:49:52.579  INFO 15920 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-13 09:49:52.587  INFO 15920 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-13 09:49:53.329  WARN 15920 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-13 09:49:53.664  INFO 15920 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@361d169a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@47a68e3f, org.springframework.security.web.context.SecurityContextPersistenceFilter@2a41d17a, org.springframework.security.web.header.HeaderWriterFilter@4c5ae26d, org.springframework.security.web.authentication.logout.LogoutFilter@7acbd3d0, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@29ce33e9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3b22bcad, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@462deb2b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@52288c65, org.springframework.security.web.session.SessionManagementFilter@73b034ca, org.springframework.security.web.access.ExceptionTranslationFilter@58fbecde, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@312e8eaf]
+2023-03-13 09:49:54.589  INFO 15920 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-13 09:49:54.600  INFO 15920 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 5.281 seconds (JVM running for 5.864)
+2023-03-13 09:52:21.886  INFO 20916 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 17.0.2 on PC-NaderJardak with PID 20916 (C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend\target\classes started by ADMIN in C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend)
+2023-03-13 09:52:21.888  INFO 20916 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-13 09:52:22.575  INFO 20916 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-13 09:52:22.667  INFO 20916 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 22 JPA repository interfaces.
+2023-03-13 09:52:23.140  INFO 20916 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-13 09:52:23.146  INFO 20916 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-13 09:52:23.146  INFO 20916 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-13 09:52:23.268  INFO 20916 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-13 09:52:23.269  INFO 20916 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1331 ms
+2023-03-13 09:52:23.444  INFO 20916 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-13 09:52:23.483  INFO 20916 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-13 09:52:23.572  INFO 20916 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-13 09:52:23.627  INFO 20916 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-13 09:52:23.716  INFO 20916 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-13 09:52:23.722  INFO 20916 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-13 09:52:24.897  INFO 20916 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-13 09:52:24.902  INFO 20916 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-13 09:52:25.594  WARN 20916 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-13 09:52:25.911  INFO 20916 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@52288c65, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@33ef393a, org.springframework.security.web.context.SecurityContextPersistenceFilter@3b22bcad, org.springframework.security.web.header.HeaderWriterFilter@5dd5422f, org.springframework.security.web.authentication.logout.LogoutFilter@40e90634, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@2e76d0d3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@57330423, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@13563e64, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d18401b, org.springframework.security.web.session.SessionManagementFilter@3f9ee527, org.springframework.security.web.access.ExceptionTranslationFilter@3ba6707e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2f307fcc]
+2023-03-13 09:52:26.826  INFO 20916 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-13 09:52:26.841  INFO 20916 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 5.339 seconds (JVM running for 5.995)
+2023-03-13 09:55:26.411  INFO 20916 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-13 09:55:26.411  INFO 20916 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-13 09:55:26.413  INFO 20916 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-13 09:55:26.619  INFO 20916 --- [http-nio-8081-exec-1] t.w.coco_marketplace.AOP.OrderLogFile    : Entering method: researchProduct
+2023-03-13 09:55:26.648  INFO 20916 --- [http-nio-8081-exec-1] t.w.coco_marketplace.AOP.OrderLogFile    : Exiting method: researchProduct
+2023-03-13 09:56:39.696  INFO 9668 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 17.0.2 on PC-NaderJardak with PID 9668 (C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend\target\classes started by ADMIN in C:\Users\ADMIN\OneDrive\Bureau\pidev\MarketPlace-Backend)
+2023-03-13 09:56:39.698  INFO 9668 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-13 09:56:40.292  INFO 9668 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-13 09:56:40.394  INFO 9668 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 96 ms. Found 22 JPA repository interfaces.
+2023-03-13 09:56:40.794  INFO 9668 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-13 09:56:40.799  INFO 9668 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-13 09:56:40.799  INFO 9668 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-13 09:56:40.907  INFO 9668 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-13 09:56:40.907  INFO 9668 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1157 ms
+2023-03-13 09:56:41.039  INFO 9668 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-13 09:56:41.074  INFO 9668 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-13 09:56:41.153  INFO 9668 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-13 09:56:41.209  INFO 9668 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-13 09:56:41.284  INFO 9668 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-13 09:56:41.291  INFO 9668 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-13 09:56:42.414  INFO 9668 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-13 09:56:42.423  INFO 9668 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-13 09:56:43.103  WARN 9668 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-13 09:56:43.424  INFO 9668 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@52288c65, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@33ef393a, org.springframework.security.web.context.SecurityContextPersistenceFilter@3b22bcad, org.springframework.security.web.header.HeaderWriterFilter@4c5ae26d, org.springframework.security.web.authentication.logout.LogoutFilter@40e90634, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@29ce33e9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@57330423, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@13563e64, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d18401b, org.springframework.security.web.session.SessionManagementFilter@3f9ee527, org.springframework.security.web.access.ExceptionTranslationFilter@58fbecde, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2f307fcc]
+2023-03-13 09:56:44.342  INFO 9668 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-13 09:56:44.353  INFO 9668 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 4.938 seconds (JVM running for 5.564)
+2023-03-13 09:56:50.684  INFO 9668 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-13 09:56:50.684  INFO 9668 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-13 09:56:50.685  INFO 9668 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-03-13 09:56:50.831  INFO 9668 --- [http-nio-8081-exec-1] t.w.coco_marketplace.AOP.OrderLogFile    : Entering method: researchProduct
+2023-03-13 09:56:50.859  INFO 9668 --- [http-nio-8081-exec-1] t.w.coco_marketplace.AOP.OrderLogFile    : Exiting method: researchProduct
