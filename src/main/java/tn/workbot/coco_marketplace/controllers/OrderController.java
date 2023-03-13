@@ -30,13 +30,13 @@ public class OrderController {
     Order getOrderById(@RequestParam Long id){return orderInterface.getOrderById(id);}
 
     @PutMapping("AddProductToOrder")
-    Boolean AddProductToOrder(@RequestBody ProductQuantity productQuantity){return orderInterface.AddProductToOrder(productQuantity);}
+    Boolean AddProductToOrder(@RequestBody ProductQuantity productQuantity,@RequestParam(required = false) String voucher){return orderInterface.AddProductToOrder(productQuantity,voucher);}
 
     @PutMapping("UpdateQuantityInOrder")
-    public ProductQuantity UpdateQuantiyOfProduct(@RequestParam Long refProuct,@RequestParam int quantity){return UpdateQuantiyOfProduct(refProuct,quantity);}
+    public ProductQuantity UpdateQuantiyOfProduct(@RequestParam String refProuct,@RequestParam int quantity){return orderInterface.UpdateQuantiyOfProduct(refProuct,quantity);}
 
     @DeleteMapping("DeleteProductFromOrder")
-    public ProductQuantity DeleteProductFromOrder(@RequestParam Long refProduct){return orderInterface.DeleteProductFromOrder(refProduct);}
+    public ProductQuantity DeleteProductFromOrder(@RequestParam String refProduct){return orderInterface.DeleteProductFromOrder(refProduct);}
 
     @PutMapping("AddShippingToCard")
     public Order AffectShippingAdressToOrder(@RequestBody Shipping shipping){return orderInterface.AffectShippingAdressToOrder(shipping);}
@@ -45,7 +45,7 @@ public class OrderController {
     public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException, MessagingException { return orderInterface.StripePayementService(data); }
 
     @GetMapping("ProductResearch")
-    public List<Product> research(@RequestParam int maxPrix ,@RequestParam int minPrix ,@RequestParam(required = false) String nameProduct,@RequestParam(required = false) String categorie,@RequestParam(required = false) String mark,@RequestParam ProductFiltre productFiltre){return orderInterface.research(maxPrix,minPrix,nameProduct,categorie,mark,productFiltre);}
+    public List<Product> researchProduct(@RequestParam int maxPrix ,@RequestParam int minPrix ,@RequestParam(required = false) String nameProduct,@RequestParam(required = false) String categorie,@RequestParam(required = false) String mark,@RequestParam ProductFiltre productFiltre){return orderInterface.researchProduct(maxPrix,minPrix,nameProduct,categorie,mark,productFiltre);}
 
     @PutMapping("EndPaimentProcess")
     public Boolean endCommandProsess(@RequestParam PaymentType paymentType, @RequestParam Boolean cardPaiment) throws MessagingException {return orderInterface.endCommandProsess(paymentType,cardPaiment);}

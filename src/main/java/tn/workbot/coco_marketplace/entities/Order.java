@@ -49,8 +49,11 @@ public class Order implements Serializable {
     @ManyToOne
     @JsonIgnore
     private User buyer;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<ProductQuantity> productQuantities;
+
+    @OneToMany
+    private List<PromotionCode> promotionCodeList;
 
 }

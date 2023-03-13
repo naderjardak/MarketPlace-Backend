@@ -1,11 +1,13 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -48,7 +50,7 @@ public class RequestController   {
         return ri.assignRequestDeliveryMenFreelancerandPickup(request, idDeliveryMenFreelancer, idPickup);
     }
     @PostMapping("assignRequesttoseller")
-    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) {
+    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return ri.assignRequesttoseller(idRequest, idSeller, status,idPickup);
     }
      @GetMapping("retrieveRequestDeliveryAgencycBySeller")

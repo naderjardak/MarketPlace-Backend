@@ -15,17 +15,14 @@ public interface OrderInterface {
     // Get all orders from the database
     List<Order> getAllOrders();
 
-    // Create a new order in the database
-    void createOrder(ProductQuantity productQuantity);
-
     // Update an existing order in the database by ID
-    Boolean AddProductToOrder(ProductQuantity productQuantity);
+    Boolean AddProductToOrder(ProductQuantity productQuantity,String voucher);
 
     // Delete Product from Order List
-    ProductQuantity DeleteProductFromOrder(Long refProduct);
+    ProductQuantity DeleteProductFromOrder(String refProduct);
 
     // Update Quantity Of product in basket
-    ProductQuantity UpdateQuantiyOfProduct(Long refProuct,int quantity);
+    ProductQuantity UpdateQuantiyOfProduct(String refProuct,int quantity);
 
     //add Shipping to order
     Order AffectShippingAdressToOrder(Shipping shipping);
@@ -59,7 +56,7 @@ public interface OrderInterface {
     void deleteOrderAfterDateExmiration();
 
     //Buyer Product Page and research
-    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre);
+    public List<Product> researchProduct(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre);
 
     //validate Cash On delivery Command
     public String validateCommand(String token) throws MessagingException;
