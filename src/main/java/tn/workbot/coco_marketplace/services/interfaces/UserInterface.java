@@ -15,4 +15,9 @@ public interface UserInterface {
 
     public List<User> GetAll();
     public void affectRoleAtUser(long idRole,long idUser);
+
+    public User findByEmail(String email);
+
+
+
 }

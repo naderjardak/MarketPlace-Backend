@@ -7,6 +7,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasAuthority('SELLER')")
+@Secured("SELLER")
 @RequestMapping("store")
 @Slf4j
 public class StoreController {
@@ -38,6 +42,7 @@ public class StoreController {
     public Store getById(@RequestParam Long id) {
         return storeInterface.getById(id);
     }
+
 
     @PostMapping("SaveStore")
     public Store createProduct(@RequestBody Store s) {

@@ -47,6 +47,13 @@ public class User implements Serializable {
     //co2 consoummer
     private  double co2;
 
+   private  String resetToken;
+
+   public String getResetToken() {
+        return resetToken;
+    }
+        // private String code;
+
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;
 
@@ -104,10 +111,6 @@ private List<Pickup>PickupdeliverymenFreelancer;
     @OneToMany(mappedBy = "supplier")
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
-
-
-
-
 
 }
 
