@@ -85,10 +85,10 @@ public class UserController {
         userInterface.affectRoleAtUser(idRole, idUser);
     }
 
-      @GetMapping("/getUser")
-        public User findByEmail(@RequestParam String email){
-        return userInterface.findByEmail(email);
-}
+//      @GetMapping("/getUser")
+//        public User findByEmail(@RequestParam String email){
+//        return userInterface.findByEmail(email);
+//}
 
     @GetMapping("/confirm-account")
     public String confirmUserAccount(@RequestParam("token") String  ConfirmationToken) {

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/ForgetPassword")
+@RequestMapping("ForgetPassword")
 public class ForgetPassword {
 
     @Autowired
@@ -48,8 +48,8 @@ public class ForgetPassword {
             user.setResetToken(UUID.randomUUID().toString());
             userService.Create(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
-            mailSenderService.sendEmail(resetPassword.getEmail(), "Forget password", "To reset your password, click the link below:\n" + appUrl
-                    + "/reset?token=" + user.getResetToken());
+            mailSenderService.sendEmail(resetPassword.getEmail(), "Forget password", "To reset your password, check your token :\n" +
+                    "token=" + user.getResetToken());
 
             accountResponse.setResult("User Found");
         } else {

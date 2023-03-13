@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/order/stats")
+@RequestMapping("orderStats")
 public class OrderStatsController {
     @Autowired
     OrderInterface orderInterface;

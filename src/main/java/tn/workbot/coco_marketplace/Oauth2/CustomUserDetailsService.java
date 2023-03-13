@@ -18,37 +18,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service
-@Transactional
-public class CustomUserDetailsService  implements UserDetailsService {
-    @Autowired
-   private UserrRepository userRepository;
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return  new BCryptPasswordEncoder(11);
-    }
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email);
-        if(user == null){
-            throw new UsernameNotFoundException("No User  found");
-        }
-
-        return new   org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                user.isEnabled(),
-                true,
-                true,
-                true ,
-                getAuthorities(List.of(user.getRole().getType().toString()))
-        );
-    }
-    private Collection<? extends GrantedAuthority> getAuthorities(List<String>roles){
-        List<GrantedAuthority>authorities = new ArrayList<>();
-        for(String role: roles){
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-        return  authorities;
-    }
-}
+//@Service
+//@Transactional
+//public class CustomUserDetailsService  implements UserDetailsService {
+//    @Autowired
+//   private UserrRepository userRepository;
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return  new BCryptPasswordEncoder(11);
+//    }
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        User user = userRepository.findUserByEmail(email);
+//        if(user == null){
+//            throw new UsernameNotFoundException("No User  found");
+//        }
+//
+//        return new   org.springframework.security.core.userdetails.User(
+//                user.getEmail(),
+//                user.getPassword(),
+//                user.isEnabled(),
+//                true,
+//                true,
+//                true ,
+//                getAuthorities(List.of(user.getRole().getType().toString()))
+//        );
+//    }
+//    private Collection<? extends GrantedAuthority> getAuthorities(List<String>roles){
+//        List<GrantedAuthority>authorities = new ArrayList<>();
+//        for(String role: roles){
+//            authorities.add(new SimpleGrantedAuthority(role));
+//        }
+//        return  authorities;
+//    }
+//}

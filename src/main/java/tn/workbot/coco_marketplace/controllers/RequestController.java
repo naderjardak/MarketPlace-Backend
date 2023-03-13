@@ -9,6 +9,7 @@ import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 import java.util.List;
 
 @RestController
+@RequestMapping("RequestController")
 public class RequestController   {
     @Autowired
     RequestInterface ri;
