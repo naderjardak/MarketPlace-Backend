@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.Api.*;
@@ -9,10 +10,12 @@ import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pickup")
@@ -27,6 +30,8 @@ public class PickupController  {
     DeliveryPreduction dp;
     @Autowired
     ScraperEssence sce;
+    @Autowired
+    ScraperTOpProduct scraper;
 
 
     @PostMapping("addPickup")
@@ -319,6 +324,22 @@ public class PickupController  {
     public String scrapePage(@RequestParam String url) throws Exception {
         return sce.scrapePage(url);
     }
-
+    @GetMapping("/export")
+    @ResponseBody
+    public ResponseEntity<File> exportToXsl(@RequestParam String categoryUrl, @RequestParam String filename) {
+        try {
+            Map<String, Map<String, String>> products = scraper.getProducts(categoryUrl);
+            scraper.exportToXsl(products, filename);
+            File file = new File(filename);
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                    .body(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
+
+}
 
