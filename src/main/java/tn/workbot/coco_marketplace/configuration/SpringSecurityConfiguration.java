@@ -54,7 +54,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/store").access("hasRole('SELLER')")
                 .antMatchers("/PromotionCode").access("hasRole('SELLER')")
                 .antMatchers("/productCategory").access("hasRole('SELLER')")
-                .antMatchers("/Pickup").access("hasRole('SELLER')")
+                .antMatchers("/SupplierRequest").access("hasRole('SELLER')")
+
+                .antMatchers("/Pickup").access("hasRole('DELIVERYAGENCY')")
                 .antMatchers("/product").access("hasRole('SELLER')")
                 .antMatchers("/Privilege/**").access("hasRole('MODERATOR')")
                 .antMatchers(" /productQuantity/**").access("hasRole('BUYER')")
@@ -66,7 +68,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/AgencyBranch/**").access("hasRole('DELIVERYAGENCY')")
                 .antMatchers("/AgencyDeliveryMan/**").access("hasRole('DELIVERYAGENCY')")
-                .antMatchers("/SupplierRequest").access("hasRole('SELLER')")
                 .antMatchers("/**/changePass").permitAll()
                 .antMatchers("/**/resetPassword").permitAll()
                 .antMatchers("/**/checkEmail").permitAll()
