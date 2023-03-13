@@ -53,34 +53,44 @@ public class PdfPickup {
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
         // Add title
         contentStream.beginText();
-        contentStream.newLineAtOffset(50, 750);
+        contentStream.newLineAtOffset(70, 760);
         contentStream.showText("Pickup Details");
         contentStream.endText();
         // Add pickup date
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
-        contentStream.newLineAtOffset(50, 700);
+        contentStream.newLineAtOffset(70, 710);
         contentStream.showText("Date: " + pickup.getDateCreationPickup());
         contentStream.endText();
         // Add pickup address
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
-        contentStream.newLineAtOffset(50, 680);
+        contentStream.newLineAtOffset(70, 690);
         contentStream.showText("Address: " + pickup.getGovernorate() +"/" +pickup.getCity());
         contentStream.endText();
         // Add pickup NomBuyer
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
-        contentStream.newLineAtOffset(50, 660);
+        contentStream.newLineAtOffset(70, 650);
         contentStream.showText("FirstName: " + pickup.getOrder().getBuyer().getFirstName()+ "   LastName: "+ pickup.getOrder().getBuyer().getLastName()+"  Phone Number: "+ pickup.getOrder().getBuyer().getPhoneNumber());
         contentStream.endText();
         // Add pickup NomStore
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 12);
-        contentStream.newLineAtOffset(50, 670);
+        contentStream.newLineAtOffset(70, 670);
         contentStream.showText("Name Of Store: " + pickup.getStore().getName());
         contentStream.endText();
-        //
+        List<Product> ps=pr.ProductBystorebyPickup(idPickup);
+        float price=0;
+        for (Product p:ps) {
+            price=p.getProductPrice()+price;
+        }
+        // Add pickup NomStore
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 15);
+        contentStream.newLineAtOffset(70, 630);
+        contentStream.showText("Total: " +price+"DT ");
+        contentStream.endText();
 
         // Add table of items
         float tableTopY = 600;
@@ -89,11 +99,12 @@ public class PdfPickup {
 
         contentStream.close();
         // Add total to footer
+
         contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
         contentStream.newLineAtOffset(50, 50);
-        contentStream.showText("Total: " );
+        contentStream.showText("Total: " +price);
         contentStream.endText();
         contentStream.close();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

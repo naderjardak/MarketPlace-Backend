@@ -181,9 +181,8 @@ public class PickupService implements PickupIService {
         String code = prefix + randomNumber;
         pr.countstoreorder(id);
         float totalPrice = 0;
-        List<Product> productList = pr.productOfTheStoreById(IdSotre);
-        System.out.println(pr.countstoreorder(id));
-        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(id, 1L);
+        List<Product> productList = pr.productOfTheStoreById(IdSotre, id, 1L);
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(IdSotre, id, 1L);
         if (pr.countstoreorder(id) == 1) {
 
             pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
@@ -203,7 +202,7 @@ public class PickupService implements PickupIService {
             //
             pickup1.setOrder(order);
             pickup1.setDateCreationPickup(LocalDateTime.now());
-            pickup1.setOrderOfTheSomeSeller(false);
+            // pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(storeer);
             pickup1.setSum(order.getSum());
             if (order.getPayment().equals(PaymentType.BANK_CARD)) {
@@ -212,7 +211,7 @@ public class PickupService implements PickupIService {
                 pickup1.setPayed(false);
             }
         } else {
-            if (storeofsomeUser > 1) {
+            if (storeofsomeUser >= 1) {
                 for (Product p : productList) {
                     totalPrice += p.getProductPrice();
                     pickup1.setStore(storeer);
@@ -232,7 +231,7 @@ public class PickupService implements PickupIService {
                     pickup1.setSum(totalPrice);
                 }
 
-            } else {
+            }/* else {
 
                 pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
                 pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
@@ -249,7 +248,7 @@ public class PickupService implements PickupIService {
                 pickup1.setOrder(order);
                 pickup1.setCodePickup(code);
                 pickup1.setDateCreationPickup(LocalDateTime.now());
-                pickup1.setOrderOfTheSomeSeller(true);
+                pickup1.setOrderOfTheSomeSeller(false);
                 pickup1.setStore(store2);
                 pr.save(pickup1);
                 List<Product> products = pr.productoforder(id, 1L);
@@ -267,6 +266,7 @@ public class PickupService implements PickupIService {
                     pickup1.setPayed(false);
                 }
             }
+            */
         }
         return pr.save(pickup1);
     }
@@ -402,7 +402,6 @@ public class PickupService implements PickupIService {
     public List<Pickup> retrievePickupBysellerAttent() {
         /////session manager
         User u = ur.findById(1L).get();
-        System.out.println( pr.PickupBySeller(u.getId()));
         return pr.PickupBySeller(u.getId());
     }
 
@@ -522,8 +521,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Product> RetrieveProductByPickup(Long idPickup) {
-        List<Product> s=pr.ProductBystorebyPickup(idPickup);
-        System.out.println(s);
+        List<Product> s = pr.ProductBystorebyPickup(idPickup);
         return s;
     }
 
@@ -639,14 +637,14 @@ public class PickupService implements PickupIService {
         //session manager idUser
         User u = ur.findById(3L).get();
         List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
-        List<Pickup> pickups1=pr.AgencyINCar(u.getId());
+        List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
         float kiloSum = 0;
         //////
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
                 .build();
         // Get the distance and travel time using the DistanceMatrixApi
-        if(u.getRole().getType().equals(RoleType.DELIVERYMEN)){
+        if (u.getRole().getType().equals(RoleType.DELIVERYMEN)) {
             for (Pickup p : pickups) {
                 DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
                         .origins(p.getGovernorate())
@@ -658,8 +656,7 @@ public class PickupService implements PickupIService {
                 double distanceInKm = distance.inMeters / 1000.0;
                 kiloSum = (float) distanceInKm + kiloSum;
             }
-        }
-        else if(u.getRole().getType().equals(RoleType.DELIVERYAGENCY)){
+        } else if (u.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
             for (Pickup p : pickups1) {
                 DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
                         .origins(p.getGovernorate())
@@ -684,7 +681,17 @@ public class PickupService implements PickupIService {
         Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
         double price = Float.valueOf(0);
         double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
-        if (user.getGear().equals("CAR")) {
+        if (user.getRole().getType().equals(RoleType.DELIVERYMEN)) {
+            if (user.getGear().equals("CAR")) {
+                if (user.getGearAge() > 0 && user.getGearAge() < 5) {
+                    price = kiloSum * (5.8 / 100) * priceEssnceliters;
+                } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
+                    price = kiloSum * (6.9 / 100) * priceEssnceliters;
+                } else if (user.getGearAge() >= 10) {
+                    price = kiloSum * (7.8 / 100) * priceEssnceliters;
+                }
+            }
+        } else if (user.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
             if (user.getGearAge() > 0 && user.getGearAge() < 5) {
                 price = kiloSum * (5.8 / 100) * priceEssnceliters;
             } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
@@ -692,7 +699,6 @@ public class PickupService implements PickupIService {
             } else if (user.getGearAge() >= 10) {
                 price = kiloSum * (7.8 / 100) * priceEssnceliters;
             }
-
         }
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formattedNumber = decimalFormat.format(price);
@@ -754,18 +760,32 @@ public class PickupService implements PickupIService {
     @Scheduled(cron = "* * * 27 * *")
     public void ModifyTheLevelOfDeliveryAgencyMonthly() {
         List<User> users = pr.ListOfDeliveryAgencywithStatusPickupDelivered();
-        System.out.println(users);
+        List<User> freelancer = pr.ListOfFreelancerwithStatusPickupDelivered();
         for (User u : users) {
             int uu = pr.countPickupdeliveredMonthlyByAgency(u.getId());
-            if (uu > 0 && uu < 100) {
+            if (uu >= 1 && uu < 100) {
                 u.setLevelDelivery("Level 1");
                 ur.save(u);
-            } else if (uu > 100 && uu < 500) {
+            } else if (uu >= 100 && uu < 500) {
                 u.setLevelDelivery("Level 2");
                 ur.save(u);
-            } else if (uu > 500) {
+            } else if (uu >= 500) {
                 u.setLevelDelivery("Top Rated Delivery");
                 ur.save(u);
+            }
+        }
+        for (User fr:freelancer) {
+
+            int uu = pr.countPickupdeliveredMonthlyByFreelancer(fr.getId());
+            if (uu > 0 && uu < 100) {
+                fr.setLevelDelivery("Level 1");
+                ur.save(fr);
+            } else if (uu > 100 && uu < 500) {
+                fr.setLevelDelivery("Level 2");
+                ur.save(fr);
+            } else if (uu > 500) {
+                fr.setLevelDelivery("Top Rated Delivery");
+                ur.save(fr);
             }
 
         }

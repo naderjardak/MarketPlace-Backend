@@ -22,11 +22,11 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v2 ")
     public  int countstoreorder(@Param("v2") Long id);
     @Query("select distinct s from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and s.id=:v6 and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
-    public  Store storeoforder(@Param("v6") Long idStore,@Param("v3") Long id,@Param("v4") Long idSeller);
-    @Query("select distinct p from Product p,Store s where p.store.id=:v4")
-    public  List<Product> productOfTheStoreById(@Param("v4") Long IdStore);
-    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
-    public  int countstoreofproductinorderOfSomeseller(@Param("v3") Long id,@Param("v4") Long idSeller);
+    public  Store storeoforder(@Param("v6") Long idStore,@Param("v3") Long idOrder,@Param("v4") Long idSeller);
+    @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,User u where s.id=p.store.id and s.id=:v6 and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
+    public  List<Product> productOfTheStoreById(@Param("v6") Long IdStore,@Param("v3") Long idOrder,@Param("v4") Long idSeller);
+    @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and s.id=:v10 and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4 ")
+    public  int countstoreofproductinorderOfSomeseller(@Param("v10")Long idStore,@Param("v3") Long id,@Param("v4") Long idSeller);
     @Query("select count(distinct s) from Store s,Product p,ProductQuantity pq,Order o,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id  and s.seller.id=u.id and u.id=:v4")
     public  int countstoreofproductinorderOfSomesellerr(@Param("v4") Long idSeller);
     @Query("select distinct p from Product p,Store s,ProductQuantity pq,Order o,Pickup pi,User u where s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id and o.id=:v3 and s.seller.id=u.id and u.id=:v4")
@@ -144,9 +144,15 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select u from User u,Request r,Pickup p where r.Agency.id=u.id  and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'")
     public List<User> ListOfDeliveryAgencywithStatusPickupDelivered();
+    @Query("select u from User u,Request r,Pickup p where r.deliveryman.id=u.id  and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'")
+    public List<User> ListOfFreelancerwithStatusPickupDelivered();
 
-    @Query("select count(distinct p) from Request r,Pickup p,User u where u.id=r.Agency.id and u.id=:d1 and r.Agency.id=u.id and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'")
+    @Query("select count(distinct p) from Request r,Pickup p,User u where u.id=r.Agency.id and u.id=:d1  and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.requestStatus='APPROVED'")
     public int countPickupdeliveredMonthlyByAgency(@Param("d1") Long idAgency);
+
+    @Query("select count(distinct p) from Request r,Pickup p,User u where u.id=r.deliveryman.id and u.id=:d1 and r.pickup.id=p.id and p.statusPickupSeller='DELIVERED'and r.requestStatus='APPROVED'")
+    public int countPickupdeliveredMonthlyByFreelancer(@Param("d1") Long idFreelancer);
+
 
     @Query("select distinct pp from Product pp,Store s,Pickup p where p.store.id=s.id and p.id=:v1 and pp.store.id=s.id")
     public List<Product> ProductBystorebyPickup(@Param("v1") Long idPickup);
