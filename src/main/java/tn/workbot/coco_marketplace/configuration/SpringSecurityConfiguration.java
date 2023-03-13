@@ -71,10 +71,21 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                .antMatchers("/**/addUser").permitAll()
                .antMatchers("/**/confirm-account").permitAll()
                 .antMatchers("/**/affectRole").permitAll()
+                .antMatchers("/**/verify").permitAll()
+                .antMatchers("/**/verifyy").permitAll()
                 .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Ne pas de creer de session ( api REST )
+                .and().sessionManagement(
+                        session -> session
+
+               .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                                .invalidSessionUrl("/logout?expired")
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+       http.logout(logout ->logout.deleteCookies("JESSIONID").invalidateHttpSession(true));
+
     }
 
     @Override
