@@ -13,4 +13,7 @@ import java.util.List;
 @Repository
 public interface ClaimSavRepository extends JpaRepository<ClaimSav,Long> {
     @Query("SELECT c FROM ClaimSav c WHERE c.claimSavType = :type AND c.status = :status")
-    List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);}
+    List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);
+}
+
+

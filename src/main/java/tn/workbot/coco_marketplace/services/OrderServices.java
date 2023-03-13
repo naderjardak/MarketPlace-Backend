@@ -22,16 +22,14 @@ import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
-import tn.workbot.coco_marketplace.repositories.OrderRepository;
-import tn.workbot.coco_marketplace.repositories.ProductQuantityRepository;
-import tn.workbot.coco_marketplace.repositories.ShippingRepository;
-import tn.workbot.coco_marketplace.repositories.UserrRepository;
+import tn.workbot.coco_marketplace.repositories.*;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -48,9 +46,13 @@ public class OrderServices implements OrderInterface {
     ProductQuantityRepository productQuantityRepository;
     @Autowired
     UserrRepository userrRepository;
-
+    @Autowired
+    PromotionCodeRepository promotionCodeRepository;
     @Autowired
     OrderMailSenderService orderMailSenderService;
+    @Autowired
+    ProductRepository productRepository;
+
     @Value("${stripe.api.key}")
     private String stripeApiKey;
     @Value("${Days.To.Delete.After}")
@@ -73,52 +75,61 @@ public class OrderServices implements OrderInterface {
         return orderRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public void createOrder(ProductQuantity productQuantity) {
-
-        //Session Manager Id ne9sa affectation mte3 id user lil order
-        User user=userrRepository.findById(1L).get();
-        Order newOrder = new Order();
-        newOrder.setBuyer(user);
-        newOrder.setStatus(StatusOrderType.BASKET);
-        if (newOrder.getProductQuantities() == null) {
-            newOrder.setProductQuantities(new ArrayList<>());
-        }
-        newOrder.getProductQuantities().add(productQuantity);
-        newOrder.setCreationDate(new Date(System.currentTimeMillis()));
-        newOrder.setRef(" ");
-        float sum =productQuantity.getProduct().getProductPrice()*productQuantity.getQuantity();
-        newOrder.setSum(sum);
-        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-        if(weight<=1)
-            newOrder.setDeliveryPrice(6);
-        else
-            newOrder.setDeliveryPrice(6*weight);
-        newOrder.setProductsWeightKg(weight);
-
-        productQuantity.setOrder(newOrder);
-        orderRepository.save(newOrder);
-        productQuantityRepository.save(productQuantity);
-    }
-
-
 
 
     @Override
-    public Boolean AddProductToOrder(ProductQuantity productQuantity) {
+    public Boolean AddProductToOrder(ProductQuantity productQuantity,String voucher) {
         //Session Id (change 1L)
         Order order = orderRepository.BasketExistance(1L);
         if (order == null) {
-            createOrder(productQuantity);
-            return true;
+            User user=userrRepository.findById(1L).get();
+            order = new Order();
+            order.setBuyer(user);
+            order.setStatus(StatusOrderType.BASKET);
+            order.setProductsWeightKg(0);
+            if (order.getProductQuantities() == null) {
+                order.setProductQuantities(new ArrayList<>());
+            }
         }
-        order.setSum(order.getSum() + (productQuantity.getQuantity() * productQuantity.getProduct().getProductPrice()));
-        orderRepository.save(order);
+        Product product=productRepository.findById(productQuantity.getProduct().getId()).get();
+        productQuantity.setProduct(product);
+
+        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        float sum =0;
+        PromotionCode promotionCode=promotionCodeRepository.findByProductIdAndVoucher(product.getId(), voucher);
+        if(promotionCode==null )
+        {
+            sum=productQuantity.getProduct().getProductPriceBeforeDiscount() * productQuantity.getQuantity();
+        }
+        else
+        {
+            if((currentDate.after(promotionCode.getStartDate()) && currentDate.before(promotionCode.getEndtDate())))
+            {
+                order.getPromotionCodeList().add(promotionCode);
+                sum = ((productQuantity.getProduct().getProductPriceBeforeDiscount() - productQuantity.getProduct().getPromotionCodes().get(0).getDiscountValue())) * productQuantity.getQuantity();
+            } else
+                return false;
+        }
+        order.setSum(sum+order.getSum());
+        weight+=order.getProductsWeightKg();
+        order.setProductsWeightKg(weight);
+        if(weight<=1)
+            order.setDeliveryPrice(6);
+        else if(weight<=10)
+            order.setDeliveryPrice(6*weight);
+        else
+            order.setDeliveryPrice(60+(weight-10)*2);
+
+        order=orderRepository.save(order);
+        productQuantity.setOrder(order);
+        productQuantityRepository.save(productQuantity);
         return true;
     }
 
     @Override
-    public ProductQuantity UpdateQuantiyOfProduct(Long refProuct,int quantity)
+    public ProductQuantity UpdateQuantiyOfProduct(String refProuct,int quantity)
     {
         if(quantity==0)
         {
@@ -138,12 +149,13 @@ public class OrderServices implements OrderInterface {
 
         order.setProductsWeightKg(weight);
         order.setSum(SummOrder());
+        orderRepository.save(order);
         return productQuantity;
     }
 
 
     @Override
-    public ProductQuantity DeleteProductFromOrder(Long refProduct) {
+    public ProductQuantity DeleteProductFromOrder(String refProduct) {
         //Session Id (change 1L)
         Order order = orderRepository.BasketExistance(1L);
         ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
@@ -165,15 +177,15 @@ public class OrderServices implements OrderInterface {
     @Override
     public Order AffectShippingAdressToOrder(Shipping shipping) {
         Order order = orderRepository.BasketExistance(1L);
+        shipping=shippingRepository.save(shipping);
         order.setShipping(shipping);
         return orderRepository.save(order);
     }
-
+    //===
     @Override
     public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
         User user=userrRepository.findById(1L).get();
         Order order= orderRepository.BasketExistance(user.getId());
-
         if(order.getShipping()==null)
             return false;
 
@@ -211,6 +223,12 @@ public class OrderServices implements OrderInterface {
                 referance=generateRandomNumber(10);
             }while (refList.contains(referance));
             order.setRef(referance);
+            List<ProductQuantity> lpq=order.getProductQuantities();
+            for (ProductQuantity pq :lpq)
+            {
+                pq.getProduct().setNumberOfPurchase(pq.getProduct().getNumberOfPurchase()+pq.getQuantity());
+                productRepository.save(pq.getProduct());
+            }
         }
         else
         {
@@ -236,9 +254,34 @@ public class OrderServices implements OrderInterface {
     @Override
     public float SummOrder() {
         Order order = orderRepository.BasketExistance(1L);
+        List<PromotionCode> promotionCodeList = order.getPromotionCodeList();
         float sum = 0;
-        for (ProductQuantity pq : order.getProductQuantities()) {
-            sum += pq.getQuantity() * pq.getProduct().getProductPrice();
+        if (promotionCodeList.size() == 0)
+        {
+            for (ProductQuantity pq : order.getProductQuantities()) {
+                sum += pq.getQuantity() * pq.getProduct().getProductPriceBeforeDiscount();
+            }
+        }
+        else
+        {
+            List<Long> idList=new ArrayList<>();
+            for (PromotionCode p :promotionCodeList)
+            {
+                idList.add(p.getProduct().getId());
+            }
+            boolean var=true;
+            for (ProductQuantity pq : order.getProductQuantities()) {
+            var=true;
+                for (Long i:idList) {
+                    PromotionCode promotionCode = promotionCodeRepository.findById(i).get();
+                    if (promotionCode.getProduct().getId() == pq.getProduct().getId()) {
+                        sum += pq.getQuantity() * (pq.getProduct().getProductPriceBeforeDiscount() - promotionCode.getDiscountValue());
+                        var = false;
+                    }
+                }
+                if (var)
+                sum += pq.getQuantity() * pq.getProduct().getProductPriceBeforeDiscount();
+            }
         }
         return sum;
     }
@@ -315,7 +358,7 @@ public class OrderServices implements OrderInterface {
     }
 
     @Override
-    public List<Product> research(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
+    public List<Product> researchProduct(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre)
     {
         float aux=0;
         if(maxPrix<minPrix)
@@ -330,7 +373,7 @@ public class OrderServices implements OrderInterface {
         }
         if (nameProduct==null)
         {
-            nameProduct="";
+            nameProduct="%";
         }
         if(categorie==null)
         {
@@ -338,10 +381,11 @@ public class OrderServices implements OrderInterface {
         }
         if(mark==null)
         {
-            mark="";
+            mark="%";
         }
         if(productFiltre == ProductFiltre.TOP_RATED)
-            return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
+        { System.out.println("----------------------------- "+orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%"));
+            return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");}
         if(productFiltre == ProductFiltre.ASCENDING_PRICE)
             return orderRepository.researchProductASCENDINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
         if(productFiltre == ProductFiltre.DECREASING_PRICE)
@@ -357,6 +401,7 @@ public class OrderServices implements OrderInterface {
     public String validateCommand(String token) throws MessagingException
     {
         String email=parseToken(token);
+        System.out.println(email);
         if(orderRepository.findUserByEmail(email)==1)
         {
             User user=userrRepository.findById(1L).get();
@@ -367,8 +412,15 @@ public class OrderServices implements OrderInterface {
             String referance="";
             do{
                 referance=generateRandomNumber(10);
-            }while (!refList.contains(referance));
+            }while (refList.contains(referance));
             order.setRef(referance);
+
+            List<ProductQuantity> lpq=order.getProductQuantities();
+            for (ProductQuantity pq :lpq)
+            {
+                pq.getProduct().setNumberOfPurchase(pq.getProduct().getNumberOfPurchase()+pq.getQuantity());
+                productRepository.save(pq.getProduct());
+            }
             orderRepository.save(order);
 
             return "Your command is successfully confirmed";
