@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -45,7 +46,7 @@ public class User implements Serializable {
     private String DriveLicense;
     private Float GearAge;
     //co2 consoummer
-    private  double co2;
+    private double co2;
 
     // Define a field to store the average rating of the user (buyer_seller,deliveryAgency, DeliveryFreelancer)
     private float rating;
@@ -60,28 +61,35 @@ public class User implements Serializable {
     private List<Order> orders;
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
-    private List<Store> stores;
+    @JsonIgnore
+    private Set<Store> stores;
 
     @JsonIgnore
     @ManyToOne
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<ClaimSav> claimSavList;
 
     @OneToMany(mappedBy = "userSender")
+    @JsonIgnore
     private List<Review> reviewsSent;
 
     @OneToMany(mappedBy = "DeliveryAgency")
+    @JsonIgnore
     private List<Review> reviewsOnDA;
 
     @OneToMany(mappedBy = "DeliveryFreelancer")
+    @JsonIgnore
     private List<Review> reviewsOnDF;
 
     @OneToMany(mappedBy = "deliveryman")
+    @JsonIgnore
     private List<Request> requestsdeliverymen;
 
     @OneToMany(mappedBy = "seller")
+    @JsonIgnore
     private List<Request> requestsellers;
 
     @OneToMany(mappedBy = "Agency")
@@ -104,9 +112,6 @@ private List<Pickup>PickupdeliverymenFreelancer;
     @OneToMany(mappedBy = "supplier")
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
-
-
-
 
 
 }
