@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.Store;
+import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.StoreRepository;
+import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.StoreInterface;
 
 import java.util.List;
@@ -16,12 +18,16 @@ public class StoreService implements StoreInterface {
     @Autowired
     StoreRepository storeRepository;
 
-
+    @Autowired
+    UserrRepository userrRepository;
 
 
     @Override
     public Store create(Store s) {
-        s.setName(s.getName().toLowerCase());
+        //TODO : set user id from session
+        User user = userrRepository.findById(1L).get();
+        s.setSeller(user);
+        s.setName(s.getName().toUpperCase());
         return storeRepository.save(s);
     }
 
@@ -42,7 +48,7 @@ public class StoreService implements StoreInterface {
 
         return new Store();
     }
-
+    //
     @Override
     public void delete(Store s) {
         storeRepository.delete(s);

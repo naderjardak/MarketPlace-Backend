@@ -1,7 +1,12 @@
 package tn.workbot.coco_marketplace.services;
 
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.Distance;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +26,8 @@ import tn.workbot.coco_marketplace.services.interfaces.RequestInterface;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +79,11 @@ public class RequestService implements RequestInterface {
 
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
         User user = ur.findById(idDeliveryAgency).get();
-        User u=pr.UserOfPickup(idPickup);
-        Pickup p=pr.findById(idPickup).get();
-        int i=pr.countrequest(u.getId());
-        i=i+1;
+        //eli fou9o sessionManger
+        User u = pr.UserOfPickup(idPickup);
+        Pickup p = pr.findById(idPickup).get();
+        int i = pr.countrequest(u.getId());
+        i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
@@ -98,10 +106,10 @@ public class RequestService implements RequestInterface {
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
-        User u=pr.UserOfPickup(idPickup);
-        Pickup p=pr.findById(idPickup).get();
-        int i=pr.countrequest(u.getId());
-        i=i+1;
+        User u = pr.UserOfPickup(idPickup);
+        Pickup p = pr.findById(idPickup).get();
+        int i = pr.countrequest(u.getId());
+        i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
         User user = ur.findById(idDeliveryMenFreelancer).get();
@@ -112,10 +120,61 @@ public class RequestService implements RequestInterface {
         request1.setRequestDate(LocalDateTime.now());
         return rr.save(request);
     }
+    public String calculateDeliveryTime(Long idPickup, Long idRequest) throws IOException, InterruptedException, ApiException {
+
+        Pickup pickup1 = pr.pickupprettolivred(idPickup);
+        Request request1 = rr.findById(idRequest).get();
+        if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
+            GeoApiContext context = new GeoApiContext.Builder()
+                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .build();
+            // Get the distance and travel time using the DistanceMatrixApi
+            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                    .origins(pickup1.getGovernorate())
+                    .destinations(pickup1.getStore().getGovernorate())
+                    .mode(TravelMode.DRIVING);
+
+            DistanceMatrix matrix = request.await();
+            Distance distance = matrix.rows[0].elements[0].distance;
+            if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("CAR"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("CAR"))) {
+                double averageSpeed = 80.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("BIKE"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("BIKE"))) {
+                double averageSpeed = 10.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else if ((request1.getDeliveryman() != null && request1.getDeliveryman().getGear() != null && request1.getDeliveryman().getGear().equals("MOTO"))
+                    || (request1.getAgencyDeliveryMan() != null && request1.getAgencyDeliveryMan().getGearv() != null && request1.getAgencyDeliveryMan().getGearv().equals("MOTO"))) {
+                double averageSpeed = 30.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            } else {
+                // Calculate the estimated travel time based on the gear information
+                double averageSpeed = 60.0; // km/h
+                double distanceInKm = distance.inMeters / 1000.0;
+                double travelTimeInHours = distanceInKm / averageSpeed;
+                // Return the estimated delivery time as a Duration object
+                return String.format("%.2f", travelTimeInHours);
+            }
+
+        }
+        return null;
+
+    }
 
     @Override
-    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) {
+    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) throws IOException, InterruptedException, ApiException {
         Request request = rr.findById(idRequest).get();
+        Pickup pickup=pr.findById(idPickup).get();
         //session manager el idmt3 seller bech njibo el id mt3 el pickup wel request mel url wel status yda5elha houwa
         User seller = ur.findById(idSeller).get();
         List<Request> requestsPending = new ArrayList<>();
@@ -127,11 +186,15 @@ public class RequestService implements RequestInterface {
         if (rr.verifier(idPickup) == 1) {
             for (Request r : requestsPending) {
                 r.setRequestStatus(RequestStatus.valueOf("REJECTED"));
+                r.setRequestDate(LocalDateTime.now());
             }
         }
         request.setRequestDate(LocalDateTime.now());
         request.setRequestStatus(RequestStatus.valueOf(status));
         request.setSeller(seller);
+        String deliverytime=calculateDeliveryTime(idPickup,idRequest);
+        pickup.setDeliveryTimeInHoursBuyer(deliverytime);
+        pr.save(pickup);
         return rr.save(request);
     }
 
@@ -148,7 +211,7 @@ public class RequestService implements RequestInterface {
     }
 
 
-    @Scheduled(cron = "*/60 * 11 * * *")
+    @Scheduled(cron = "0 0 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {
         System.out.println("test");
         List<Request> requests = (List<Request>) rr.findAll();
@@ -160,32 +223,56 @@ public class RequestService implements RequestInterface {
                 if (requestDate.isAfter(now.minusMinutes(1)) && requestDate.isBefore(now.plusMinutes(1))) {
                     MimeMessage message = javaMailSender.createMimeMessage();
                     MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
-                    mailMessage.setTo(r.getDeliveryman().getEmail());
-                    mailMessage.setSubject("Request Status");
-                    Context context = new Context();
-                    String emailContent = templateEngine.process("emailRequest", context);
-                    mailMessage.setText(emailContent, true);
-                    javaMailSender.send(message);
+                    if (r.getAgency() != null) {
+                        mailMessage.setTo(r.getAgency().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context context = new Context();
+                        context.setVariable("name", "Congradulations your request is accepted");
+                        String emailContent = templateEngine.process("emailRequest", context);
+                        mailMessage.setText(emailContent, true);
+                        javaMailSender.send(message);
+                    }
+
+
+                    if (r.getDeliveryman() != null) {
+                        mailMessage.setTo(r.getDeliveryman().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context contextt = new Context();
+                        contextt.setVariable("name", "Congradulations your request is accepted");
+                        String emailContentt = templateEngine.process("emailRequest", contextt);
+                        mailMessage.setText(emailContentt, true);
+                        javaMailSender.send(message);
+                    }
+
                 }
             } else if (r.getRequestStatus().equals(RequestStatus.REJECTED)) {
                 LocalDateTime requestDate = r.getRequestDate();
 
                 if (requestDate.isAfter(now.minusMinutes(1)) && requestDate.isBefore(now.plusMinutes(1))) {
-                    SimpleMailMessage mailMessage = new SimpleMailMessage();
-                    mailMessage.setTo(r.getDeliveryman().getEmail());
-                    mailMessage.setSubject("Request Status");
-                    mailMessage.setText("Rejected");
-                    javaMailSender.send(mailMessage);
-                } else if (r.getRequestStatus().equals(RequestStatus.PENDING)) {
-                    LocalDateTime requestDate1 = r.getRequestDate();
+                    MimeMessage message = javaMailSender.createMimeMessage();
+                    MimeMessageHelper mailMessage = new MimeMessageHelper(message, true);
+                    if (r.getAgency() != null) {
+                        mailMessage.setTo(r.getAgency().getEmail());
+                        mailMessage.setSubject("Request Status");
+                        Context context = new Context();
+                        context.setVariable("name", "Sorry your request is Rejected");
+                        String emailContent = templateEngine.process("emailRequest", context);
+                        mailMessage.setText(emailContent, true);
+                        javaMailSender.send(message);
+                    }
 
-                    if (requestDate1.isAfter(now.minusMinutes(1)) && requestDate1.isBefore(now.plusMinutes(1))) {
-                        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+                    if (r.getDeliveryman() != null) {
                         mailMessage.setTo(r.getDeliveryman().getEmail());
                         mailMessage.setSubject("Request Status");
-                        mailMessage.setText("Rejected");
-                        javaMailSender.send(mailMessage);
+
+                        Context contextt = new Context();
+                        contextt.setVariable("name","Sorry your request is Rejected");
+                        String emailContentt = templateEngine.process("emailRequest", contextt);
+                        mailMessage.setText(emailContentt, true);
+                        javaMailSender.send(message);
                     }
+
                 }
             }
         }
