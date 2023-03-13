@@ -18,3 +18,4 @@ public interface ClaimSavRepository extends JpaRepository<ClaimSav,Long> {
     List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);
 
 }
+

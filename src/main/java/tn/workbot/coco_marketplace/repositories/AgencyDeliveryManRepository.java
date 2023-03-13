@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface AgencyDeliveryManRepository extends CrudRepository<AgencyDeliveryMan,Long> {
-@Query("select distinct dm from AgencyDeliveryMan dm ,AgencyBranch ab,User u,Store s,Pickup p where dm.agencyBranch.deliveryAgency.id=u.id and u.id=:v1 and  p.store.id=s.id and p.id=:v2 and dm.governorate=s.governorate")
+@Query("select distinct dm from AgencyDeliveryMan dm ,AgencyBranch ab,User u,Store s,Pickup p where dm.agencyBranch.deliveryAgency.id=u.id and u.id=:v1 and  p.store.id=s.id and p.id=:v2 and dm.governorate=p.governorate")
     public List<AgencyDeliveryMan> deliveryMenByAgency(@Param("v1") Long idAgency,@Param("v2") Long idPickup);
 
     AgencyDeliveryMan findByFirstNameAndLastName(String s,String s1)    ;

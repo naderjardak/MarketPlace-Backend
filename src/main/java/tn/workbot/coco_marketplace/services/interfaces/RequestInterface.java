@@ -1,8 +1,10 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Request;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface RequestInterface {
@@ -14,7 +16,7 @@ public interface RequestInterface {
     public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idDeliveryAgency, Long idPickup,Long idDeliveryMenAgency);
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup);
 
-    public Request assignRequesttoseller(Long idRequest,Long idSeller,String status,Long idPickup);
+    public Request assignRequesttoseller(Long idRequest,Long idSeller,String status,Long idPickup) throws IOException, InterruptedException, ApiException;
     public List<Request> retrieveRequestBySeller();
     public List<Request> retrieveRequestByPickup(Long idPickup);
 }

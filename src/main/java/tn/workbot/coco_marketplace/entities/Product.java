@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +79,7 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
+    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")

@@ -2,22 +2,23 @@ package tn.workbot.coco_marketplace.controllers;
 
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.workbot.coco_marketplace.Api.DeliveryPreduction;
-import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
-import tn.workbot.coco_marketplace.Api.PdfPickup;
-import tn.workbot.coco_marketplace.Api.Weather;
+import tn.workbot.coco_marketplace.Api.*;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@RequestMapping("Pickup")
 public class PickupController  {
     @Autowired
     PickupIService pis;
@@ -27,6 +28,10 @@ public class PickupController  {
     private OpenWeatherMapClient weatherClient;
     @Autowired
     DeliveryPreduction dp;
+    @Autowired
+    ScraperEssence sce;
+    @Autowired
+    ScraperTOpProduct scraper;
 
 
     @PostMapping("addPickup")
@@ -70,8 +75,8 @@ public class PickupController  {
         return pis.RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     }
     @PostMapping("AssignPickupByStoreAndOrder")
-    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id){
-        return pis.AssignPickupByStoreAndOrder(pickup,id);
+    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id,@RequestParam Long IdSotre){
+        return pis.AssignPickupByStoreAndOrder(pickup,id,IdSotre);
     }
     @PutMapping("ModifyStatusOfPickupByDelivery")
     public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {
@@ -268,7 +273,7 @@ public class PickupController  {
     }
     //////FraisEssenceTotalParGearConsommer
     @GetMapping("FraisEssenceTotal")
-    public String FraisEssenceTotal() throws IOException, InterruptedException, ApiException{
+    public String FraisEssenceTotal() throws Exception {
         return  pis.FraisEssenceTotal();
     }
     //////////////calculer co2 and update in user entity
@@ -315,5 +320,26 @@ public class PickupController  {
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupFreelancerByRequestWithStatusRequestApproved();
     }
+    @GetMapping("/scrape")
+    public String scrapePage(@RequestParam String url) throws Exception {
+        return sce.scrapePage(url);
     }
+    @GetMapping("/export")
+    @ResponseBody
+    public ResponseEntity<File> exportToXsl(@RequestParam String categoryUrl, @RequestParam String filename) {
+        try {
+            Map<String, Map<String, String>> products = scraper.getProducts(categoryUrl);
+            scraper.exportToXsl(products, filename);
+            File file = new File(filename);
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                    .body(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+}
 
