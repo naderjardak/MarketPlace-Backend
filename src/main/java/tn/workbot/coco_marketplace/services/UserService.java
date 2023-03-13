@@ -1,9 +1,11 @@
 package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.Dto.auth.AccountResponse;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
@@ -24,11 +26,12 @@ public class UserService implements UserInterface {
 
 
     PasswordEncoder passwordEncoder;
-   @Autowired
-   public UserService(){
-       this.passwordEncoder=new BCryptPasswordEncoder();
-   }
 
+
+
+    public UserService() {
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
 
 
     @Override
@@ -43,7 +46,7 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public User update( User u) {
+    public User update(User u) {
         return userRepository.save(u);
     }
 
@@ -59,16 +62,20 @@ public class UserService implements UserInterface {
 
     @Override
     public void affectRoleAtUser(long idRole, long idUser) {
-        Role r=roleRepository.findById(idRole).get();
-        User u=userRepository.findById(idUser).get();
+        Role r = roleRepository.findById(idRole).get();
+        User u = userRepository.findById(idUser).get();
         u.setRole(r);
         userRepository.save(u);
     }
 
+    @Override
     public User findByEmail(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(()->new EntityNotFoundException((
-                "user not found with email =" +email)
-        ));
+        return userRepository.findUserByEmail(email);
     }
+    public User findByResetToken(String resetToken) {
+        return userRepository.findByResetToken(resetToken);
+    }
+
+
 
 }

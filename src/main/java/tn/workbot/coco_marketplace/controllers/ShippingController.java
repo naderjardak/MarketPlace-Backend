@@ -9,7 +9,7 @@ import tn.workbot.coco_marketplace.services.interfaces.ShippingInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("/buyer/shipping")
+@RequestMapping("buyerShipping")
 public class ShippingController {
     @Autowired
     ShippingInterface shippingInterface;

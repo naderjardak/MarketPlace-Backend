@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("product")
 @Tag(name = "Product Management")
 @Slf4j
 public class ProductController {

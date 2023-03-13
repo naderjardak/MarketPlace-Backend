@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/AgencyDeliveryMan")
+
+@RequestMapping("AgencyDeliveryMan")
 public class AgencyDeliveryManController  {
     @Autowired
     AgencyDeliveryManIService ad;

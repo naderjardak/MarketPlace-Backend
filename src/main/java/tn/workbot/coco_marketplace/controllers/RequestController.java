@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Request")
+@RequestMapping("RequestController")
 public class RequestController   {
     @Autowired
     RequestInterface ri;

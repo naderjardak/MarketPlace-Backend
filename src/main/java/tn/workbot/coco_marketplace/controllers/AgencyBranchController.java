@@ -11,7 +11,7 @@ import tn.workbot.coco_marketplace.services.interfaces.AgencyBranchIService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/AgencyBranch")
+@RequestMapping("AgencyBranch")
 public class AgencyBranchController {
     @Autowired
     AgencyBranchIService abi;

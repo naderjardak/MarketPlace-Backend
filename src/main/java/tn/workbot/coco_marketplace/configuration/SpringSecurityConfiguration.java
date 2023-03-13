@@ -3,22 +3,22 @@ package tn.workbot.coco_marketplace.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tn.workbot.coco_marketplace.services.auth.ApplicationUserDetailsService;
 
-import static java.util.regex.Pattern.matches;
 
+@Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -38,8 +38,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/**/auth",
-
+                .authorizeRequests()
+                .antMatchers("/**/auth",
                         "/swagger-ui/**",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
@@ -47,10 +47,45 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/**",
                         "/webjars/**")
                 .permitAll()
+                .antMatchers("/store").access("hasRole('SELLER')")
+                .antMatchers("/PromotionCode").access("hasRole('SELLER')")
+                .antMatchers("/productCategory").access("hasRole('SELLER')")
+                .antMatchers("/Pickup").access("hasRole('SELLER')")
+                .antMatchers("/product").access("hasRole('SELLER')")
+                .antMatchers("/Privilege/**").access("hasRole('MODERATOR')")
+                .antMatchers(" /productQuantity/**").access("hasRole('BUYER')")
+                .antMatchers("/claims/**").access("hasRole('BUYER')")
+                .antMatchers("/Review/**").access("hasRole('BUYER')")
+                .antMatchers("/order/**").access("hasRole('BUYER')")
+                .antMatchers("/orderStats/**").access("hasRole('BUYER')")
+                .antMatchers("/Loyalty/**").access("hasRole('BUYER')")
+                .antMatchers("/**/deleteUser").access("hasRole('ADMINISTRTOR')")
+                .antMatchers("/**/selectUserById").access("hasRole('ADMINISTRTOR')")
+                .antMatchers("/**/selectUserAll").access("hasRole('ADMINISTRTOR')")
+                .antMatchers("/AgencyBranch/**").access("hasRole('DELIVERYAGENCY')")
+                .antMatchers("/AgencyDeliveryMan/**").access("hasRole('DELIVERYMEN')")
+                .antMatchers("/SupplierRequest/**").access("hasRole('SELLER_BUYER')")
+                .antMatchers("/**/changePass").permitAll()
+                .antMatchers("/**/resetPassword").permitAll()
+                .antMatchers("/**/checkEmail").permitAll()
+               .antMatchers("/**/addUser").permitAll()
+               .antMatchers("/**/confirm-account").permitAll()
+                .antMatchers("/**/affectRole").permitAll()
+                .antMatchers("/**/verify").permitAll()
+                .antMatchers("/**/verifyy").permitAll()
                 .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Ne pas de creer de session ( api REST )
+                .and().sessionManagement(
+                        session -> session
+
+               .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                                .invalidSessionUrl("/logout?expired")
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+       http.logout(logout ->logout.deleteCookies("JESSIONID").invalidateHttpSession(true));
+
     }
 
     @Override
@@ -59,7 +94,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
+//hachage
 
     public static String encodePassword(String password) {
         return passwordEncoder.encode(password);

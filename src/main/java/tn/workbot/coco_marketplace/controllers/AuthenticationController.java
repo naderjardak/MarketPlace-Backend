@@ -10,10 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.workbot.coco_marketplace.Dto.auth.AuthenticationRequest;
 import tn.workbot.coco_marketplace.Dto.auth.AuthenticationResponse;
 import tn.workbot.coco_marketplace.configuration.JWT;
@@ -57,5 +56,7 @@ public class AuthenticationController {
 
 
     }
+
+
 }
 

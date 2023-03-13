@@ -10,6 +10,7 @@ import tn.workbot.coco_marketplace.services.interfaces.PrivilegeInterface;
 import java.util.List;
 
 @RestController
+@RequestMapping("Privilege")
 public class PrivilegeController {
 
     @Autowired

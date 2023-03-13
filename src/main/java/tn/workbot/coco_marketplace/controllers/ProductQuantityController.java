@@ -9,7 +9,7 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductQuantityInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("/buyer/productQuantity")
+@RequestMapping("productQuantity")
 public class ProductQuantityController {
     @Autowired
     ProductQuantityInterface productQuantityInterface;
