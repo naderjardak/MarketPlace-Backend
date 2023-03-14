@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.controllers;
 
+import com.google.zxing.WriterException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,17 +11,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.workbot.coco_marketplace.Api.QRCodeGenerator;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.StoreRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -115,5 +121,27 @@ public class ProductController {
                 .body(new InputStreamResource(pdf));
     }
 
+//    @GetMapping("/qrcode")
+//    public ResponseEntity<InputStreamResource> downloadQRCodeImage(@RequestParam String text,
+//                                                                   @RequestParam(defaultValue = "200") int width,
+//                                                                   @RequestParam(defaultValue = "200") int height) {
+//        try {
+//            BufferedImage qrCodeImage = QRCodeGenerator.generateQRCodeImage(text, width, height);
+//
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            ImageIO.write(qrCodeImage, "png", bos);
+//            byte[] imageBytes = bos.toByteArray();
+//
+//            InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(imageBytes));
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentDispositionFormData("attachment", "qrcode.png");
+//            headers.setContentType(MediaType.IMAGE_PNG);
+//
+//            return new ResponseEntity<>(isr, headers, HttpStatus.OK);
+//        } catch (WriterException | IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 }

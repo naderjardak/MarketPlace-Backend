@@ -47,36 +47,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/**",
                         "/webjars/**")
                 .permitAll()
-                .antMatchers("/**/deleteUser").access("hasRole('ADMINISTRTOR')")
-                .antMatchers("/**/selectUserById").access("hasRole('ADMINISTRTOR')")
-                .antMatchers("/**/selectUserAll").access("hasRole('ADMINISTRTOR')")
-                .antMatchers("/**/**").access("hasRole('ADMINISTRTOR')")
-                .antMatchers("/store").access("hasRole('SELLER')")
-                .antMatchers("/PromotionCode").access("hasRole('SELLER')")
-                .antMatchers("/productCategory").access("hasRole('SELLER')")
-                .antMatchers("/SupplierRequest").access("hasRole('SELLER')")
-
-                .antMatchers("/Pickup").access("hasRole('DELIVERYAGENCY')")
-                .antMatchers("/product").access("hasRole('SELLER')")
-                .antMatchers("/Privilege/**").access("hasRole('MODERATOR')")
-                .antMatchers(" /productQuantity/**").access("hasRole('BUYER')")
-                .antMatchers("/claims/**").access("hasRole('BUYER')")
-                .antMatchers("/Review/**").access("hasRole('BUYER')")
-                .antMatchers("/order/**").access("hasRole('BUYER')")
-                .antMatchers("/orderStats/**").access("hasRole('BUYER')")
-                .antMatchers("/Loyalty/**").access("hasRole('BUYER')")
-
-                .antMatchers("/AgencyBranch/**").access("hasRole('DELIVERYAGENCY')")
-                .antMatchers("/AgencyDeliveryMan/**").access("hasRole('DELIVERYAGENCY')")
-                .antMatchers("/**/changePass").permitAll()
-                .antMatchers("/**/resetPassword").permitAll()
-                .antMatchers("/**/checkEmail").permitAll()
-               .antMatchers("/**/addUser").permitAll()
-               .antMatchers("/**/confirm-account").permitAll()
-                .antMatchers("/**/affectRole").permitAll()
-                .antMatchers("/**/verify").permitAll()
-                .antMatchers("/**/verifyy").permitAll()
-
                 .anyRequest().authenticated()
                 .and().sessionManagement(
                         session -> session

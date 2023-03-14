@@ -21,7 +21,9 @@ public class PromotionCodeService implements PromotionCodeInterface {
     ProductService productService;
 
     @Override
-    public PromotionCode create(PromotionCode p) {
+    public PromotionCode create(PromotionCode p, Long idProduct) {
+        Product product=productService.getById(idProduct);
+        p.setProduct(product);
         return promotionCodeRepository.save(p);
     }
 

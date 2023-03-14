@@ -22,16 +22,15 @@ public class PromotionCode {
     private Long id;
 
     private String voucher;
-
+    //  percentage
+    private int discountValue;
     @Temporal(TemporalType.DATE)
     private Date startDate;
     @Temporal(TemporalType.DATE)
     private Date EndtDate;
 
     @ManyToOne
-    @JsonIgnore
     private Product product;
 
-    //  percentage
-    private int discountValue;
+
 }
