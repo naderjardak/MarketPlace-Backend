@@ -33,7 +33,7 @@ public class PromortionCodeController {
     private ProductService productService;
 
     @PostMapping("savePromotionCode")
-    public ResponseEntity<InputStreamResource>  create(@RequestBody PromotionCode p,@RequestParam Long id) {
+    public ResponseEntity<InputStreamResource> create(@RequestBody PromotionCode p, @RequestParam Long id) {
         try {
             BufferedImage qrCodeImage = QRCodeGenerator.generateQRCodeImage(p.getVoucher(), 200, 200);
 
@@ -44,7 +44,7 @@ public class PromortionCodeController {
 
             InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(imageBytes));
             HttpHeaders headers = new HttpHeaders();
-            Product product=productService.getById(id);
+            Product product = productService.getById(id);
 
             headers.setContentDispositionFormData("attachment", product.getName());
             headers.setContentType(MediaType.IMAGE_PNG);
@@ -78,8 +78,8 @@ public class PromortionCodeController {
     }
 
     @PostMapping("createProductAndAssignPC")
-    public PromotionCode createAndAssignPromortionCodeToProduct(@RequestParam Long idp, @RequestParam String voucher , @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date promotionCodeSatrDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam int discountValue){
-        return promotionCodeInterface.createAndAssignPromortionCodeToProduct(idp,voucher,promotionCodeSatrDate,endDate,discountValue);
+    public PromotionCode createAndAssignPromortionCodeToProduct(@RequestParam Long idp, @RequestParam String voucher, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date promotionCodeSatrDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam int discountValue) {
+        return promotionCodeInterface.createAndAssignPromortionCodeToProduct(idp, voucher, promotionCodeSatrDate, endDate, discountValue);
     }
 
 }
