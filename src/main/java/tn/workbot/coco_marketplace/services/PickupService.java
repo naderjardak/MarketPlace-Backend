@@ -27,10 +27,7 @@ import java.text.DecimalFormat;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PickupService implements PickupIService {
@@ -149,22 +146,23 @@ public class PickupService implements PickupIService {
     }
 
 
+
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         //sessionManager Variable
         User u = ur.findById(4L).get();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
-        ArrayList<Pickup> store = new ArrayList<>();
+        Set<Pickup> pickups = new HashSet<>(); // use Set instead of ArrayList
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {
-                    store.addAll(s.getPickups());
+                    pickups.addAll(s.getPickups()); // use addAll instead of add
                 }
             }
         }
-        return store;
+        return new ArrayList<>(pickups); // convert Set to ArrayList
     }
 
     @Override
