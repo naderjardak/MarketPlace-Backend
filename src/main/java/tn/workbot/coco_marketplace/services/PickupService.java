@@ -16,6 +16,7 @@ import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PickupTwilio;
 import tn.workbot.coco_marketplace.Api.ScraperEssence;
+import tn.workbot.coco_marketplace.Dto.auth.NewPassword;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -753,6 +754,19 @@ public class PickupService implements PickupIService {
         //sessionManager
         User freelancer = ur.findById(1L).get();
         return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
+    }
+
+    @Override
+    public Set<Store> RetrieveStoreOfUser() {
+        User user=ur.findById(1L).get();
+        List<Store> stores=sr.findAll();
+        Set<Store> stores1= new HashSet<>();
+        for (Store store:stores) {
+            if(store.getSeller().getId().equals(user.getId())){
+                stores1.add(store);
+            }
+        }
+        return stores1;
     }
 
     @Scheduled(cron = "* * * 27 * *")

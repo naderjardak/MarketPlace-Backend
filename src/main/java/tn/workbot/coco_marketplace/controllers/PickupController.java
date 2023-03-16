@@ -16,8 +16,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
+@CrossOrigin
 @RequestMapping("Pickup")
 public class PickupController  {
     @Autowired
@@ -341,5 +343,10 @@ public class PickupController  {
     }
 
 
-}
+    @GetMapping("RetrieveStoreOfUser")
+    public Set<Store> RetrieveStoreOfUser() {
+        return pis.RetrieveStoreOfUser();
+    }
+
+    }
 

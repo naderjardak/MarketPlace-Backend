@@ -1,14 +1,12 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.google.maps.errors.ApiException;
-import tn.workbot.coco_marketplace.entities.Order;
-import tn.workbot.coco_marketplace.entities.Pickup;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.*;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 public interface PickupIService {
     public Pickup addPickup(Pickup pickup);
@@ -78,6 +76,7 @@ public interface PickupIService {
 
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved();
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved();
+    public Set<Store> RetrieveStoreOfUser();
 
 
 
