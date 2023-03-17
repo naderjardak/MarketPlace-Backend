@@ -45,8 +45,8 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct p from Pickup p,Request r ,User u ,AgencyBranch ab where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 and r.agencyDeliveryMan.agencyBranch.id=:v5 ")
     public List<Pickup> pickupOfBranch(@Param("v4") Long idAgency,@Param("v5")Long idBranch);
 
-    @Query("select distinct o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
-    public  List<Order> orderOfstore(@Param("v4") Long idSeller);
+    @Query("select distinct o from User u,Store s,ProductQuantity pq,Product p , Order o where s.id=p.store.id and s.id=:v5 and s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
+    public  List<Order> orderOfstore(@Param("v5") Long idStore,@Param("v4")Long idSeller);
     @Query("select distinct p from Pickup p , Store s ,User u,Request r where p.store.seller.id=u.id and u.id=:id1 and r.pickup.id=p.id and r.requestStatus='PENDING'")
     public  List<Pickup> PickupBySeller(@Param("id1") Long idSeller);
     @Query("select count(distinct r) from Request r,Pickup p where r.pickup.id=p.id and p.store.seller.id=:id1")

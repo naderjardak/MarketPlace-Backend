@@ -28,7 +28,7 @@ public interface PickupIService {
     public List<Pickup> retrievePickupByDeliveryMenFreelancer();
     public List<Pickup> retrievePickupByAgence();
     public List<Pickup> retrievePickupByBranch(Long idbranch);
-    public List<Order> retrieveOrderByseller();
+    public List<Order> retrieveOrderByseller(Long idStore);
     public List<Pickup> retrievePickupBysellerAttent();
     ///////////stat Seller
     public int countPickupSellerPendingToday();

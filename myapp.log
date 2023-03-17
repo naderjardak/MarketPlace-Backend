@@ -549,3 +549,797 @@ java.lang.ClassCastException: class java.util.HashSet cannot be cast to class ja
 2023-03-17 00:45:48.505  INFO 77076 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2023-03-17 00:45:48.506  INFO 77076 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2023-03-17 00:45:48.509  INFO 77076 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-03-17 01:33:20.284 ERROR 77076 --- [http-nio-8081-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+
+org.springframework.security.web.firewall.RequestRejectedException: The request was rejected because the URL contained a potentially malicious String "//"
+	at org.springframework.security.web.firewall.StrictHttpFirewall.rejectedBlocklistedUrls(StrictHttpFirewall.java:535) ~[spring-security-web-5.7.5.jar:5.7.5]
+	at org.springframework.security.web.firewall.StrictHttpFirewall.getFirewalledRequest(StrictHttpFirewall.java:505) ~[spring-security-web-5.7.5.jar:5.7.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:206) ~[spring-security-web-5.7.5.jar:5.7.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:186) ~[spring-security-web-5.7.5.jar:5.7.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142) ~[spring-session-core-2.7.0.jar:2.7.0]
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82) ~[spring-session-core-2.7.0.jar:2.7.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.24.jar:5.3.24]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:177) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 01:35:04.862  INFO 77076 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:35:04.941  INFO 77076 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 01:35:04.982  INFO 77076 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 01:35:28.505  INFO 77684 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 77684 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 01:35:28.511  INFO 77684 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 01:35:32.497  INFO 77684 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 01:35:32.765  INFO 77684 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 254 ms. Found 25 JPA repository interfaces.
+2023-03-17 01:35:34.276  INFO 77684 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 01:35:34.299  INFO 77684 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 01:35:34.299  INFO 77684 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 01:35:34.606  INFO 77684 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 01:35:34.606  INFO 77684 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5982 ms
+2023-03-17 01:35:34.847  INFO 77684 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 01:35:35.211  INFO 77684 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 01:35:35.493  INFO 77684 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 01:35:35.612  INFO 77684 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 01:35:35.972  INFO 77684 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 01:35:36.215  INFO 77684 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 01:35:40.365  INFO 77684 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 01:35:40.382  INFO 77684 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:35:42.729  WARN 77684 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 01:35:44.059  INFO 77684 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@17da6e45, org.springframework.security.web.session.ForceEagerSessionCreationFilter@6af10aa7, org.springframework.security.web.session.ForceEagerSessionCreationFilter@1e6a8d01, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@15eaa2ce, org.springframework.security.web.context.SecurityContextPersistenceFilter@63c07eaf, org.springframework.security.web.header.HeaderWriterFilter@1fcef7, org.springframework.security.web.authentication.logout.LogoutFilter@38cbbd0b, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@7e9d171c, org.springframework.security.web.session.ConcurrentSessionFilter@a824f87, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@67e7fe73, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5180f430, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1d0fae45, org.springframework.security.web.session.SessionManagementFilter@1c8746a0, org.springframework.security.web.access.ExceptionTranslationFilter@2c841ac4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5beda06e]
+2023-03-17 01:35:46.488  INFO 77684 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 01:35:46.508  INFO 77684 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 01:35:46.535  INFO 77684 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 18.821 seconds (JVM running for 33.496)
+2023-03-17 01:35:53.800  INFO 77684 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 01:35:53.801  INFO 77684 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 01:35:53.806  INFO 77684 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 01:43:05.224  INFO 77684 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:43:05.268  INFO 77684 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 01:43:05.326  INFO 77684 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 01:43:22.408  INFO 56420 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 56420 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 01:43:22.413  INFO 56420 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 01:43:24.330  INFO 56420 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 01:43:24.586  INFO 56420 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 242 ms. Found 25 JPA repository interfaces.
+2023-03-17 01:43:26.013  INFO 56420 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 01:43:26.031  INFO 56420 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 01:43:26.032  INFO 56420 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 01:43:26.327  INFO 56420 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 01:43:26.328  INFO 56420 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3810 ms
+2023-03-17 01:43:26.597  INFO 56420 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 01:43:27.016  INFO 56420 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 01:43:27.279  INFO 56420 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 01:43:27.391  INFO 56420 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 01:43:27.725  INFO 56420 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 01:43:27.977  INFO 56420 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 01:43:31.605  INFO 56420 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 01:43:31.621  INFO 56420 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:43:34.658  WARN 56420 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 01:43:36.008  INFO 56420 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@a479c0c, org.springframework.security.web.session.ForceEagerSessionCreationFilter@33d75081, org.springframework.security.web.session.ForceEagerSessionCreationFilter@2f341732, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@327af731, org.springframework.security.web.context.SecurityContextPersistenceFilter@236a6a2a, org.springframework.security.web.header.HeaderWriterFilter@8497c23, org.springframework.security.web.authentication.logout.LogoutFilter@316987c4, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@5f6b1f19, org.springframework.security.web.session.ConcurrentSessionFilter@55fb9e52, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@57d6f569, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@19984625, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2fb171f5, org.springframework.security.web.session.SessionManagementFilter@3459ccd9, org.springframework.security.web.access.ExceptionTranslationFilter@361a618e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1a56cb99]
+2023-03-17 01:43:39.003  INFO 56420 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 01:43:39.027  INFO 56420 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 01:43:39.052  INFO 56420 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 17.327 seconds (JVM running for 18.889)
+2023-03-17 01:43:39.313  INFO 56420 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 01:43:39.314  INFO 56420 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 01:43:39.318  INFO 56420 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-03-17 01:51:22.566  INFO 56420 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:51:22.626  INFO 56420 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 01:51:22.743  INFO 56420 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 01:51:35.875  INFO 77772 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 77772 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 01:51:35.880  INFO 77772 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 01:51:37.761  INFO 77772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 01:51:38.031  INFO 77772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 257 ms. Found 25 JPA repository interfaces.
+2023-03-17 01:51:39.401  INFO 77772 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 01:51:39.422  INFO 77772 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 01:51:39.423  INFO 77772 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 01:51:39.731  INFO 77772 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 01:51:39.732  INFO 77772 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3731 ms
+2023-03-17 01:51:39.965  INFO 77772 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 01:51:40.342  INFO 77772 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 01:51:40.760  INFO 77772 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 01:51:40.878  INFO 77772 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 01:51:41.215  INFO 77772 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 01:51:41.468  INFO 77772 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 01:51:45.724  INFO 77772 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 01:51:45.749  INFO 77772 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:51:48.228  WARN 77772 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 01:51:49.664  INFO 77772 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@697797e4, org.springframework.security.web.session.ForceEagerSessionCreationFilter@38cbbd0b, org.springframework.security.web.session.ForceEagerSessionCreationFilter@59ac94ad, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@56a34c0e, org.springframework.security.web.context.SecurityContextPersistenceFilter@361a618e, org.springframework.security.web.header.HeaderWriterFilter@4ee9daf5, org.springframework.security.web.authentication.logout.LogoutFilter@4e293c35, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@4fcb796f, org.springframework.security.web.session.ConcurrentSessionFilter@77c8b276, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@29471e3e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@13553828, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@16750a5e, org.springframework.security.web.session.SessionManagementFilter@59a49dbc, org.springframework.security.web.access.ExceptionTranslationFilter@c54e23b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1967c032]
+2023-03-17 01:51:53.184  INFO 77772 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 01:51:53.232  INFO 77772 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 01:51:53.287  INFO 77772 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 18.121 seconds (JVM running for 19.663)
+2023-03-17 01:52:52.655  INFO 77772 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 01:52:52.670  INFO 77772 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 01:52:52.836  INFO 77772 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 166 ms
+2023-03-17 01:54:38.905  INFO 77772 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:54:39.079  INFO 77772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 01:54:39.383  INFO 77772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 01:54:56.106  INFO 66456 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 66456 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 01:54:56.123  INFO 66456 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 01:54:58.266  INFO 66456 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 01:54:58.535  INFO 66456 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 256 ms. Found 25 JPA repository interfaces.
+2023-03-17 01:54:59.974  INFO 66456 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 01:54:59.993  INFO 66456 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 01:54:59.994  INFO 66456 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 01:55:00.315  INFO 66456 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 01:55:00.316  INFO 66456 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3825 ms
+2023-03-17 01:55:00.544  INFO 66456 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 01:55:00.937  INFO 66456 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 01:55:01.220  INFO 66456 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 01:55:01.337  INFO 66456 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 01:55:01.676  INFO 66456 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 01:55:01.916  INFO 66456 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 01:55:05.421  INFO 66456 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 01:55:05.439  INFO 66456 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 01:55:07.525  WARN 66456 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 01:55:08.712  INFO 66456 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@18d76c14, org.springframework.security.web.session.ForceEagerSessionCreationFilter@517f9ba3, org.springframework.security.web.session.ForceEagerSessionCreationFilter@18ac2dfe, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7011eee0, org.springframework.security.web.context.SecurityContextPersistenceFilter@761d679f, org.springframework.security.web.header.HeaderWriterFilter@2c841ac4, org.springframework.security.web.authentication.logout.LogoutFilter@48611ad4, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@56f569e, org.springframework.security.web.session.ConcurrentSessionFilter@1bc80978, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6789b471, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@32eca9f4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5576eef4, org.springframework.security.web.session.SessionManagementFilter@57d6f569, org.springframework.security.web.access.ExceptionTranslationFilter@62a89e92, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@53d3ae89]
+2023-03-17 01:55:10.558  INFO 66456 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 01:55:10.573  INFO 66456 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 01:55:10.590  INFO 66456 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 15.392 seconds (JVM running for 17.023)
+2023-03-17 01:55:36.096  INFO 66456 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 01:55:36.097  INFO 66456 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 01:55:36.100  INFO 66456 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 02:00:35.144  INFO 66456 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:00:35.199  INFO 66456 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 02:00:35.319  INFO 66456 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 02:00:47.506  INFO 64908 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 64908 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 02:00:47.510  INFO 64908 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 02:00:49.427  INFO 64908 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 02:00:49.698  INFO 64908 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 257 ms. Found 25 JPA repository interfaces.
+2023-03-17 02:00:51.095  INFO 64908 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 02:00:51.115  INFO 64908 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 02:00:51.115  INFO 64908 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 02:00:51.460  INFO 64908 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 02:00:51.460  INFO 64908 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3841 ms
+2023-03-17 02:00:51.717  INFO 64908 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 02:00:52.185  INFO 64908 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 02:00:52.463  INFO 64908 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 02:00:52.585  INFO 64908 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 02:00:52.948  INFO 64908 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 02:00:53.187  INFO 64908 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 02:00:57.259  INFO 64908 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 02:00:57.280  INFO 64908 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:00:59.814  WARN 64908 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 02:01:01.128  INFO 64908 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1014c825, org.springframework.security.web.session.ForceEagerSessionCreationFilter@5acc6ca1, org.springframework.security.web.session.ForceEagerSessionCreationFilter@2512eaaa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@100235c7, org.springframework.security.web.context.SecurityContextPersistenceFilter@3435b6d8, org.springframework.security.web.header.HeaderWriterFilter@17c0d43c, org.springframework.security.web.authentication.logout.LogoutFilter@6789b471, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@5af8ef61, org.springframework.security.web.session.ConcurrentSessionFilter@ab5f1d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@670e6fa3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6ba8859b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3ca43e5d, org.springframework.security.web.session.SessionManagementFilter@4aa4bfa1, org.springframework.security.web.access.ExceptionTranslationFilter@4be171d1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7d96618]
+2023-03-17 02:01:03.846  INFO 64908 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 02:01:03.863  INFO 64908 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 02:01:03.893  INFO 64908 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 17.091 seconds (JVM running for 18.763)
+2023-03-17 02:01:03.987  INFO 64908 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 02:01:03.988  INFO 64908 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 02:01:03.990  INFO 64908 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 02:06:00.438  INFO 64908 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:06:00.494  INFO 64908 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 02:06:00.605  INFO 64908 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 02:06:11.235  INFO 70240 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 70240 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 02:06:11.239  INFO 70240 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 02:06:13.073  INFO 70240 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 02:06:13.333  INFO 70240 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 247 ms. Found 25 JPA repository interfaces.
+2023-03-17 02:06:14.774  INFO 70240 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 02:06:14.793  INFO 70240 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 02:06:14.794  INFO 70240 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 02:06:15.095  INFO 70240 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 02:06:15.096  INFO 70240 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3730 ms
+2023-03-17 02:06:15.318  INFO 70240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 02:06:15.677  INFO 70240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 02:06:15.942  INFO 70240 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 02:06:16.056  INFO 70240 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 02:06:16.395  INFO 70240 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 02:06:16.609  INFO 70240 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 02:06:20.858  INFO 70240 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 02:06:20.878  INFO 70240 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:06:23.410  WARN 70240 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 02:06:24.846  INFO 70240 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7671c02d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@44189797, org.springframework.security.web.context.SecurityContextPersistenceFilter@4005e63a, org.springframework.security.web.header.HeaderWriterFilter@14ce13fa, org.springframework.security.web.csrf.CsrfFilter@3e5d10fc, org.springframework.security.web.authentication.logout.LogoutFilter@4be171d1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@717b4de2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@29511cf9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4aa4bfa1, org.springframework.security.web.session.SessionManagementFilter@1c8d9ac9, org.springframework.security.web.access.ExceptionTranslationFilter@3726fc3b]
+2023-03-17 02:06:28.308  INFO 70240 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 02:06:28.341  INFO 70240 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 02:06:28.368  INFO 70240 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 17.857 seconds (JVM running for 19.445)
+2023-03-17 02:06:29.870  INFO 70240 --- [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 02:06:29.871  INFO 70240 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 02:06:29.873  INFO 70240 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 02:12:31.609  INFO 70240 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:12:31.668  INFO 70240 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 02:12:31.789  INFO 70240 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 02:12:46.364  INFO 79824 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 79824 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 02:12:46.369  INFO 79824 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 02:12:49.130  INFO 79824 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 02:12:49.398  INFO 79824 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 253 ms. Found 25 JPA repository interfaces.
+2023-03-17 02:12:51.721  INFO 79824 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 02:12:51.744  INFO 79824 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 02:12:51.745  INFO 79824 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 02:12:52.236  INFO 79824 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 02:12:52.237  INFO 79824 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5751 ms
+2023-03-17 02:12:52.499  INFO 79824 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 02:12:53.047  INFO 79824 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 02:12:53.376  INFO 79824 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 02:12:53.514  INFO 79824 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 02:12:53.903  INFO 79824 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 02:12:54.364  INFO 79824 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 02:12:59.117  INFO 79824 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 02:12:59.140  INFO 79824 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:13:01.861  WARN 79824 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 02:13:03.116  INFO 79824 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2100d881, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@59881424, org.springframework.security.web.context.SecurityContextPersistenceFilter@d35d84a, org.springframework.security.web.header.HeaderWriterFilter@2a742ee4, org.springframework.security.web.csrf.CsrfFilter@377a1763, org.springframework.security.web.authentication.logout.LogoutFilter@77c8b276, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@213a2fe3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6cf633eb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@59ac94ad, org.springframework.security.web.session.SessionManagementFilter@4005e63a, org.springframework.security.web.access.ExceptionTranslationFilter@296ddfc7]
+2023-03-17 02:13:05.108  INFO 79824 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 02:13:05.123  INFO 79824 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 02:13:05.142  INFO 79824 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 20.02 seconds (JVM running for 21.746)
+2023-03-17 02:13:10.360  INFO 79824 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 02:13:10.361  INFO 79824 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 02:13:10.364  INFO 79824 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-03-17 02:14:38.318  INFO 79824 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 02:14:38.361  INFO 79824 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 02:14:38.454  INFO 79824 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 10:54:48.889  INFO 7924 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 7924 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 10:54:48.891  INFO 7924 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 10:54:50.379  INFO 7924 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 10:54:50.494  INFO 7924 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 25 JPA repository interfaces.
+2023-03-17 10:54:51.116  INFO 7924 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 10:54:51.125  INFO 7924 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 10:54:51.125  INFO 7924 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 10:54:51.403  INFO 7924 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 10:54:51.403  INFO 7924 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2450 ms
+2023-03-17 10:54:51.531  INFO 7924 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 10:54:51.741  INFO 7924 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 10:54:51.913  INFO 7924 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 10:54:51.969  INFO 7924 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 10:54:52.121  INFO 7924 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 10:54:52.240  INFO 7924 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 10:54:54.243  INFO 7924 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 10:54:54.251  INFO 7924 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 10:54:55.136  WARN 7924 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 10:54:55.621  INFO 7924 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29ff84fa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@156b31d, org.springframework.security.web.context.SecurityContextPersistenceFilter@33e6176b, org.springframework.security.web.header.HeaderWriterFilter@4569b6a9, org.springframework.security.web.csrf.CsrfFilter@3de4f936, org.springframework.security.web.authentication.logout.LogoutFilter@16a4e4c9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@296ddfc7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7108b12d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@168ffb0, org.springframework.security.web.session.SessionManagementFilter@7641d70, org.springframework.security.web.access.ExceptionTranslationFilter@387bbd7a]
+2023-03-17 10:54:56.394  INFO 7924 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 10:54:56.400  INFO 7924 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 10:54:56.407  INFO 7924 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 7.867 seconds (JVM running for 15.583)
+2023-03-17 10:55:11.615  INFO 7924 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 10:55:11.616  INFO 7924 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 10:55:11.617  INFO 7924 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-03-17 10:55:13.130  INFO 7924 --- [http-nio-8081-exec-8] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1027 ms
+2023-03-17 11:01:40.090  INFO 7924 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 11:01:40.121  INFO 7924 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 11:01:40.154  INFO 7924 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 11:01:46.556  INFO 16256 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 16256 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 11:01:46.559  INFO 16256 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 11:01:47.338  INFO 16256 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 11:01:47.450  INFO 16256 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 106 ms. Found 25 JPA repository interfaces.
+2023-03-17 11:01:48.060  INFO 16256 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 11:01:48.068  INFO 16256 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 11:01:48.069  INFO 16256 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 11:01:48.197  INFO 16256 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 11:01:48.197  INFO 16256 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1591 ms
+2023-03-17 11:01:48.302  INFO 16256 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 11:01:48.472  INFO 16256 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 11:01:48.580  INFO 16256 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 11:01:48.634  INFO 16256 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 11:01:48.787  INFO 16256 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 11:01:48.896  INFO 16256 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 11:01:50.494  INFO 16256 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 11:01:50.502  INFO 16256 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 11:01:51.427  WARN 16256 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 11:01:51.887  INFO 16256 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@718198db, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@40bac624, org.springframework.security.web.context.SecurityContextPersistenceFilter@37672aa7, org.springframework.security.web.header.HeaderWriterFilter@291fba9, org.springframework.security.web.csrf.CsrfFilter@2aea7775, org.springframework.security.web.authentication.logout.LogoutFilter@5854e526, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7671c02d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10395bc4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1bc80978, org.springframework.security.web.session.SessionManagementFilter@76afb9d, org.springframework.security.web.access.ExceptionTranslationFilter@7fdaeb6b]
+2023-03-17 11:01:52.768  INFO 16256 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 11:01:52.775  INFO 16256 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 11:01:52.782  INFO 16256 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 6.533 seconds (JVM running for 7.264)
+2023-03-17 11:02:04.037  INFO 16256 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 11:02:04.037  INFO 16256 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 11:02:04.038  INFO 16256 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-03-17 11:02:06.055  INFO 16256 --- [http-nio-8081-exec-9] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1407 ms
+2023-03-17 11:52:36.325  WARN 16256 --- [http-nio-8081-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "?id=1"]
+2023-03-17 11:52:41.971  WARN 16256 --- [http-nio-8081-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "?id=1"]
+2023-03-17 13:08:43.664  INFO 16256 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 13:08:43.761  INFO 16256 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 13:08:43.795  INFO 16256 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 13:50:12.296  INFO 31976 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 31976 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 13:50:12.301  INFO 31976 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 13:50:14.152  INFO 31976 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 13:50:14.436  INFO 31976 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 270 ms. Found 25 JPA repository interfaces.
+2023-03-17 13:50:15.813  INFO 31976 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 13:50:15.831  INFO 31976 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 13:50:15.831  INFO 31976 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 13:50:16.174  INFO 31976 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 13:50:16.175  INFO 31976 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3764 ms
+2023-03-17 13:50:16.427  INFO 31976 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 13:50:16.801  INFO 31976 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 13:50:17.095  INFO 31976 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 13:50:17.199  INFO 31976 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 13:50:17.539  INFO 31976 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 13:50:17.786  INFO 31976 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 13:50:21.818  INFO 31976 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 13:50:21.834  INFO 31976 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 13:50:24.187  WARN 31976 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 13:50:25.730  INFO 31976 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@93fb20b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2512eaaa, org.springframework.security.web.context.SecurityContextPersistenceFilter@291fba9, org.springframework.security.web.header.HeaderWriterFilter@d35d84a, org.springframework.security.web.csrf.CsrfFilter@664c411d, org.springframework.security.web.authentication.logout.LogoutFilter@49de2cc4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@156b31d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2b0df4ba, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3435b6d8, org.springframework.security.web.session.SessionManagementFilter@c54e23b, org.springframework.security.web.access.ExceptionTranslationFilter@30ae6721]
+2023-03-17 13:50:27.956  INFO 31976 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 13:50:27.971  INFO 31976 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 13:50:27.989  INFO 31976 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 16.375 seconds (JVM running for 21.286)
+2023-03-17 13:51:16.086  INFO 31976 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 13:51:16.088  INFO 31976 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 13:51:16.110  INFO 31976 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 21 ms
+2023-03-17 14:00:44.308  INFO 31976 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 14:00:44.332  INFO 31976 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 14:00:44.368  INFO 31976 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 19:23:11.859  INFO 12824 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 12824 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 19:23:11.866  INFO 12824 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 19:23:15.465  INFO 12824 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 19:23:15.760  INFO 12824 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 281 ms. Found 25 JPA repository interfaces.
+2023-03-17 19:23:17.238  INFO 12824 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 19:23:17.257  INFO 12824 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 19:23:17.257  INFO 12824 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 19:23:17.646  INFO 12824 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 19:23:17.647  INFO 12824 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5651 ms
+2023-03-17 19:23:17.895  INFO 12824 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 19:23:18.251  INFO 12824 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 19:23:18.615  INFO 12824 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 19:23:18.752  INFO 12824 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 19:23:19.095  INFO 12824 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 19:23:19.352  INFO 12824 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 19:23:23.319  INFO 12824 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 19:23:23.336  INFO 12824 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:23:25.496  WARN 12824 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 19:23:26.789  INFO 12824 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@59a49dbc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6dde03ce, org.springframework.security.web.context.SecurityContextPersistenceFilter@2a742ee4, org.springframework.security.web.header.HeaderWriterFilter@2140de63, org.springframework.security.web.csrf.CsrfFilter@593d5f39, org.springframework.security.web.authentication.logout.LogoutFilter@4ee9daf5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@915c47b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2aea7775, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2b0df4ba, org.springframework.security.web.session.SessionManagementFilter@14ce13fa, org.springframework.security.web.access.ExceptionTranslationFilter@7066c00a]
+2023-03-17 19:23:28.924  INFO 12824 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 19:23:28.939  INFO 12824 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 19:23:28.955  INFO 12824 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 17.975 seconds (JVM running for 27.222)
+2023-03-17 19:23:42.740  INFO 12824 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 19:23:42.741  INFO 12824 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 19:23:42.744  INFO 12824 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 19:23:45.593  INFO 12824 --- [http-nio-8081-exec-8] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1737 ms
+2023-03-17 19:38:13.878  INFO 12824 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:38:13.931  INFO 12824 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 19:38:13.987  INFO 12824 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 19:38:49.438  INFO 42508 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 42508 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 19:38:49.443  INFO 42508 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 19:38:51.241  INFO 42508 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 19:38:51.531  INFO 42508 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 274 ms. Found 25 JPA repository interfaces.
+2023-03-17 19:38:52.976  INFO 42508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 19:38:52.995  INFO 42508 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 19:38:52.996  INFO 42508 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 19:38:53.330  INFO 42508 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 19:38:53.331  INFO 42508 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3767 ms
+2023-03-17 19:38:53.564  INFO 42508 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 19:38:53.928  INFO 42508 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 19:38:54.165  INFO 42508 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 19:38:54.283  INFO 42508 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 19:38:54.661  INFO 42508 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 19:38:54.886  INFO 42508 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 19:38:58.150  INFO 42508 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 19:38:58.165  INFO 42508 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:39:00.353  WARN 42508 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 19:39:01.736  INFO 42508 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29511cf9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3df473e8, org.springframework.security.web.context.SecurityContextPersistenceFilter@2914f916, org.springframework.security.web.header.HeaderWriterFilter@31f5580b, org.springframework.security.web.csrf.CsrfFilter@6d1c15cb, org.springframework.security.web.authentication.logout.LogoutFilter@30ae6721, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2da273b3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@33c5cc0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4dc10682, org.springframework.security.web.session.SessionManagementFilter@4569b6a9, org.springframework.security.web.access.ExceptionTranslationFilter@2be49c8c]
+2023-03-17 19:39:03.727  INFO 42508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 19:39:03.746  INFO 42508 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 19:39:03.766  INFO 42508 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 14.987 seconds (JVM running for 16.491)
+2023-03-17 19:39:15.394  INFO 42508 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 19:39:15.395  INFO 42508 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 19:39:15.398  INFO 42508 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 19:40:14.504  INFO 42508 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:40:14.508  INFO 42508 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 19:40:14.525  INFO 42508 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 19:40:46.008  INFO 35720 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 35720 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 19:40:46.013  INFO 35720 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 19:40:47.762  INFO 35720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 19:40:48.050  INFO 35720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 275 ms. Found 25 JPA repository interfaces.
+2023-03-17 19:40:49.530  INFO 35720 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 19:40:49.549  INFO 35720 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 19:40:49.550  INFO 35720 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 19:40:49.873  INFO 35720 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 19:40:49.874  INFO 35720 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3752 ms
+2023-03-17 19:40:50.165  INFO 35720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 19:40:50.537  INFO 35720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 19:40:50.780  INFO 35720 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 19:40:50.904  INFO 35720 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 19:40:51.278  INFO 35720 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 19:40:51.521  INFO 35720 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 19:40:55.249  INFO 35720 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 19:40:55.265  INFO 35720 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:40:57.510  WARN 35720 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 19:40:58.750  INFO 35720 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29ff84fa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@156b31d, org.springframework.security.web.context.SecurityContextPersistenceFilter@33e6176b, org.springframework.security.web.header.HeaderWriterFilter@4569b6a9, org.springframework.security.web.csrf.CsrfFilter@3de4f936, org.springframework.security.web.authentication.logout.LogoutFilter@16a4e4c9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@296ddfc7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7108b12d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@168ffb0, org.springframework.security.web.session.SessionManagementFilter@7641d70, org.springframework.security.web.access.ExceptionTranslationFilter@387bbd7a]
+2023-03-17 19:41:00.763  INFO 35720 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 19:41:00.777  INFO 35720 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 19:41:00.796  INFO 35720 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 15.39 seconds (JVM running for 16.752)
+2023-03-17 19:41:04.010  INFO 35720 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 19:41:04.011  INFO 35720 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 19:41:04.013  INFO 35720 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 19:42:33.562  INFO 35720 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:42:33.566  INFO 35720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 19:42:33.582  INFO 35720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 19:42:42.097  INFO 44764 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 44764 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 19:42:42.102  INFO 44764 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 19:42:43.771  INFO 44764 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 19:42:44.026  INFO 44764 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 242 ms. Found 25 JPA repository interfaces.
+2023-03-17 19:42:45.310  INFO 44764 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 19:42:45.327  INFO 44764 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 19:42:45.328  INFO 44764 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 19:42:45.628  INFO 44764 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 19:42:45.629  INFO 44764 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3429 ms
+2023-03-17 19:42:45.854  INFO 44764 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 19:42:46.191  INFO 44764 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 19:42:46.425  INFO 44764 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 19:42:46.533  INFO 44764 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 19:42:46.860  INFO 44764 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 19:42:47.085  INFO 44764 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 19:42:50.666  INFO 44764 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 19:42:50.683  INFO 44764 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 19:42:53.032  WARN 44764 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 19:42:54.147  INFO 44764 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@75452b01, org.springframework.security.web.session.ForceEagerSessionCreationFilter@23b260ed, org.springframework.security.web.session.ForceEagerSessionCreationFilter@37672aa7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6d5b160, org.springframework.security.web.context.SecurityContextPersistenceFilter@670199c5, org.springframework.security.web.header.HeaderWriterFilter@6cf633eb, org.springframework.security.web.authentication.logout.LogoutFilter@76cf849f, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@15096b0e, org.springframework.security.web.session.ConcurrentSessionFilter@2b0df4ba, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44189797, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@361a618e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@fd07138, org.springframework.security.web.session.SessionManagementFilter@7fdaeb6b, org.springframework.security.web.access.ExceptionTranslationFilter@3df473e8, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5f1d270a]
+2023-03-17 19:42:56.143  INFO 44764 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 19:42:56.157  INFO 44764 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 19:42:56.173  INFO 44764 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 14.71 seconds (JVM running for 16.144)
+2023-03-17 19:43:00.511  INFO 44764 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 19:43:00.512  INFO 44764 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 19:43:00.515  INFO 44764 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 20:15:47.695  INFO 44764 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:15:47.838  INFO 44764 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:15:47.866  INFO 44764 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:16:02.055  INFO 46460 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 46460 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:16:02.061  INFO 46460 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:16:04.434  INFO 46460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:16:04.763  INFO 46460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 311 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:16:06.442  INFO 46460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:16:06.463  INFO 46460 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:16:06.464  INFO 46460 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:16:06.800  INFO 46460 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:16:06.801  INFO 46460 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4618 ms
+2023-03-17 20:16:07.734  INFO 46460 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:16:08.489  INFO 46460 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:16:08.902  INFO 46460 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:16:09.028  INFO 46460 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:16:09.406  INFO 46460 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:16:09.671  INFO 46460 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:16:13.709  INFO 46460 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:16:13.729  INFO 46460 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:16:16.168  WARN 46460 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:16:17.513  INFO 46460 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@289fff3c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6872201, org.springframework.security.web.context.SecurityContextPersistenceFilter@44189797, org.springframework.security.web.header.HeaderWriterFilter@168ffb0, org.springframework.security.web.csrf.CsrfFilter@7b57587e, org.springframework.security.web.authentication.logout.LogoutFilter@1fcef7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2100d881, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8497c23, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@669ae205, org.springframework.security.web.session.SessionManagementFilter@37672aa7, org.springframework.security.web.access.ExceptionTranslationFilter@29ff84fa]
+2023-03-17 20:16:19.537  INFO 46460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:16:19.551  INFO 46460 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:16:19.569  INFO 46460 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 18.266 seconds (JVM running for 19.966)
+2023-03-17 20:18:09.059  INFO 46460 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:18:09.064  INFO 46460 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:18:09.090  INFO 46460 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 25 ms
+2023-03-17 20:25:42.893  INFO 46460 --- [http-nio-8081-exec-7] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 3061 ms
+2023-03-17 20:30:23.696  INFO 46460 --- [http-nio-8081-exec-6] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:30:23.696  INFO 46460 --- [http-nio-8081-exec-5] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:32:17.394  INFO 46460 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:32:17.433  INFO 46460 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:32:17.469  INFO 46460 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:32:22.785  INFO 27812 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 27812 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:32:22.787  INFO 27812 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:32:23.769  INFO 27812 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:32:23.886  INFO 27812 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 112 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:32:24.503  INFO 27812 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:32:24.514  INFO 27812 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:32:24.514  INFO 27812 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:32:24.645  INFO 27812 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:32:24.645  INFO 27812 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1811 ms
+2023-03-17 20:32:24.751  INFO 27812 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:32:24.916  INFO 27812 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:32:25.034  INFO 27812 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:32:25.091  INFO 27812 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:32:25.242  INFO 27812 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:32:25.347  INFO 27812 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:32:27.042  INFO 27812 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:32:27.050  INFO 27812 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:32:28.274  WARN 27812 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:32:29.146  INFO 27812 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34b4c82a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@67e7fe73, org.springframework.security.web.context.SecurityContextPersistenceFilter@2c841ac4, org.springframework.security.web.header.HeaderWriterFilter@10395bc4, org.springframework.security.web.csrf.CsrfFilter@3df473e8, org.springframework.security.web.authentication.logout.LogoutFilter@1b6982e4, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@525c0f74, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1fcef7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5854e526, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2daf650b, org.springframework.security.web.session.SessionManagementFilter@76cf849f, org.springframework.security.web.access.ExceptionTranslationFilter@ab5f1d5]
+2023-03-17 20:32:30.624  INFO 27812 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:32:30.630  INFO 27812 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:32:30.639  INFO 27812 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 8.174 seconds (JVM running for 8.876)
+2023-03-17 20:32:32.425  INFO 27812 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:32:32.425  INFO 27812 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:32:32.428  INFO 27812 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-03-17 20:33:16.692  INFO 27812 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:33:16.694  INFO 27812 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:33:16.702  INFO 27812 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:33:20.722  INFO 42556 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 42556 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:33:20.724  INFO 42556 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:33:21.441  INFO 42556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:33:21.549  INFO 42556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 102 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:33:22.104  INFO 42556 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:33:22.113  INFO 42556 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:33:22.113  INFO 42556 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:33:22.236  INFO 42556 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:33:22.237  INFO 42556 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1471 ms
+2023-03-17 20:33:22.332  INFO 42556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:33:22.486  INFO 42556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:33:22.589  INFO 42556 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:33:22.644  INFO 42556 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:33:22.785  INFO 42556 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:33:22.897  INFO 42556 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:33:24.602  INFO 42556 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:33:24.610  INFO 42556 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:33:25.577  WARN 42556 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:33:26.065  INFO 42556 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56a34c0e, org.springframework.security.web.session.ForceEagerSessionCreationFilter@16750a5e, org.springframework.security.web.session.ForceEagerSessionCreationFilter@1147a8de, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@436867c3, org.springframework.security.web.context.SecurityContextPersistenceFilter@29471e3e, org.springframework.security.web.header.HeaderWriterFilter@12504d49, org.springframework.security.web.authentication.logout.LogoutFilter@40bac624, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@321302bc, org.springframework.security.web.session.ConcurrentSessionFilter@1179731c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@93fb20b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@55fb9e52, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@262ea940, org.springframework.security.web.session.SessionManagementFilter@37672aa7, org.springframework.security.web.access.ExceptionTranslationFilter@2b0df4ba, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3d7d920b]
+2023-03-17 20:33:26.942  INFO 42556 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:33:26.949  INFO 42556 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:33:26.956  INFO 42556 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 6.523 seconds (JVM running for 7.154)
+2023-03-17 20:33:29.445  INFO 42556 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:33:29.445  INFO 42556 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:33:29.446  INFO 42556 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-03-17 20:34:39.928  INFO 42556 --- [http-nio-8081-exec-4] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:34:39.928  INFO 42556 --- [http-nio-8081-exec-3] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:39:05.919  INFO 42556 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:39:05.971  INFO 42556 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:39:06.073  INFO 42556 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:39:13.648  INFO 37964 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 37964 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:39:13.650  INFO 37964 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:39:14.847  INFO 37964 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:39:14.964  INFO 37964 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 110 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:39:15.596  INFO 37964 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:39:15.604  INFO 37964 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:39:15.604  INFO 37964 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:39:15.731  INFO 37964 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:39:15.731  INFO 37964 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2031 ms
+2023-03-17 20:39:15.883  INFO 37964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:39:16.047  INFO 37964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:39:16.162  INFO 37964 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:39:16.217  INFO 37964 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:39:16.427  INFO 37964 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:39:16.533  INFO 37964 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:39:18.258  INFO 37964 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:39:18.266  INFO 37964 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:39:19.217  WARN 37964 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:39:19.742  INFO 37964 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7c98bac0, org.springframework.security.web.session.ForceEagerSessionCreationFilter@bc85538, org.springframework.security.web.session.ForceEagerSessionCreationFilter@2c78771b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6fc9c0cc, org.springframework.security.web.context.SecurityContextPersistenceFilter@aec9672, org.springframework.security.web.header.HeaderWriterFilter@4c617143, org.springframework.security.web.authentication.logout.LogoutFilter@6d5b160, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@80081d7, org.springframework.security.web.session.ConcurrentSessionFilter@19984625, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@77035caa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1eb3a6a3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@21a09c5a, org.springframework.security.web.session.SessionManagementFilter@1fcef7, org.springframework.security.web.access.ExceptionTranslationFilter@670e6fa3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7ba70b3b]
+2023-03-17 20:39:20.615  INFO 37964 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:39:20.622  INFO 37964 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:39:20.630  INFO 37964 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 7.31 seconds (JVM running for 8.708)
+2023-03-17 20:39:43.826  INFO 37964 --- [http-nio-8081-exec-1] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:39:43.826  INFO 37964 --- [http-nio-8081-exec-2] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:40:49.813  INFO 37964 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:40:49.826  INFO 37964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:40:49.840  INFO 37964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:40:54.172  INFO 47432 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 47432 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:40:54.174  INFO 47432 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:40:54.893  INFO 47432 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:40:55.023  INFO 47432 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 124 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:40:55.593  INFO 47432 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:40:55.602  INFO 47432 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:40:55.603  INFO 47432 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:40:55.747  INFO 47432 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:40:55.747  INFO 47432 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1528 ms
+2023-03-17 20:40:55.851  INFO 47432 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:40:56.007  INFO 47432 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:40:56.113  INFO 47432 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:40:56.166  INFO 47432 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:40:56.310  INFO 47432 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:40:56.415  INFO 47432 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:40:58.045  INFO 47432 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:40:58.053  INFO 47432 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:40:58.933  WARN 47432 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:40:59.384  INFO 47432 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6fc9c0cc, org.springframework.security.web.session.ForceEagerSessionCreationFilter@21a09c5a, org.springframework.security.web.session.ForceEagerSessionCreationFilter@718198db, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@18d76c14, org.springframework.security.web.context.SecurityContextPersistenceFilter@40bac624, org.springframework.security.web.header.HeaderWriterFilter@93fb20b, org.springframework.security.web.authentication.logout.LogoutFilter@7d14efc, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@531bfe4b, org.springframework.security.web.session.ConcurrentSessionFilter@2940eec0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1c8746a0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1cfb59e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@517f9ba3, org.springframework.security.web.session.SessionManagementFilter@4c617143, org.springframework.security.web.access.ExceptionTranslationFilter@8497c23, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@269a37bc]
+2023-03-17 20:41:00.467  INFO 47432 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:41:00.473  INFO 47432 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:41:00.480  INFO 47432 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 6.602 seconds (JVM running for 7.2)
+2023-03-17 20:41:14.662  INFO 47432 --- [http-nio-8081-exec-2] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:41:14.662  INFO 47432 --- [http-nio-8081-exec-1] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in the request target [/Pickup/AssignPickupByStoreAndOrder?id${idOrder}&IdSotre={idStore} ]. The valid characters are defined in RFC 7230 and RFC 3986
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:494) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.69.jar:9.0.69]
+	at java.base/java.lang.Thread.run(Thread.java:1589) ~[na:na]
+
+2023-03-17 20:41:41.145  INFO 47432 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:41:41.147  INFO 47432 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:41:41.155  INFO 47432 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:41:45.894  INFO 46516 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 46516 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:41:45.897  INFO 46516 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:41:46.675  INFO 46516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:41:46.814  INFO 46516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 131 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:41:47.449  INFO 46516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:41:47.463  INFO 46516 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:41:47.463  INFO 46516 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:41:47.605  INFO 46516 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:41:47.605  INFO 46516 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1658 ms
+2023-03-17 20:41:47.722  INFO 46516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:41:47.932  INFO 46516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:41:48.038  INFO 46516 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:41:48.095  INFO 46516 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:41:48.287  INFO 46516 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:41:48.400  INFO 46516 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:41:50.465  INFO 46516 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:41:50.474  INFO 46516 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:41:51.552  WARN 46516 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:41:52.336  INFO 46516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@42cef0af, org.springframework.security.web.session.ForceEagerSessionCreationFilter@44992466, org.springframework.security.web.session.ForceEagerSessionCreationFilter@23b260ed, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@55bf08a5, org.springframework.security.web.context.SecurityContextPersistenceFilter@6d5b160, org.springframework.security.web.header.HeaderWriterFilter@77035caa, org.springframework.security.web.authentication.logout.LogoutFilter@1a56cb99, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@253c7189, org.springframework.security.web.session.ConcurrentSessionFilter@2daf650b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@53115ee0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5910c67e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@623cd12e, org.springframework.security.web.session.SessionManagementFilter@30f0b75, org.springframework.security.web.access.ExceptionTranslationFilter@aec9672, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1b841396]
+2023-03-17 20:41:53.234  INFO 46516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:41:53.240  INFO 46516 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:41:53.249  INFO 46516 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 7.669 seconds (JVM running for 8.41)
+2023-03-17 20:43:26.161  INFO 46516 --- [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:43:26.165  INFO 46516 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:43:26.211  INFO 46516 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 46 ms
+2023-03-17 20:50:08.313  INFO 46516 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:50:08.357  INFO 46516 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:50:08.410  INFO 46516 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:50:14.110  INFO 48040 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 48040 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:50:14.112  INFO 48040 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:50:14.906  INFO 48040 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:50:15.018  INFO 48040 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:50:15.673  INFO 48040 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:50:15.681  INFO 48040 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:50:15.681  INFO 48040 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:50:15.812  INFO 48040 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:50:15.812  INFO 48040 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1654 ms
+2023-03-17 20:50:15.919  INFO 48040 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:50:16.092  INFO 48040 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:50:16.207  INFO 48040 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:50:16.263  INFO 48040 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:50:16.418  INFO 48040 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:50:16.530  INFO 48040 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:50:18.665  INFO 48040 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:50:18.674  INFO 48040 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:50:19.640  WARN 48040 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:50:20.118  INFO 48040 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6efd83ac, org.springframework.security.web.session.ForceEagerSessionCreationFilter@117e9a56, org.springframework.security.web.session.ForceEagerSessionCreationFilter@aec9672, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@21acc86a, org.springframework.security.web.context.SecurityContextPersistenceFilter@1cfb59e, org.springframework.security.web.header.HeaderWriterFilter@76cf849f, org.springframework.web.filter.CorsFilter@443819d5, org.springframework.security.web.authentication.logout.LogoutFilter@fd07138, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@3b44ed3c, org.springframework.security.web.session.ConcurrentSessionFilter@4e293c35, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@18ac2dfe, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@30f0b75, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@465a121d, org.springframework.security.web.session.SessionManagementFilter@2f341732, org.springframework.security.web.access.ExceptionTranslationFilter@55fb9e52, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@12ff0e4f]
+2023-03-17 20:50:21.109  INFO 48040 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:50:21.133  INFO 48040 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:50:21.144  INFO 48040 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 7.329 seconds (JVM running for 8.624)
+2023-03-17 20:50:42.837  INFO 48040 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:50:42.837  INFO 48040 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:50:42.838  INFO 48040 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-03-17 20:52:03.747  INFO 48040 --- [http-nio-8081-exec-4] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 740 ms
+2023-03-17 20:53:51.287  INFO 48040 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:53:51.296  INFO 48040 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-17 20:53:51.307  INFO 48040 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-17 20:53:55.578  INFO 7608 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 19.0.1 on LAPTOP-GNGG9OFG with PID 7608 (C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend\target\classes started by fnmoh in C:\Users\fnmoh\Desktop\lastintegSpring\MarketPlace-Backend)
+2023-03-17 20:53:55.580  INFO 7608 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-17 20:53:56.336  INFO 7608 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-17 20:53:56.446  INFO 7608 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 103 ms. Found 25 JPA repository interfaces.
+2023-03-17 20:53:57.067  INFO 7608 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-17 20:53:57.075  INFO 7608 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-17 20:53:57.076  INFO 7608 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-17 20:53:57.213  INFO 7608 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-17 20:53:57.213  INFO 7608 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1586 ms
+2023-03-17 20:53:57.319  INFO 7608 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-17 20:53:57.474  INFO 7608 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-17 20:53:57.586  INFO 7608 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-17 20:53:57.643  INFO 7608 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-17 20:53:57.800  INFO 7608 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-17 20:53:58.041  INFO 7608 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-17 20:53:59.849  INFO 7608 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-17 20:53:59.859  INFO 7608 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-17 20:54:01.098  WARN 7608 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-17 20:54:01.580  INFO 7608 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@35ec9d29, org.springframework.security.web.session.ForceEagerSessionCreationFilter@3cdafb82, org.springframework.security.web.session.ForceEagerSessionCreationFilter@77b7a4b2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@28f663de, org.springframework.security.web.context.SecurityContextPersistenceFilter@56739ee9, org.springframework.security.web.header.HeaderWriterFilter@fd07138, org.springframework.web.filter.CorsFilter@7a3c541e, org.springframework.security.web.authentication.logout.LogoutFilter@18d76c14, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@64b0ec4a, org.springframework.security.web.session.ConcurrentSessionFilter@16750a5e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1014c825, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@33d75081, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2be89ba5, org.springframework.security.web.session.SessionManagementFilter@5910c67e, org.springframework.security.web.access.ExceptionTranslationFilter@23b260ed, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@28357fc3]
+2023-03-17 20:54:02.441  INFO 7608 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-17 20:54:02.448  INFO 7608 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-17 20:54:02.457  INFO 7608 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 7.188 seconds (JVM running for 7.831)
+2023-03-17 20:54:02.501  INFO 7608 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-17 20:54:02.502  INFO 7608 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-17 20:54:02.503  INFO 7608 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-03-17 20:54:03.892  INFO 7608 --- [http-nio-8081-exec-9] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 846 ms
+2023-03-17 20:54:27.315  WARN 7608 --- [http-nio-8081-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 20:54:27.316  WARN 7608 --- [http-nio-8081-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 20:54:56.626  WARN 7608 --- [http-nio-8081-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 20:54:56.630  WARN 7608 --- [http-nio-8081-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 20:55:16.421  WARN 7608 --- [http-nio-8081-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 20:55:16.423  WARN 7608 --- [http-nio-8081-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:01.969  WARN 7608 --- [http-nio-8081-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:01.969  WARN 7608 --- [http-nio-8081-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:05.652  WARN 7608 --- [http-nio-8081-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:05.654  WARN 7608 --- [http-nio-8081-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:52.459  WARN 7608 --- [http-nio-8081-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]
+2023-03-17 21:32:52.459  WARN 7608 --- [http-nio-8081-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public tn.workbot.coco_marketplace.entities.Pickup tn.workbot.coco_marketplace.controllers.PickupController.AssignPickupByStoreAndOrder(tn.workbot.coco_marketplace.entities.Pickup,java.lang.Long,java.lang.Long)]

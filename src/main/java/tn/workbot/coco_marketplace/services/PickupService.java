@@ -391,10 +391,10 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public List<Order> retrieveOrderByseller() {
+    public List<Order> retrieveOrderByseller(Long idStore) {
         //session manager idseller
         User u = ur.findById(1L).get();
-        return pr.orderOfstore(u.getId());
+        return pr.orderOfstore(idStore,u.getId());
     }
 
     @Override
@@ -758,11 +758,11 @@ public class PickupService implements PickupIService {
 
     @Override
     public Set<Store> RetrieveStoreOfUser() {
-        User user=ur.findById(1L).get();
-        List<Store> stores=sr.findAll();
-        Set<Store> stores1= new HashSet<>();
-        for (Store store:stores) {
-            if(store.getSeller().getId().equals(user.getId())){
+        User user = ur.findById(1L).get();
+        List<Store> stores = sr.findAll();
+        Set<Store> stores1 = new TreeSet<>((s1, s2) -> Long.compare(s1.getId(), s2.getId())); // Use TreeSet with custom Comparator
+        for (Store store : stores) {
+            if (store.getSeller().getId().equals(user.getId())) {
                 stores1.add(store);
             }
         }

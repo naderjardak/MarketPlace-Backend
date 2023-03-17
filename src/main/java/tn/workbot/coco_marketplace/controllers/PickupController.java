@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+@CrossOrigin(origins ="*")
 @RestController
-@CrossOrigin
 @RequestMapping("Pickup")
 public class PickupController  {
     @Autowired
@@ -116,8 +117,8 @@ public class PickupController  {
         return pis.retrievePickupByBranch(idbranch);
     }
     @GetMapping("retrieveOrderByseller")
-    public List<Order> retrieveOrderByseller() {
-        return pis.retrieveOrderByseller();
+    public List<Order> retrieveOrderByseller(@RequestParam Long idStore) {
+        return pis.retrieveOrderByseller(idStore);
     }
     @GetMapping("retrievePickupBysellerAttent")
     public List<Pickup> retrievePickupBysellerAttent(){
