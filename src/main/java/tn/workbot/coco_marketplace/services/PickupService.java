@@ -52,6 +52,10 @@ public class PickupService implements PickupIService {
     PickupTwilio pickupTwilio;
     @Autowired
     ScraperEssence se;
+    @Autowired
+    ShippingRepository shippingRepository;
+
+
 
 
     @Override
@@ -767,6 +771,26 @@ public class PickupService implements PickupIService {
             }
         }
         return stores1;
+    }
+
+    @Override
+    public Order GetOrderById(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        return order;
+    }
+
+    @Override
+    public Shipping getShippingByOrder(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        Shipping shipping=order.getShipping();
+        return shipping;
+    }
+
+    @Override
+    public User getBuyerByOrder(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        User buyer=order.getBuyer();
+        return buyer;
     }
 
     @Scheduled(cron = "* * * 27 * *")

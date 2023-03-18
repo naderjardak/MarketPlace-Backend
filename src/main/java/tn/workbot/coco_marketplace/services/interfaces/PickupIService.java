@@ -77,6 +77,9 @@ public interface PickupIService {
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved();
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved();
     public Set<Store> RetrieveStoreOfUser();
+    public Order GetOrderById(Long IdOrder);
+    public Shipping getShippingByOrder(Long IdOrder);
+    public User getBuyerByOrder(Long IdOrder);
 
 
 
