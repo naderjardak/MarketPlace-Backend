@@ -396,11 +396,24 @@ public class PickupService implements PickupIService {
 
     @Override
     public List<Order> retrieveOrderByseller(Long idStore) {
-        //session manager idseller
         User u = ur.findById(1L).get();
-        return pr.orderOfstore(idStore,u.getId());
+        List<Pickup> pickups = (List<Pickup>) pr.findAll();
+        List<Order> orders = pr.orderOfstore(idStore, u.getId());
+        List<Order> finalOrders = new ArrayList<>();
+        for (Order order : orders) {
+            boolean hasPickup = false;
+            for (Pickup pickup : pickups) {
+                if (pickup.getOrder().getId().equals(order.getId())) {
+                    hasPickup = true;
+                    break;
+                }
+            }
+            if (!hasPickup) {
+                finalOrders.add(order);
+            }
+        }
+        return finalOrders;
     }
-
     @Override
     public List<Pickup> retrievePickupBysellerAttent() {
         /////session manager
