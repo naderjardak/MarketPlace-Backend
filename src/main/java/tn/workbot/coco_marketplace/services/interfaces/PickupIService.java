@@ -13,7 +13,7 @@ public interface PickupIService {
     public void removePickup(Long id);
     public Pickup RetrievePickup(Long id);
     public List<Pickup> RetrievePickups();
-    public Pickup updatePickup(Pickup pickup);
+    public Pickup updatePickup(Pickup pickup,Long idPikup);
     public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(Long id);
     public Pickup AssignPickupByOder(Pickup pickup,Long id);
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
@@ -80,6 +80,8 @@ public interface PickupIService {
     public Order GetOrderById(Long IdOrder);
     public Shipping getShippingByOrder(Long IdOrder);
     public User getBuyerByOrder(Long IdOrder);
+    public Order getOrderByPickupId(Long idPickup);
+    public User getBuyerByPickupId(Long idPickup);
 
 
 

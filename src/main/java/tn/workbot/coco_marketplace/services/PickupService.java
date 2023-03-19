@@ -105,9 +105,12 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup updatePickup(Pickup pickup) {
+    public Pickup updatePickup(Pickup pickup,Long idPikup) {
+         Pickup pickup1=pr.findById(idPikup).get();
+         pickup.setOrder(pickup1.getOrder());
+         pickup.setStore(pickup1.getStore());
         return pr.save(pickup);
-    }/**/
+    }
 
     @Override
     public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(Long id) {
@@ -804,6 +807,16 @@ public class PickupService implements PickupIService {
         Order order=or.findById(IdOrder).get();
         User buyer=order.getBuyer();
         return buyer;
+    }
+
+    @Override
+    public Order getOrderByPickupId(Long idPickup) {
+        return pr.getOrderByPickupId(idPickup);
+    }
+
+    @Override
+    public User getBuyerByPickupId(Long idPickup) {
+        return null;
     }
 
     @Scheduled(cron = "* * * 27 * *")

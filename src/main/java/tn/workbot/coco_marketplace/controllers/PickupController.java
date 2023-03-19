@@ -58,8 +58,8 @@ public class PickupController {
     }
 
     @PutMapping("UpdatePickup")
-    public Pickup updatePickup(@RequestBody Pickup pickup) {
-        return pis.updatePickup(pickup);
+    public Pickup updatePickup(@RequestBody Pickup pickup, @RequestParam Long idPikup) {
+        return pis.updatePickup(pickup, idPikup);
     }
 
     @PostMapping("AssignPickupByOder")
@@ -379,17 +379,25 @@ public class PickupController {
     public Set<Store> RetrieveStoreOfUser() {
         return pis.RetrieveStoreOfUser();
     }
+
     @GetMapping("GetOrderById")
-    public Order GetOrderById(@RequestParam Long IdOrder){
+    public Order GetOrderById(@RequestParam Long IdOrder) {
         return pis.GetOrderById(IdOrder);
     }
+
     @GetMapping("GetShippingByOrder")
     public Shipping getShippingByOrder(@RequestParam Long IdOrder) {
         return pis.getShippingByOrder(IdOrder);
     }
+
     @GetMapping("GetBuyerByOrder")
     public User getBuyerByOrder(@RequestParam Long IdOrder) {
         return pis.getBuyerByOrder(IdOrder);
     }
+
+    @GetMapping("GetOrderByPickupId")
+    public Order getOrderByPickupId(@RequestParam Long idPickup) {
+        return pis.getOrderByPickupId(idPickup);
     }
+}
 
