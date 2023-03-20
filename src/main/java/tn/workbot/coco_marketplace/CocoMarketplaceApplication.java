@@ -16,7 +16,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @OpenAPIDefinition(info = @Info(title = "Coco Marketplace", version = "1.0", description = "workbot"))
 @SecurityScheme(name = "bearerAuth", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+
 public class CocoMarketplaceApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(CocoMarketplaceApplication.class, args);
     }
