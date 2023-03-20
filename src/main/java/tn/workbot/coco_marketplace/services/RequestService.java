@@ -103,7 +103,7 @@ public class RequestService implements RequestInterface {
         return rr.save(request1);    }
 
     @Override
-    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
+    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
         User u = pr.UserOfPickup(idPickup);
@@ -112,7 +112,7 @@ public class RequestService implements RequestInterface {
         i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
-        User user = ur.findById(idDeliveryMenFreelancer).get();
+        User user = ur.findById(3L).get();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
         request1.setDeliveryman(user);

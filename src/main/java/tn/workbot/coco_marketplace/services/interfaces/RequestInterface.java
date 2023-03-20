@@ -14,7 +14,7 @@ public interface RequestInterface {
     public List<Request> RetrieveRequests();
     public Request updateRequest(Request request);
     public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idPickup,Long idDeliveryMenAgency);
-    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup);
+    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idPickup);
 
     public Request assignRequesttoseller(Long idRequest,Long idSeller,String status,Long idPickup) throws IOException, InterruptedException, ApiException;
     public List<Request> retrieveRequestBySeller();

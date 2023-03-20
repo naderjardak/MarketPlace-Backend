@@ -46,8 +46,8 @@ public class RequestController   {
     }
 
     @PostMapping("assignRequestDeliveryMenFreelancerandPickup")
-    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idDeliveryMenFreelancer,@RequestParam Long idPickup) {
-        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idDeliveryMenFreelancer, idPickup);
+    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idPickup) {
+        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idPickup);
     }
     @PostMapping("assignRequesttoseller")
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
