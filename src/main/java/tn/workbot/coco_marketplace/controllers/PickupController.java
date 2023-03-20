@@ -399,5 +399,13 @@ public class PickupController {
     public Order getOrderByPickupId(@RequestParam Long idPickup) {
         return pis.getOrderByPickupId(idPickup);
     }
-}
+    @GetMapping("GetShippingByPickupId")
+    public Shipping getShippingByPickupId(@RequestParam Long idPickup) {
+        return pis.getShippingByPickupId(idPickup);
+    }
+    @GetMapping("GetBuyerByPickupId")
+    public User getBuyerByPickupId(@RequestParam Long idPickup) {
+        return pis.getBuyerByPickupId(idPickup);
+    }
+    }
 

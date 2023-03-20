@@ -816,7 +816,12 @@ public class PickupService implements PickupIService {
 
     @Override
     public User getBuyerByPickupId(Long idPickup) {
-        return null;
+        return pr.getUserByPickupId(idPickup);
+    }
+
+    @Override
+    public Shipping getShippingByPickupId(Long idPickup) {
+        return pr.getShippingByPickupId(idPickup);
     }
 
     @Scheduled(cron = "* * * 27 * *")

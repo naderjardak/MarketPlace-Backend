@@ -75,9 +75,9 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     }
 
     @Override
-    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idAgency,Long idPickup) {
+    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup) {
        //session el id mt3 agency
-        User u=ur.findById(idAgency).get();
+        User u=ur.findById(4L).get();
         Pickup p=pr.findById(idPickup).get();
         return admr.deliveryMenByAgency(u.getId(),p.getId());
     }

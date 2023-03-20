@@ -41,8 +41,8 @@ public class RequestController   {
     }
 
     @PostMapping("assignRequestDeliveryAgencyandPickup")
-    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idDeliveryAgency,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
-       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request, idDeliveryAgency,idPickup,idDeliveryMenAgency);
+    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
+       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request,idPickup,idDeliveryMenAgency);
     }
 
     @PostMapping("assignRequestDeliveryMenFreelancerandPickup")

@@ -160,6 +160,13 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select distinct o from Order o,Pickup p where p.order.id=o.id and p.id=:v1")
     public Order getOrderByPickupId(@Param("v1") Long idPickup);
+    @Query("select distinct sh from Shipping sh,Order o,Pickup p where p.order.id=o.id and o.shipping.id=sh.id and p.id=:v1")
+    public Shipping getShippingByPickupId(@Param("v1") Long idPickup);
+
+    @Query("select distinct u from User u,Order o,Pickup p where p.order.id=o.id and o.buyer.id=u.id and p.id=:v1")
+    public User getUserByPickupId(@Param("v1") Long idPickup);
+
+
 
 
 
