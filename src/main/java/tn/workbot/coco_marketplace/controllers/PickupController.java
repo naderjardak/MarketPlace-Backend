@@ -21,7 +21,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("Pickup")
+@RequestMapping("pickup")
 public class PickupController {
     @Autowired
     PickupIService pis;
@@ -103,8 +103,8 @@ public class PickupController {
     }
 
     @GetMapping("trakingbybuyer")
-    public Pickup trakingbybuyer(@RequestParam String codePickup, @RequestParam Long idBuyer) {
-        return pis.trakingbybuyer(codePickup, idBuyer);
+    public Pickup trakingbybuyer(@RequestParam String codePickup) {
+        return pis.trakingbybuyer(codePickup);
     }
 
     @GetMapping("trakingbyseller")

@@ -24,7 +24,7 @@ public interface PickupIService {
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException;
     public int test(Long id);
     public Pickup trakingbyseller(String codePickup);
-    public Pickup trakingbybuyer(String codePickup,Long idBuyer);
+    public Pickup trakingbybuyer(String codePickup);
     public List<Pickup> retrievePickupByDeliveryMenFreelancer();
     public List<Pickup> retrievePickupByAgence();
     public List<Pickup> retrievePickupByBranch(Long idbranch);
