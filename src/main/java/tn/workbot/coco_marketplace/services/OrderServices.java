@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
+import tn.workbot.coco_marketplace.Api.OrderTwilioService;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
@@ -90,6 +91,7 @@ public class OrderServices implements OrderInterface {
             order.setProductsWeightKg(0);
             if (order.getProductQuantities() == null) {
                 order.setProductQuantities(new ArrayList<>());
+                order.setPromotionCodeList(new ArrayList<>());
             }
         }
         Product product=productRepository.findById(productQuantity.getProduct().getId()).get();
@@ -108,8 +110,9 @@ public class OrderServices implements OrderInterface {
         {
             if((currentDate.after(promotionCode.getStartDate()) && currentDate.before(promotionCode.getEndtDate())))
             {
-                order.getPromotionCodeList().add(promotionCode);
-                sum = ((productQuantity.getProduct().getProductPriceBeforeDiscount() - productQuantity.getProduct().getPromotionCodes().get(0).getDiscountValue())) * productQuantity.getQuantity();
+                Product pr =productRepository.findById(productQuantity.getProduct().getId()).get();
+                sum = ((pr.getProductPriceBeforeDiscount() - pr.getPromotionCodes().get(0).getDiscountValue())) * productQuantity.getQuantity();
+
             } else
                 return false;
         }
@@ -124,6 +127,7 @@ public class OrderServices implements OrderInterface {
             order.setDeliveryPrice(60+(weight-10)*2);
 
         order=orderRepository.save(order);
+
         productQuantity.setOrder(order);
         productQuantityRepository.save(productQuantity);
         return true;
@@ -217,7 +221,7 @@ public class OrderServices implements OrderInterface {
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
             orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
             //Twilio mna7iha 3al flous
-            //OrderTwilioService.sendSMS(msg);
+            OrderTwilioService.sendSMS(msg);
             List<String> refList=orderRepository.reflist();
             String referance="";
             do{
@@ -237,7 +241,7 @@ public class OrderServices implements OrderInterface {
             orderRepository.save(order);
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" you have error in Payment with card please retry with a valid card.";
             //Twilio mna7iha 3al flous
-            //OrderTwilioService.sendSMS(msg);
+            OrderTwilioService.sendSMS(msg);
             return false;
         }
         orderRepository.save(order);
@@ -384,8 +388,7 @@ public class OrderServices implements OrderInterface {
             mark="%";
         }
         if(productFiltre == ProductFiltre.TOP_RATED)
-        { System.out.println("----------------------------- "+orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%"));
-            return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");}
+        { return orderRepository.researchProductTOPRATED(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");}
         if(productFiltre == ProductFiltre.ASCENDING_PRICE)
             return orderRepository.researchProductASCENDINGPRICE(maxPrix,minPrix,"%"+nameProduct+"%",categorie,"%"+mark+"%");
         if(productFiltre == ProductFiltre.DECREASING_PRICE)

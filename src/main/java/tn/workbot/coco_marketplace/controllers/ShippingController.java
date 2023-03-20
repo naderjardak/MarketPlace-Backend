@@ -15,13 +15,13 @@ public class ShippingController {
     ShippingInterface shippingInterface;
 
     @GetMapping("GetAllShippingsByUserId")
-    List<Shipping> getAllShippingsByUserID(Long idU){return shippingInterface.getAllShippingsByUserID(idU);}
+    List<Shipping> getAllShippingsByUserID(@RequestParam Long idU){return shippingInterface.getAllShippingsByUserID(idU);}
     @GetMapping("GetShippingById")
-    Shipping getShippingById(Long id){return shippingInterface.getShippingById(id);}
+    Shipping getShippingById(@RequestParam Long id){return shippingInterface.getShippingById(id);}
     @PostMapping("CreateNewShipping")
-    Shipping createShipping(Shipping shipping){return shippingInterface.createShipping(shipping);}
+    Shipping createShipping(@RequestBody Shipping shipping){return shippingInterface.createShipping(shipping);}
     @PutMapping("UpdateShippingAdresse")
-    Shipping updateShipping(Long id, Shipping shipping){return shippingInterface.updateShipping(id,shipping);}
+    Shipping updateShipping(@RequestParam Long id, @RequestBody Shipping shipping){return shippingInterface.updateShipping(id,shipping);}
     @DeleteMapping("DeleteShippingAdresse")
-    Boolean deleteShipping(Long id){return shippingInterface.deleteShipping(id);}
+    Boolean deleteShipping(@RequestParam Long id){return shippingInterface.deleteShipping(id);}
 }
