@@ -74,7 +74,7 @@ public class ProductController {
     //@ImplicitParam(name = "file", value = "File to upload", required = true, dataType = "java.io.File", paramType = "formData")
     public void mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws Exception {
 
-        User user = userInterface.GetById(1);
+        User user = userInterface.getUserById(1);
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
         XSSFSheet worksheet = workbook.getSheetAt(0);
         for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {

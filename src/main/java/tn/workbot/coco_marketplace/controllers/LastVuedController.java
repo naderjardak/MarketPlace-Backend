@@ -8,7 +8,7 @@ import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("orderLastVued")
 public class LastVuedController {
     @Autowired
     LastVuedInterface lastVuedInterface;

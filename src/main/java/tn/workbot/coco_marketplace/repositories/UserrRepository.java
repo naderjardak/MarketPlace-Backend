@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.repositories;
 
+import org.springframework.data.jpa.repository.Query;
 import tn.workbot.coco_marketplace.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,9 @@ public interface UserrRepository extends CrudRepository<User,Long> {
 
     User findUserByEmail(String email);
     User findByResetToken(String resetToken);
+
+    @Query("select u from User u where u.role='SELLER' group by u.city order by count(u)")
+    List<String> SellersGroupeByCityname();
 
 
 }

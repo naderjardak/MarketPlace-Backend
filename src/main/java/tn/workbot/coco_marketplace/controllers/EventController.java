@@ -11,7 +11,7 @@ import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Modirator")
+@RequestMapping("Modirator")
 public class EventController {
 
     @Autowired
