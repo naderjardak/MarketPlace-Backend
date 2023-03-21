@@ -43,4 +43,5 @@ public class OrderLogFile {
         logger.debug("Searching for products with criteria: maxPrix={}, minPrix={}, nameProduct={}, categorie={}, mark={}, productFiltre={}",
                 joinPoint.getArgs()[0], joinPoint.getArgs()[1], joinPoint.getArgs()[2], joinPoint.getArgs()[3], joinPoint.getArgs()[4], joinPoint.getArgs()[5]);
     }
+
 }

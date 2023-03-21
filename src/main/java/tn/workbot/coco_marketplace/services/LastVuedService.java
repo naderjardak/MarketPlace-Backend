@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.LastVued;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.User;
@@ -22,11 +23,13 @@ public class LastVuedService implements LastVuedInterface {
     UserrRepository userrRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    SessionService sessionService;
 
     @Override
     public void createNewVueOrAddNb(Long id) {
         //User Session Manager
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         Product product=productRepository.findById(id).get();
         LastVued lastVued=lastVuedRepository.findByUserAndProductVued(user,product);
         if (lastVued!=null)
@@ -45,13 +48,13 @@ public class LastVuedService implements LastVuedInterface {
 
     @Override
     public List<Product> afficherLastVued() {
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         return lastVuedRepository.allVuedBynbVued(user.getId());
     }
 
     @Override
     public void autoClearLastVued() {
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         List<LastVued> lastVuedList=lastVuedRepository.allListVuedByUser(user.getId());
         int i=0;
         for(LastVued lv :lastVuedList)

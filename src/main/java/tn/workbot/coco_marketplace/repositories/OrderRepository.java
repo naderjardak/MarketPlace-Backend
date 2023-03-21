@@ -32,20 +32,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("SELECT o from Order o where o.status='BASKET' and o.creationDate<:date" )
   List<Order> deleteOrderByStatusAndCreationDate(@Param("date") Date date);
 
-  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPriceBeforeDiscount<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.numberOfPurchase desc ")
+  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPriceBeforeDiscount<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie) order by p.numberOfPurchase desc ")
   List<Product> researchProductMOSTREQUESTED(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
-  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPriceBeforeDiscount<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.productPrice asc ")
+  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPriceBeforeDiscount<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie ) order by p.productPrice asc ")
   List<Product> researchProductASCENDINGPRICE(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
-  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie) order by p.productPrice desc ")
+  @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie) order by p.productPrice desc ")
   List<Product> researchProductDECREASINGPRICE(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
   @Query("SELECT p from Product p where p.productPriceBeforeDiscount>=:minPrix and p.productPriceBeforeDiscount<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie) order by p.rating desc ")
   List<Product> researchProductTOPRATED(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
   @OrderBy("creationDate desc")
-  @Query("SELECT p from Product p where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie or p.productCategory.category.name LIKE :categorie)")
+  @Query("SELECT p from Product p where p.productPrice>=:minPrix and p.productPrice<=:maxPrix and p.name LIKE :nameProduct and p.store.seller.BrandName LIKE :mark and (p.productCategory.name LIKE :categorie)")
   List<Product> researchProductNEWARRIVAL(@Param("maxPrix") float maxPrix ,@Param("minPrix") float minPrix ,@Param("nameProduct") String nameProduct,@Param("categorie") String categorie,@Param("mark") String mark);
 
   @Query("SELECT max(p.productPriceBeforeDiscount) from Product p")

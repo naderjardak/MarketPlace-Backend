@@ -49,7 +49,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement(
-                        session -> session
+                session -> session
 
                                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                                 .invalidSessionUrl("/logout?expired")

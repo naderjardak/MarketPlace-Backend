@@ -12,6 +12,7 @@ import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("/Event")
 public class EventController {
 
