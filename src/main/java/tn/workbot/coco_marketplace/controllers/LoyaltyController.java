@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 
 @RestController("loyalty")
 @RequestMapping("Loyalty")
+@PreAuthorize("hasAuthority('ROLE!!!')")
+
 public class LoyaltyController {
     @Autowired
     LoyaltyRepository loyaltyRepository;

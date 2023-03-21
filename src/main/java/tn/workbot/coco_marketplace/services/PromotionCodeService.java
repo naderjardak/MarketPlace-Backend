@@ -21,7 +21,9 @@ public class PromotionCodeService implements PromotionCodeInterface {
     ProductService productService;
 
     @Override
-    public PromotionCode create(PromotionCode p) {
+    public PromotionCode create(PromotionCode p, Long idProduct) {
+        Product product = productService.getById(idProduct);
+        p.setProduct(product);
         return promotionCodeRepository.save(p);
     }
 
@@ -37,8 +39,8 @@ public class PromotionCodeService implements PromotionCodeInterface {
 
     @Override
     public PromotionCode getById(Long id) {
-        if(promotionCodeRepository.findById(id).isPresent())
-                return promotionCodeRepository.findById(id).get();
+        if (promotionCodeRepository.findById(id).isPresent())
+            return promotionCodeRepository.findById(id).get();
 
         return new PromotionCode();
     }
@@ -49,9 +51,9 @@ public class PromotionCodeService implements PromotionCodeInterface {
     }
 
     @Override
-    public PromotionCode createAndAssignPromortionCodeToProduct(Long idp, String voucher , Date promotionCodeSatrDate, Date endDate, int discountValue){
-        PromotionCode promotionCode = promotionCodeRepository.findByVoucherAndStartDateAndDiscountValue(voucher, promotionCodeSatrDate,discountValue);
-            Product p=productService.getById(idp);
+    public PromotionCode createAndAssignPromortionCodeToProduct(Long idp, String voucher, Date promotionCodeSatrDate, Date endDate, int discountValue) {
+        PromotionCode promotionCode = promotionCodeRepository.findByVoucherAndStartDateAndDiscountValue(voucher, promotionCodeSatrDate, discountValue);
+        Product p = productService.getById(idp);
 
         if (promotionCode == null) {
             promotionCode = new PromotionCode();
@@ -62,6 +64,6 @@ public class PromotionCodeService implements PromotionCodeInterface {
         }
         //affect child to parent
         promotionCode.setProduct(p);
-        return  promotionCodeRepository.save(promotionCode);
+        return promotionCodeRepository.save(promotionCode);
     }
 }
