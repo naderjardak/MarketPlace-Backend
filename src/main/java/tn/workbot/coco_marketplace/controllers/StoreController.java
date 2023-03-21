@@ -22,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("store")
+@PreAuthorize("hasAuthority('SELLER')")
 @Slf4j
 public class StoreController {
 

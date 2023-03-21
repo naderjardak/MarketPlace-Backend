@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("SupplierRequest")
+@PreAuthorize("hasAuthority('SUPPLIER')")
 public class SupplierRequestController {
 
     @Autowired

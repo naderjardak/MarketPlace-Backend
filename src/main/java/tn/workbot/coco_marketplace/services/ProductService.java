@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
@@ -50,12 +51,17 @@ public class ProductService implements ProductInterface {
     @Autowired
     SupplierRequestRepository supplierRequestRepository;
 
+    @Autowired
+    SessionService sessionService;
+
     @Override
     public Product create(Product p, String storeName) throws Exception {
         if (p.getProductCategory() == null)
             throw new Exception("Missing Category");
-        //TODO : get user by session id
-        User user = userrRepository.findAll().iterator().next();
+
+        User user = sessionService.getUserBySession();
+        log.info(user.getId().toString());
+
         Store store = storeRepository.findByNameAndSeller(storeName, user);
         if (store == null)
             throw new Exception("Store not found");
@@ -144,18 +150,18 @@ public class ProductService implements ProductInterface {
     }
 
     @Override
-    public ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String suppStatus) {
+    public ByteArrayInputStream allSupplierRequestsOnProduct(Long id, String suppStatus) {
 
         Product product = productRepository.findById(id).get();
         List<SupplierRequest> supplierRequests = supplierRequestRepository.findSupplierRequestsByProductId(id);
-        if(suppStatus.equals("DELIVERED"))
-            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.DELIVERED)).toList();
-        if(suppStatus.equals("ACCEPTED"))
-            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.ACCEPTED)).toList();
-        if(suppStatus.equals("PENDING"))
-            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.WAITING_FOR_VALIDATION)).toList();
-        if(suppStatus.equals("REJECTED"))
-            supplierRequests=supplierRequests.stream().filter(s->s.getRequestStatus().equals(SupplierRequestStatus.REJECTED)).toList();
+        if (suppStatus.equals("DELIVERED"))
+            supplierRequests = supplierRequests.stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.DELIVERED)).toList();
+        if (suppStatus.equals("ACCEPTED"))
+            supplierRequests = supplierRequests.stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.ACCEPTED)).toList();
+        if (suppStatus.equals("PENDING"))
+            supplierRequests = supplierRequests.stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.WAITING_FOR_VALIDATION)).toList();
+        if (suppStatus.equals("REJECTED"))
+            supplierRequests = supplierRequests.stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.REJECTED)).toList();
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -242,7 +248,7 @@ public class ProductService implements ProductInterface {
     }
 
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "* * 8 * * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.SELLER);
         for (User user : userList) {
