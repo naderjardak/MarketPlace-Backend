@@ -3,11 +3,11 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.GoodFeelings;
 import tn.workbot.coco_marketplace.services.GoodFeelingsService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("GoodFeelings")
@@ -20,5 +20,20 @@ public class GoodFeelingsController {
     @PostMapping("addNewGoodFeelings")
     public void addNewGoodFeelings(GoodFeelings goodFeelings){
         goodFeelingsService.addNewGoodFeelings(goodFeelings);
+    }
+
+    @GetMapping("getAllGoodFeelings")
+    public List<GoodFeelings> getAllGoodFeelings(){
+        return goodFeelingsService.getAllGoodFeelings();
+    }
+
+    @PutMapping("updateGoodFeelings")
+    public void updateGoodFeelings(@RequestBody GoodFeelings goodFeelings){
+        goodFeelingsService.updateGoodFeelings(goodFeelings);
+    }
+
+    @DeleteMapping("deleteGoodFeelings")
+    public void deleteGoodFeelings(@RequestParam Long id){
+        goodFeelingsService.deleteGoodFeelings(id);
     }
 }

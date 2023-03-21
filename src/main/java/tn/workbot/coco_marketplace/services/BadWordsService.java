@@ -26,6 +26,11 @@ public class BadWordsService implements BadWordsInterface {
     }
 
     @Override
+    public void updateBadWords(BadWords badWords) {
+        badWordRepository.save(badWords);
+    }
+
+    @Override
     public String hideBadWords(String comment) {
 
 
@@ -52,5 +57,15 @@ public class BadWordsService implements BadWordsInterface {
         return modifiedComment;
     }
 
-
+    @Override
+    public void deleteBadWords(Long id) {
+        badWordRepository.deleteById(id);
     }
+
+    @Override
+    public List<BadWords> getAllBadWords() {
+        return badWordRepository.findAll();
+    }
+
+
+}

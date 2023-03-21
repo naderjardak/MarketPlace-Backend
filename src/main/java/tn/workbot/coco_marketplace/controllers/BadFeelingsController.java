@@ -3,11 +3,11 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.BadFeelings;
 import tn.workbot.coco_marketplace.services.BadFeelingsService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("BadFeelings")
@@ -17,7 +17,22 @@ public class BadFeelingsController {
     BadFeelingsService badFeelingsService;
 
     @PostMapping("addNewBadFeelings")
-    public void addNewBadFeelings(BadFeelings badFeelings){
+    public void addNewBadFeelings(@RequestBody BadFeelings badFeelings){
         badFeelingsService.addNewBadFeelings(badFeelings);
+    }
+
+    @PutMapping("updateBadFeelings")
+    public void updateBadFeelings(@RequestBody BadFeelings badFeelings){
+        badFeelingsService.updateBadFeelings(badFeelings);
+    }
+
+    @DeleteMapping("deleteBadFeelings")
+    public void deleteBadFeelings(@RequestParam Long id){
+        badFeelingsService.deleteBadFeelings(id);
+    }
+
+    @GetMapping("getAllBadFeelings")
+    public List<BadFeelings> getAllBadFeelings(){
+        return badFeelingsService.getAllBadFeelings();
     }
 }
