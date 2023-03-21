@@ -22,7 +22,7 @@ public class SessionService {
     // Get the user details from the authentication object
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-    // Get the user email from the user details object
+    /// Get the user email from the user details object
     String username = userDetails.getUsername();
 
     return userrRepository.findUserByEmail(username);

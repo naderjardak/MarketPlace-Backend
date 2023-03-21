@@ -212,6 +212,7 @@ public class PickupService implements PickupIService {
             pickup1.setCodePickup(code);
             //
             pickup1.setOrder(order);
+            pickup1.setShippingStatus(order.getPayment().toString());
             pickup1.setDateCreationPickup(LocalDateTime.now());
             // pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(storeer);
@@ -238,46 +239,12 @@ public class PickupService implements PickupIService {
                             pickup1.setCodePickup(code1);
                         }
                     }
+                    pickup1.setShippingStatus(order.getPayment().toString());
                     pickup1.setCodePickup(code);
                     pickup1.setSum(totalPrice);
                 }
 
-            }/* else {
-
-                pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
-                pickup1.setStatusPickupBuyer(StatusPickupBuyer.valueOf("PLACED"));
-
-                for (Pickup p : pickups) {
-                    if (p.getCodePickup() != code) {
-                        pickup1.setCodePickup(code);
-                    } else {
-                        int randomNumber1 = random.nextInt(100) + 100;
-                        String code1 = prefix + randomNumber + randomNumber1;
-                        pickup1.setCodePickup(code1);
-                    }
-                }
-                pickup1.setOrder(order);
-                pickup1.setCodePickup(code);
-                pickup1.setDateCreationPickup(LocalDateTime.now());
-                pickup1.setOrderOfTheSomeSeller(false);
-                pickup1.setStore(store2);
-                pr.save(pickup1);
-                List<Product> products = pr.productoforder(id, 1L);
-
-
-                for (Product product : products) {
-                    totalPrice += product.getProductPrice();
-                }
-                float sum = totalPrice;
-                pickup1.setSum(sum);
-
-                if (order.getPayment().equals(PaymentType.BANK_CARD)) {
-                    pickup1.setPayed(true);
-                } else {
-                    pickup1.setPayed(false);
-                }
             }
-            */
         }
         return pr.save(pickup1);
     }
