@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 
 @RequestMapping("/LastVued")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class LastVuedController {
     @Autowired
     LastVuedInterface lastVuedInterface;

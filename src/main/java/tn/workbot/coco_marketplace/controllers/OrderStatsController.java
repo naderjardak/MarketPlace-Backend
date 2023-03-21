@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("orderStats")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('MODIRATOR')")
 
 public class OrderStatsController {
     @Autowired

@@ -89,9 +89,9 @@ public class OrderServices implements OrderInterface {
     public Boolean AddProductToOrder(ProductQuantity productQuantity,String voucher) {
         System.out.println(productQuantity.getProduct().getId());
 
-        Order order = orderRepository.BasketExistance(3L);
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         if (order == null) {
-            User user=userrRepository.findById(3L).get();
+            User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
             order = new Order();
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
