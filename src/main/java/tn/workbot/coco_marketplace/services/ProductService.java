@@ -272,6 +272,14 @@ public class ProductService implements ProductInterface {
             }
         }
     }
+
+    @Override
+    public List<SupplierRequest> retriveRequestsByProduct(Long idProduct) {
+        return productRepository.findById(idProduct).get().getSupplierRequests()
+                .stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.WAITING_FOR_VALIDATION)).toList();
+
+    }
+
 }
 
 

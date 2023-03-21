@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("SupplierRequest")
-@PreAuthorize("hasAuthority('SUPPLIER')")
+@PreAuthorize("hasAuthority('SUPPLIER') || hasAuthority('ADMIN')")
 public class SupplierRequestController {
 
     @Autowired
@@ -48,10 +48,7 @@ public class SupplierRequestController {
         return supplierRequestInterface.retriveProductsOutOfStock();
     }
 
-    @GetMapping("retriveRequestsByProduct")
-    List<SupplierRequest> retriveRequestsByProduct(@RequestParam Long idProduct) {
-        return supplierRequestInterface.retriveRequestsByProduct(idProduct);
-    }
+
 
     @PutMapping("AcceptRequest")
     void accpetRequestBySeller(@RequestParam Long supplierRequestId) {

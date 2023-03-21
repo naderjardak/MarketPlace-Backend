@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("PromotionCode")
-@PreAuthorize("hasAuthority('SELLER')")
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')")
 
 public class PromortionCodeController {
 
