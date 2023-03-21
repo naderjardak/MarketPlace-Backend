@@ -22,7 +22,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("Pickup")
+@RequestMapping("Pickup")//
 @PreAuthorize("hasAuthority('ROLE!!!')")
 public class PickupController  {
     @Autowired
