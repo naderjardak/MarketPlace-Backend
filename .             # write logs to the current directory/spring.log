@@ -1,0 +1,59 @@
+2023-03-21 22:21:00.531  INFO 7868 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 17.0.6 on LAPTOP-DUBUDL29 with PID 7868 (D:\MarketplaceClean\MarketPlace-Backend\target\classes started by hp in D:\MarketplaceClean\MarketPlace-Backend)
+2023-03-21 22:21:00.536  INFO 7868 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-21 22:21:04.512  INFO 7868 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-21 22:21:04.767  INFO 7868 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 241 ms. Found 25 JPA repository interfaces.
+2023-03-21 22:21:06.596  INFO 7868 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-21 22:21:06.621  INFO 7868 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-21 22:21:06.622  INFO 7868 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-21 22:21:06.893  INFO 7868 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-21 22:21:06.894  INFO 7868 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6198 ms
+2023-03-21 22:21:07.131  INFO 7868 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-21 22:21:07.825  INFO 7868 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-21 22:21:08.476  INFO 7868 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-21 22:21:08.650  INFO 7868 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-21 22:21:09.107  INFO 7868 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-21 22:21:09.326  INFO 7868 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-21 22:21:20.520  INFO 7868 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-21 22:21:20.544  INFO 7868 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-21 22:21:24.645  WARN 7868 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-21 22:21:27.220  INFO 7868 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7a3c541e, org.springframework.security.web.session.ForceEagerSessionCreationFilter@2be89ba5, org.springframework.security.web.session.ForceEagerSessionCreationFilter@21b96db, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@408573b1, org.springframework.security.web.context.SecurityContextPersistenceFilter@76a13b12, org.springframework.security.web.header.HeaderWriterFilter@796d0b43, org.springframework.security.web.authentication.logout.LogoutFilter@643bef2a, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@380cd266, org.springframework.security.web.session.ConcurrentSessionFilter@1da2219c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@514f2b5c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6a40e660, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5b7600ec, org.springframework.security.web.session.SessionManagementFilter@57421e4e, org.springframework.security.web.access.ExceptionTranslationFilter@583b177a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@d833770]
+2023-03-21 22:21:32.396  INFO 7868 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-21 22:21:32.442  INFO 7868 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-21 22:21:32.490  INFO 7868 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 33.447 seconds (JVM running for 38.352)
+2023-03-21 22:21:32.658  INFO 7868 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-21 22:21:32.659  INFO 7868 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-21 22:21:32.664  INFO 7868 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2023-03-21 22:21:48.207  INFO 7868 --- [http-nio-8081-exec-4] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 6262 ms
+2023-03-21 22:22:52.843  INFO 7868 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-21 22:22:52.871  INFO 7868 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-21 22:22:52.955  INFO 7868 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-03-21 22:23:10.277  INFO 10556 --- [main] t.w.c.CocoMarketplaceApplication         : Starting CocoMarketplaceApplication using Java 17.0.6 on LAPTOP-DUBUDL29 with PID 10556 (D:\MarketplaceClean\MarketPlace-Backend\target\classes started by hp in D:\MarketplaceClean\MarketPlace-Backend)
+2023-03-21 22:23:10.283  INFO 10556 --- [main] t.w.c.CocoMarketplaceApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-03-21 22:23:13.439  INFO 10556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-03-21 22:23:13.765  INFO 10556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 313 ms. Found 25 JPA repository interfaces.
+2023-03-21 22:23:15.723  INFO 10556 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-03-21 22:23:15.759  INFO 10556 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-21 22:23:15.760  INFO 10556 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-21 22:23:16.154  INFO 10556 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-21 22:23:16.155  INFO 10556 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5692 ms
+2023-03-21 22:23:16.414  INFO 10556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-03-21 22:23:16.813  INFO 10556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-03-21 22:23:17.227  INFO 10556 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-03-21 22:23:17.397  INFO 10556 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.14.Final
+2023-03-21 22:23:17.846  INFO 10556 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-03-21 22:23:18.125  INFO 10556 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-03-21 22:23:24.630  INFO 10556 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-03-21 22:23:24.720  INFO 10556 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-03-21 22:23:27.075  WARN 10556 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-03-21 22:23:28.485  INFO 10556 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56ed9270, org.springframework.security.web.session.ForceEagerSessionCreationFilter@551fefe8, org.springframework.security.web.session.ForceEagerSessionCreationFilter@57421e4e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6affa355, org.springframework.security.web.context.SecurityContextPersistenceFilter@5a75bad4, org.springframework.security.web.header.HeaderWriterFilter@53d3ae89, org.springframework.security.web.authentication.logout.LogoutFilter@1f1b69bb, tn.workbot.coco_marketplace.configuration.JwtRequestFilter@3f0c2eff, org.springframework.security.web.session.ConcurrentSessionFilter@17da6e45, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@73136174, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ea24702, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@621a7d83, org.springframework.security.web.session.SessionManagementFilter@517f9ba3, org.springframework.security.web.access.ExceptionTranslationFilter@269a37bc, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4271960c]
+2023-03-21 22:23:30.827  INFO 10556 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2023-03-21 22:23:30.838  INFO 10556 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-03-21 22:23:30.850  INFO 10556 --- [main] t.w.c.CocoMarketplaceApplication         : Started CocoMarketplaceApplication in 21.873 seconds (JVM running for 23.865)
+2023-03-21 22:23:44.931  INFO 10556 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-03-21 22:23:44.933  INFO 10556 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-03-21 22:23:44.940  INFO 10556 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2023-03-21 22:23:48.993  INFO 10556 --- [http-nio-8081-exec-9] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 2582 ms
+2023-03-21 23:02:51.132  WARN 10556 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=17m33s830ms955µs200ns).
+2023-03-21 23:03:34.918  INFO 10556 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-03-21 23:03:34.920  INFO 10556 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-03-21 23:03:34.925  INFO 10556 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
