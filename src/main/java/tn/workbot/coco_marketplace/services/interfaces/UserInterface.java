@@ -9,9 +9,11 @@ public interface UserInterface {
 
     void  DeleteById(long id);
 
-    public User update(User u);
+   public User update(User u);
 
-    User GetById(long id);
+   public User updateUserByID(long id,User u);
+
+    User getUserById(long id);
 
     public List<User> GetAll();
     public void affectRoleAtUser(long idRole,long idUser);

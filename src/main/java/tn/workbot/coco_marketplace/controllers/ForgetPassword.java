@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import tn.workbot.coco_marketplace.Api.ResetTwilio;
 import tn.workbot.coco_marketplace.Dto.auth.AccountResponse;
 import tn.workbot.coco_marketplace.Dto.auth.ResetPassword;
 import tn.workbot.coco_marketplace.entities.User;
@@ -35,6 +36,8 @@ public class ForgetPassword {
     @Autowired
     UserrRepository userrRepository;
 
+
+
     PasswordEncoder passwordEncoder;
 
     {
@@ -52,7 +55,7 @@ public class ForgetPassword {
             String appUrl = request.getScheme() + "://" + request.getServerName();
             mailSenderService.sendEmail(resetPassword.getEmail(), "Forget password", "To reset your password, check your token :\n" +
                     "token=" + user.getResetToken());
-
+            ResetTwilio.sendSMS("To reset your password, check your token : token=" + user.getResetToken());
             accountResponse.setResult("User Found");
         } else {
             accountResponse.setResult("Forgot Password");

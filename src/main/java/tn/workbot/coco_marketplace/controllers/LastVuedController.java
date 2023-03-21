@@ -9,6 +9,7 @@ import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("/LastVued")
 @PreAuthorize("hasAuthority('ROLE!!!')")
 public class LastVuedController {

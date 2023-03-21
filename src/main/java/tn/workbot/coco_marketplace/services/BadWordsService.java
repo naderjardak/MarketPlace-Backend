@@ -44,7 +44,7 @@ public class BadWordsService implements BadWordsInterface {
         }
 
         if (shouldBanUser) {
-            User user = userService.GetById(1L);
+            User user = userService.getUserById(1L);
             user.setBanned(true);
             userService.update(user);
         }

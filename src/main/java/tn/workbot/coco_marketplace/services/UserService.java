@@ -14,6 +14,7 @@ import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService implements UserInterface {
@@ -26,7 +27,6 @@ public class UserService implements UserInterface {
 
 
     PasswordEncoder passwordEncoder;
-
 
 
     public UserService() {
@@ -51,7 +51,17 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public User GetById(long id) {
+    public User updateUserByID(long id,User u) {
+        User user1 = userRepository.findById(id).get();
+//        user1.setEmail(u.getEmail());
+//        user1.setFirstName(u.getFirstName());
+//        user1.setPhoneNumber(u.getPhoneNumber());
+//        user1.setPassword(u.getPassword());
+        return userRepository.save(user1);
+    }
+
+    @Override
+    public User getUserById(long id) {
         return userRepository.findById(id).get();
     }
 
@@ -72,9 +82,13 @@ public class UserService implements UserInterface {
     public User findByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
+
     public User findByResetToken(String resetToken) {
         return userRepository.findByResetToken(resetToken);
     }
+
+
+
 
 
 
