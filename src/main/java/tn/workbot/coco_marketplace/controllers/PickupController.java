@@ -17,11 +17,13 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("Pickup")
 @PreAuthorize("hasAuthority('ROLE!!!')")
-
 public class PickupController  {
     @Autowired
     PickupIService pis;
@@ -44,7 +46,7 @@ public class PickupController  {
 
     @DeleteMapping("RemovePickup")
     public void removePickup(@RequestParam Long id) {
-             pis.removePickup(id);
+        pis.removePickup(id);
     }
 
     @GetMapping("RetrievePickup")
@@ -56,18 +58,22 @@ public class PickupController  {
     public List<Pickup> RetrievePickups() {
         return pis.RetrievePickups();
     }
+
     @PutMapping("UpdatePickup")
-    public Pickup updatePickup(@RequestBody Pickup pickup){
-        return  pis.updatePickup(pickup);
+    public Pickup updatePickup(@RequestBody Pickup pickup, @RequestParam Long idPikup) {
+        return pis.updatePickup(pickup, idPikup);
     }
+
     @PostMapping("AssignPickupByOder")
     public Pickup AssignPickupByOder(@RequestBody Pickup pickup, @RequestParam Long id) {
         return pis.AssignPickupByOder(pickup, id);
     }
+
     @GetMapping("RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen")
-    public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(@RequestParam Long id){
-        return  pis.RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(id);
+    public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(@RequestParam Long id) {
+        return pis.RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(id);
     }
+
     @GetMapping("RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer")
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         return pis.RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
@@ -77,26 +83,32 @@ public class PickupController  {
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         return pis.RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat();
     }
+
     @PostMapping("AssignPickupByStoreAndOrder")
-    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup,@RequestParam Long id,@RequestParam Long IdSotre){
-        return pis.AssignPickupByStoreAndOrder(pickup,id,IdSotre);
+    public Pickup AssignPickupByStoreAndOrder(@RequestBody Pickup pickup, @RequestParam Long id, @RequestParam Long IdSotre) {
+        return pis.AssignPickupByStoreAndOrder(pickup, id, IdSotre);
     }
+
     @PutMapping("ModifyStatusOfPickupByDelivery")
-    public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status,@RequestParam Long idPickup) {
-        return pis.ModifyStatusOfPickupByDelivery(Status,idPickup);
+    public Pickup ModifyStatusOfPickupByDelivery(@RequestParam String Status, @RequestParam Long idPickup) {
+        return pis.ModifyStatusOfPickupByDelivery(Status, idPickup);
     }
+
     @PostMapping("calculateDeliveryTime")
     public Duration calculateDeliveryTime(@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return pis.calculateDeliveryTime(idPickup);
     }
+
     @PostMapping("hetcountt")
     public int test(@RequestParam Long id) {
         return pis.test(id);
     }
+
     @GetMapping("trakingbybuyer")
-    public Pickup trakingbybuyer(@RequestParam String codePickup,@RequestParam Long idBuyer) {
-        return pis.trakingbybuyer(codePickup, idBuyer);
+    public Pickup trakingbybuyer(@RequestParam String codePickup) {
+        return pis.trakingbybuyer(codePickup);
     }
+
     @GetMapping("trakingbyseller")
     public Pickup trakingbyseller(@RequestParam String codePickup) {
         return pis.trakingbyseller(codePickup);
@@ -110,24 +122,29 @@ public class PickupController  {
 
     @GetMapping("retrievePickupByAgence")
     public List<Pickup> retrievePickupByAgence() {
-        return  pis.retrievePickupByAgence();
+        return pis.retrievePickupByAgence();
     }
+
     @GetMapping("retrievePickupByBranch")
     public List<Pickup> retrievePickupByBranch(Long idbranch) {
         return pis.retrievePickupByBranch(idbranch);
     }
+
     @GetMapping("retrieveOrderByseller")
-    public List<Order> retrieveOrderByseller() {
-        return pis.retrieveOrderByseller();
+    public List<Order> retrieveOrderByseller(@RequestParam Long idStore) {
+        return pis.retrieveOrderByseller(idStore);
     }
+
     @GetMapping("retrievePickupBysellerAttent")
-    public List<Pickup> retrievePickupBysellerAttent(){
-              return pis.retrievePickupBysellerAttent();
+    public List<Pickup> retrievePickupBysellerAttent() {
+        return pis.retrievePickupBysellerAttent();
     }
+
     @GetMapping("countPickupSellerPendingToday")
     public int countPickupSellerPendingToday() {
         return pis.countPickupSellerPendingToday();
     }
+
     @GetMapping("countPickupSelleronTheWayToday")
     public int countPickupSelleronTheWayToday() {
         return pis.countPickupSelleronTheWayToday();
@@ -152,10 +169,12 @@ public class PickupController  {
     public int countPickupDeliveryManFreelancerPendingToday() {
         return pis.countPickupDeliveryManFreelancerPendingToday();
     }
+
     @GetMapping("countPickupAgencyToday")
     public int countPickupAgencyToday() {
         return pis.countPickupAgencyToday();
     }
+
     @GetMapping("countRequestRejectedDeliveryManFreelancerToday")
     public int countRequestRejectedDeliveryManFreelancerToday() {
         return pis.countRequestRejectedDeliveryManFreelancerToday();
@@ -175,28 +194,33 @@ public class PickupController  {
     public int countRequestApprovedAgencyToday() {
         return pis.countRequestApprovedAgencyToday();
     }
+
     @GetMapping("SumPricePickupDeliveredByFreelancerToday")
     public Float SumPricePickupDeliveredByFreelancerToday() {
         return pis.SumPricePickupDeliveredByFreelancerToday();
     }
+
     @GetMapping("SumPricePickupDeliveredByAgencyToday")
-    public Float SumPricePickupDeliveredByAgencyToday(){
+    public Float SumPricePickupDeliveredByAgencyToday() {
         return pis.SumPricePickupDeliveredByAgencyToday();
     }
 
     ////////////Pdf
     @GetMapping("pdfPick")
-    public  void pdfPick(HttpServletResponse response,@RequestParam Long idPickup) throws IOException {
-        pdf.pdfPickup(response,idPickup);
+    public void pdfPick(HttpServletResponse response, @RequestParam Long idPickup) throws IOException {
+        pdf.pdfPickup(response, idPickup);
     }
+
     @GetMapping("RetrieveProductByPickup")
     public List<Product> RetrieveProductByPickup(@RequestParam Long idPickup) {
         return pis.RetrieveProductByPickup(idPickup);
     }
+
     @GetMapping("/weather/{city}")
     public double getWeather(@PathVariable String city) {
         return weatherClient.getWeather(city);
     }
+
     //////////////stat Administrator
     @GetMapping("countAgencyAdministrator")
     public int countAgencyAdministrator() {
@@ -274,20 +298,23 @@ public class PickupController  {
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
         return pis.kilometreTotalConsommerParFreelancerDelivery();
     }
+
     //////FraisEssenceTotalParGearConsommer
     @GetMapping("FraisEssenceTotal")
     public String FraisEssenceTotal() throws Exception {
-        return  pis.FraisEssenceTotal();
+        return pis.FraisEssenceTotal();
     }
+
     //////////////calculer co2 and update in user entity
     @PostMapping("UpdateTheCO2ConsoFreelancer")
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
         return pis.UpdateTheCO2ConsoFreelancer();
     }
+
     /////////send mail if user fet el limite
     @GetMapping("LimiteCo2")
     public double LimiteCo2() throws IOException, InterruptedException, ApiException {
-     return  pis.LimiteCo2();
+        return pis.LimiteCo2();
     }
 
     ///////////predict som
@@ -297,36 +324,42 @@ public class PickupController  {
         double predictedTime = dp.predict((float) r);
         return ResponseEntity.ok(predictedTime);
     }
+
     @PostMapping("/predict/{Data}")
     public ResponseEntity<String> addDelivery() {
         dp.addDelivery();
         return ResponseEntity.ok("Delivery added successfully");
     }
+
     //////////predict co2
     @GetMapping("/predict/{co2}")
     public ResponseEntity<Double> predictco2(@RequestParam int gearage) {
-            // Predict the CO2 using the linear regression model
+        // Predict the CO2 using the linear regression model
         double predictedTime = dp.predictco2((float) gearage);
         return ResponseEntity.ok(predictedTime);
     }
+
     @PostMapping("/predict/{Dataco2}")
     public ResponseEntity<String> addUser() {
         dp.addUser();
         return ResponseEntity.ok("user added successfully");
     }
 
-     @GetMapping("RetrievePickupAgencyByRequestWithStatusRequestApproved")
-     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
+    @GetMapping("RetrievePickupAgencyByRequestWithStatusRequestApproved")
+    public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupAgencyByRequestWithStatusRequestApproved();
-     }
+    }
+
     @GetMapping("RetrievePickupFreelancerByRequestWithStatusRequestApproved")
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         return pis.RetrievePickupFreelancerByRequestWithStatusRequestApproved();
     }
+
     @GetMapping("/scrape")
     public String scrapePage(@RequestParam String url) throws Exception {
         return sce.scrapePage(url);
     }
+
     @GetMapping("/export")
     @ResponseBody
     public ResponseEntity<File> exportToXsl(@RequestParam String categoryUrl, @RequestParam String filename) {
@@ -344,5 +377,37 @@ public class PickupController  {
     }
 
 
-}
+    @GetMapping("RetrieveStoreOfUser")
+    public Set<Store> RetrieveStoreOfUser() {
+        return pis.RetrieveStoreOfUser();
+    }
+
+    @GetMapping("GetOrderById")
+    public Order GetOrderById(@RequestParam Long IdOrder) {
+        return pis.GetOrderById(IdOrder);
+    }
+
+    @GetMapping("GetShippingByOrder")
+    public Shipping getShippingByOrder(@RequestParam Long IdOrder) {
+        return pis.getShippingByOrder(IdOrder);
+    }
+
+    @GetMapping("GetBuyerByOrder")
+    public User getBuyerByOrder(@RequestParam Long IdOrder) {
+        return pis.getBuyerByOrder(IdOrder);
+    }
+
+    @GetMapping("GetOrderByPickupId")
+    public Order getOrderByPickupId(@RequestParam Long idPickup) {
+        return pis.getOrderByPickupId(idPickup);
+    }
+    @GetMapping("GetShippingByPickupId")
+    public Shipping getShippingByPickupId(@RequestParam Long idPickup) {
+        return pis.getShippingByPickupId(idPickup);
+    }
+    @GetMapping("GetBuyerByPickupId")
+    public User getBuyerByPickupId(@RequestParam Long idPickup) {
+        return pis.getBuyerByPickupId(idPickup);
+    }
+    }
 

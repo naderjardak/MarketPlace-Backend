@@ -45,9 +45,9 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct p from Pickup p,Request r ,User u ,AgencyBranch ab where r.pickup.id=p.id and r.Agency.id=u.id and u.id=:v4 and r.agencyDeliveryMan.agencyBranch.id=:v5 ")
     public List<Pickup> pickupOfBranch(@Param("v4") Long idAgency,@Param("v5")Long idBranch);
 
-    @Query("select distinct o from User u,Store s,ProductQuantity pq,Product p , Order o where s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
-    public  List<Order> orderOfstore(@Param("v4") Long idSeller);
-    @Query("select distinct p from Pickup p , Store s ,User u,Request r where p.store.seller.id=u.id and u.id=:id1 and r.pickup.id=p.id and r.requestStatus='PENDING'")
+    @Query("select distinct o from User u,Store s,ProductQuantity pq,Product p , Order o where s.id=p.store.id and s.id=:v5 and s.seller.id =u.id and u.id=:v4 and s.id=p.store.id and p.id=pq.product.id and o.id=pq.order.id")
+    public  List<Order> orderOfstore(@Param("v5") Long idStore,@Param("v4")Long idSeller);
+    @Query("select distinct p from Pickup p , Store s ,User u,Request r where p.store.seller.id=u.id and u.id=:id1 ")
     public  List<Pickup> PickupBySeller(@Param("id1") Long idSeller);
     @Query("select count(distinct r) from Request r,Pickup p where r.pickup.id=p.id and p.store.seller.id=:id1")
     public int countrequest(@Param("id1") Long idSellerr);
@@ -156,6 +156,17 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
 
     @Query("select distinct pp from Product pp,Store s,Pickup p where p.store.id=s.id and p.id=:v1 and pp.store.id=s.id")
     public List<Product> ProductBystorebyPickup(@Param("v1") Long idPickup);
+
+
+    @Query("select distinct o from Order o,Pickup p where p.order.id=o.id and p.id=:v1")
+    public Order getOrderByPickupId(@Param("v1") Long idPickup);
+    @Query("select distinct sh from Shipping sh,Order o,Pickup p where p.order.id=o.id and o.shipping.id=sh.id and p.id=:v1")
+    public Shipping getShippingByPickupId(@Param("v1") Long idPickup);
+
+    @Query("select distinct u from User u,Order o,Pickup p where p.order.id=o.id and o.buyer.id=u.id and p.id=:v1")
+    public User getUserByPickupId(@Param("v1") Long idPickup);
+
+
 
 
 

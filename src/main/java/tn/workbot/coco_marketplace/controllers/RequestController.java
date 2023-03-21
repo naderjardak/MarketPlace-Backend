@@ -43,13 +43,13 @@ public class RequestController   {
     }
 
     @PostMapping("assignRequestDeliveryAgencyandPickup")
-    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idDeliveryAgency,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
-       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request, idDeliveryAgency,idPickup,idDeliveryMenAgency);
+    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
+       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request,idPickup,idDeliveryMenAgency);
     }
 
     @PostMapping("assignRequestDeliveryMenFreelancerandPickup")
-    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idDeliveryMenFreelancer,@RequestParam Long idPickup) {
-        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idDeliveryMenFreelancer, idPickup);
+    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idPickup) {
+        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idPickup);
     }
     @PostMapping("assignRequesttoseller")
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {

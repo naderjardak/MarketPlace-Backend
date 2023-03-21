@@ -15,6 +15,7 @@ public class SessionService {
     UserrRepository userrRepository;
 
     public User getUserBySession(){
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     // Get the user details from the authentication object

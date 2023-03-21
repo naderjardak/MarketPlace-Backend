@@ -1,21 +1,19 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.google.maps.errors.ApiException;
-import tn.workbot.coco_marketplace.entities.Order;
-import tn.workbot.coco_marketplace.entities.Pickup;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.*;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 public interface PickupIService {
     public Pickup addPickup(Pickup pickup);
     public void removePickup(Long id);
     public Pickup RetrievePickup(Long id);
     public List<Pickup> RetrievePickups();
-    public Pickup updatePickup(Pickup pickup);
+    public Pickup updatePickup(Pickup pickup,Long idPikup);
     public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(Long id);
     public Pickup AssignPickupByOder(Pickup pickup,Long id);
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer();
@@ -26,11 +24,11 @@ public interface PickupIService {
     public Duration calculateDeliveryTime(Long idPickup) throws IOException, InterruptedException, ApiException;
     public int test(Long id);
     public Pickup trakingbyseller(String codePickup);
-    public Pickup trakingbybuyer(String codePickup,Long idBuyer);
+    public Pickup trakingbybuyer(String codePickup);
     public List<Pickup> retrievePickupByDeliveryMenFreelancer();
     public List<Pickup> retrievePickupByAgence();
     public List<Pickup> retrievePickupByBranch(Long idbranch);
-    public List<Order> retrieveOrderByseller();
+    public List<Order> retrieveOrderByseller(Long idStore);
     public List<Pickup> retrievePickupBysellerAttent();
     ///////////stat Seller
     public int countPickupSellerPendingToday();
@@ -78,6 +76,13 @@ public interface PickupIService {
 
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved();
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved();
+    public Set<Store> RetrieveStoreOfUser();
+    public Order GetOrderById(Long IdOrder);
+    public Shipping getShippingByOrder(Long IdOrder);
+    public User getBuyerByOrder(Long IdOrder);
+    public Order getOrderByPickupId(Long idPickup);
+    public User getBuyerByPickupId(Long idPickup);
+    public Shipping getShippingByPickupId(Long idPickup);
 
 
 
