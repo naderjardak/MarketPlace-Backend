@@ -7,17 +7,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
 import tn.workbot.coco_marketplace.Api.OrderTwilioService;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
@@ -30,6 +31,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -53,6 +55,10 @@ public class OrderServices implements OrderInterface {
     OrderMailSenderService orderMailSenderService;
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    SessionService sessionService;
+
 
     @Value("${stripe.api.key}")
     private String stripeApiKey;
@@ -81,10 +87,11 @@ public class OrderServices implements OrderInterface {
 
     @Override
     public Boolean AddProductToOrder(ProductQuantity productQuantity,String voucher) {
-        //Session Id (change 1L)
-        Order order = orderRepository.BasketExistance(1L);
+        System.out.println(productQuantity.getProduct().getId());
+
+        Order order = orderRepository.BasketExistance(3L);
         if (order == null) {
-            User user=userrRepository.findById(1L).get();
+            User user=userrRepository.findById(3L).get();
             order = new Order();
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
@@ -140,8 +147,8 @@ public class OrderServices implements OrderInterface {
         {
             return DeleteProductFromOrder(refProuct);
         }
-        //Session Id (change 1L)
-        Order order= orderRepository.BasketExistance(1L);
+
+        Order order= orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
         productQuantity.setQuantity(quantity);
         productQuantityRepository.save(productQuantity);
@@ -161,8 +168,7 @@ public class OrderServices implements OrderInterface {
 
     @Override
     public ProductQuantity DeleteProductFromOrder(String refProduct) {
-        //Session Id (change 1L)
-        Order order = orderRepository.BasketExistance(1L);
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
 
         if (productQuantity != null) {
@@ -181,15 +187,20 @@ public class OrderServices implements OrderInterface {
 
     @Override
     public Order AffectShippingAdressToOrder(Shipping shipping) {
-        Order order = orderRepository.BasketExistance(1L);
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         shipping=shippingRepository.save(shipping);
         order.setShipping(shipping);
         return orderRepository.save(order);
     }
     //===
+    @Autowired
+    UserDetailsService userDetailsService;
+
+
+
     @Override
     public Boolean endCommandProsess(PaymentType paymentType,Boolean cardPaiment) throws MessagingException {
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         Order order= orderRepository.BasketExistance(user.getId());
         if(order.getShipping()==null)
             return false;
@@ -258,7 +269,7 @@ public class OrderServices implements OrderInterface {
 
     @Override
     public float SummOrder() {
-        Order order = orderRepository.BasketExistance(1L);
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         List<PromotionCode> promotionCodeList = order.getPromotionCodeList();
         float sum = 0;
         if (promotionCodeList.size() == 0)
@@ -407,7 +418,7 @@ public class OrderServices implements OrderInterface {
         System.out.println(email);
         if(orderRepository.findUserByEmail(email)==1)
         {
-            User user=userrRepository.findById(1L).get();
+            User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
             Order order= orderRepository.BasketExistance(user.getId());
             order.setStatus(StatusOrderType.WAITING_FOR_PAYMENT);
             order.setPayment(PaymentType.CASH_ON_DELIVERY);

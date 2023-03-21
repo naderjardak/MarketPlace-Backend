@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Loyalty;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.LoyaltyRepository;
@@ -22,9 +23,12 @@ public class LoyaltyService implements LoyaltyInterface {
     @Autowired
     UserrRepository userrRepository;
 
+    @Autowired
+    SessionService sessionService;
+
     @Override
     public String generateLoyaltyLink() {
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         Loyalty  lt= loyaltyRepository.loyaltyExistance(user.getId());
         if(lt==null)
         {
@@ -62,7 +66,7 @@ public class LoyaltyService implements LoyaltyInterface {
     @Override
     public int claimedPaoints(){
         //Session Manager
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         return loyaltyRepository.pointsClaimed(user.getId());
     }
 }

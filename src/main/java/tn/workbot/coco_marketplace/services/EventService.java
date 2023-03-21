@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Event;
 import tn.workbot.coco_marketplace.entities.KeyWords;
 import tn.workbot.coco_marketplace.entities.Product;
@@ -37,11 +38,14 @@ public class EventService implements EventInterface {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    SessionService sessionService;
+
 
     @Override
     public void addEvent(Event event) {
         //session Manager id
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         event.setUser(user);
         eventRepository.save(event);
     }
@@ -78,7 +82,7 @@ public class EventService implements EventInterface {
     @Override
     public void updateEvent(Event event) {
         //session Manager id
-        User user=userrRepository.findById(1L).get();
+        User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
         event.setUser(user);
         Event event1=findEventByTitle(event.getTitle());
         if (event1!=null)
