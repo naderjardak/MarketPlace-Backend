@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.controllers;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("order")
+@PreAuthorize("hasAuthority('BUYER')")
 public class OrderController {
 
     @Autowired

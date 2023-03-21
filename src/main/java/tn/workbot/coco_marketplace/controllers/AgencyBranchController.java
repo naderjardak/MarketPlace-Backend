@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
@@ -11,7 +12,9 @@ import tn.workbot.coco_marketplace.services.interfaces.AgencyBranchIService;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("AgencyBranch")
+@PreAuthorize("hasAuthority('DELIVERYAGENCY') || hasAuthority('ADMIN')")
 public class AgencyBranchController {
     @Autowired
     AgencyBranchIService abi;

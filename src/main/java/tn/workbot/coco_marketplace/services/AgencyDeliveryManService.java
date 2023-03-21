@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -22,6 +23,8 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     UserrRepository ur;
     @Autowired
     PickupRepository pr;
+    @Autowired
+    SessionService sessionService;
 
     @Override
     public AgencyDeliveryMan addAgencyDeliveryMan(AgencyDeliveryMan agencyDeliveryMan) {
@@ -75,9 +78,9 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     }
 
     @Override
-    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idAgency,Long idPickup) {
+    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup) {
        //session el id mt3 agency
-        User u=ur.findById(idAgency).get();
+        User u=sessionService.getUserBySession();
         Pickup p=pr.findById(idPickup).get();
         return admr.deliveryMenByAgency(u.getId(),p.getId());
     }

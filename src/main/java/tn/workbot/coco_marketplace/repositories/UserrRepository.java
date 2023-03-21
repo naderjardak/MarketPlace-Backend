@@ -15,7 +15,9 @@ public interface UserrRepository extends CrudRepository<User,Long> {
 
     User findUserByEmail(String email);
     User findByResetToken(String resetToken);
+
     @Query("select u from User u where u.role='SELLER' group by u.city order by count(u)")
-    List<User> SellersGroupeByCityname();
+    List<String> SellersGroupeByCityname();
+
 
 }

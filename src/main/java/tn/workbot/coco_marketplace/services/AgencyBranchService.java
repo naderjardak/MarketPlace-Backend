@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Request;
@@ -25,6 +26,8 @@ public class AgencyBranchService implements AgencyBranchIService {
     RequestRepository rr;
     @Autowired
     AgencyDeliveryManRepository admr;
+    @Autowired
+    SessionService sessionService;
 
     @Override
     public AgencyBranch addAgencyBranch(AgencyBranch agencyBranch) {
@@ -58,8 +61,8 @@ public class AgencyBranchService implements AgencyBranchIService {
 
     @Override
     public List<AgencyBranch> retrievethebranchesofeachagency() {
-        User user1 = user.findById(1L).get();
-        List<AgencyBranch> agencyBranches = user1.getAgencyBranches();
+        User u=sessionService.getUserBySession();
+        List<AgencyBranch> agencyBranches = u.getAgencyBranches();
 
         return agencyBranches;
     }

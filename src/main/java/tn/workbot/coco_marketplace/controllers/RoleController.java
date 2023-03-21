@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
@@ -8,6 +9,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("Role")
+@PreAuthorize("hasAuthority('ADMIN')")
+
 public class RoleController {
     @Autowired
 

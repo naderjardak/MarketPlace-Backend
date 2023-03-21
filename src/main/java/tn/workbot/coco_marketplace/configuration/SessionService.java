@@ -15,14 +15,16 @@ public class SessionService {
     UserrRepository userrRepository;
 
     public User getUserBySession(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Get the user details from the authentication object
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Get the user email from the user details object
-        String username = userDetails.getUsername();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return userrRepository.findUserByEmail(username);
+    // Get the user details from the authentication object
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+    // Get the user email from the user details object
+    String username = userDetails.getUsername();
+
+    return userrRepository.findUserByEmail(username);
     }
 }

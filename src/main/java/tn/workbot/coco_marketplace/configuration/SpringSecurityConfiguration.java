@@ -51,10 +51,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement(
                 session -> session
 
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/logout?expired")
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true));
+                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                                .invalidSessionUrl("/logout?expired")
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -79,4 +79,3 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 }
-

@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Event;
 import tn.workbot.coco_marketplace.entities.KeyWords;
@@ -11,13 +12,15 @@ import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("Modirator")
+
+@RequestMapping("/Event")
 public class EventController {
 
     @Autowired
     EventInterface eventInterface;
 
     @PostMapping("addEvent")
+    @PreAuthorize("hasAuthority('MODERATOR') || hasAuthority('ADMIN')")
     public void addEvent(@RequestBody Event event){eventInterface.addEvent(event);}
 
     @GetMapping("findEventByTitle")

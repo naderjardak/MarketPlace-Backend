@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Shipping;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("buyerShipping")
+@PreAuthorize("hasAuthority('BUYER')")
+
 public class ShippingController {
     @Autowired
     ShippingInterface shippingInterface;

@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
@@ -12,6 +13,8 @@ import java.util.Optional;
 @RestController
 
 @RequestMapping("AgencyDeliveryMan")
+@PreAuthorize("hasAuthority('DELIVERYMEN') || hasAuthority('ADMIN')")
+
 public class AgencyDeliveryManController  {
     @Autowired
     AgencyDeliveryManIService ad;
@@ -43,7 +46,7 @@ public class AgencyDeliveryManController  {
         return ad.AssignAgencyDeliveryManByBranch(agencyDeliveryMan,Id);
     }
     @GetMapping("RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen")
-    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idAgency,Long idPickup) {
-        return ad.RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(idAgency, idPickup);
+    public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup) {
+        return ad.RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(idPickup);
     }
     }
