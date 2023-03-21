@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("order")
-@PreAuthorize("hasAuthority('BUYER')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class OrderController {
 
     @Autowired

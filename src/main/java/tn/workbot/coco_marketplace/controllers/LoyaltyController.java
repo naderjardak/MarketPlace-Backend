@@ -12,9 +12,9 @@ import tn.workbot.coco_marketplace.services.interfaces.LoyaltyInterface;
 
 import java.time.LocalDateTime;
 
-@RestController("loyalty")
+@RestController
 @RequestMapping("Loyalty")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 
 public class LoyaltyController {
     @Autowired
