@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
+import tn.workbot.coco_marketplace.Api.PickupTwilio;
 import tn.workbot.coco_marketplace.entities.ClaimSav;
 
 
@@ -36,6 +37,8 @@ public class ClaimSavService implements ClaimSavInterface {
 
     @Autowired
     MailSenderService mailSenderService;
+
+
 
     @Override
     public List<ClaimSav> getAllClaims() {
@@ -95,9 +98,11 @@ public class ClaimSavService implements ClaimSavInterface {
         }
 
         claimSav.setStatus(newStatus);
-        //String subject = "";
-        //String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim has been updated successfully you will recieve a message when your claim is treated, Thank you";
-        //mailSenderService.sendEmail(user.getEmail(),subject,message);
+        User user = ur.findById(1L).get();
+        String subject = "";
+        String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim status is "+newStatus+"  Thank you";
+        mailSenderService.sendEmail(user.getEmail(),subject,message);
+        PickupTwilio.sendSMS(message);
         crp.save(claimSav);
     }
 

@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Review;
+import tn.workbot.coco_marketplace.entities.enmus.ReviewEmotionStatus;
 import tn.workbot.coco_marketplace.services.ReviewService;
 
 import java.util.List;
@@ -48,8 +49,8 @@ public class ReviewController {
 
 
     @GetMapping("ClassifyReviewByDateAndEmotions")
-    public List<Review> ClassifyReviewsByDateAndEmotons(){
-        return reviewService.ClassifyReviewsByDateAndEmotons();
+    public List<Review> ClassifyReviewsByDateAndEmotons(@RequestParam ReviewEmotionStatus emotion){
+        return reviewService.ClassifyReviewsByDateAndEmotons(emotion);
     }
 
 
