@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Request;
@@ -46,6 +47,8 @@ public class RequestService implements RequestInterface {
     private JavaMailSender javaMailSender;
     @Autowired
     private TemplateEngine templateEngine;
+    @Autowired
+    SessionService sessionService;
 
     @Override
     public Request addRequest(Request request) {
@@ -78,7 +81,7 @@ public class RequestService implements RequestInterface {
     public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idPickup, Long idDeliveryMenAgency) {
 
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
-        User user = ur.findById(4L).get();
+        User user=sessionService.getUserBySession();
         Request request1 = rr.save(request);
 
         //eli fou9o sessionManger
@@ -112,7 +115,7 @@ public class RequestService implements RequestInterface {
         i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
-        User user = ur.findById(3L).get();
+        User user=sessionService.getUserBySession();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
         request1.setDeliveryman(user);
@@ -172,11 +175,11 @@ public class RequestService implements RequestInterface {
     }
 
     @Override
-    public Request assignRequesttoseller(Long idRequest, Long idSeller, String status, Long idPickup) throws IOException, InterruptedException, ApiException {
+    public Request assignRequesttoseller(Long idRequest, String status, Long idPickup) throws IOException, InterruptedException, ApiException {
         Request request = rr.findById(idRequest).get();
         Pickup pickup=pr.findById(idPickup).get();
         //session manager el idmt3 seller bech njibo el id mt3 el pickup wel request mel url wel status yda5elha houwa
-        User seller = ur.findById(idSeller).get();
+        User seller=sessionService.getUserBySession();
         List<Request> requestsPending = new ArrayList<>();
         //bech njib el request eli saro el kol 3al pickup haki bech kif ya5tar anahi bech ylivreha ytsetaw e yetsetaw el ba9i reject auto
         requestsPending.addAll(rr.verifier2(idPickup));
@@ -201,7 +204,8 @@ public class RequestService implements RequestInterface {
     @Override
     public List<Request> retrieveRequestBySeller() {
         //session manager variable idseller
-        return rr.retrieveRequestBystore(2L);
+        User u=sessionService.getUserBySession();
+        return rr.retrieveRequestBystore(u.getId());
     }
 
     @Override
