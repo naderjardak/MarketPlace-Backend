@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
@@ -8,7 +9,9 @@ import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
 import java.util.List;
 
 @RestController
-@RequestMapping("orderLastVued")
+
+@RequestMapping("/LastVued")
+@PreAuthorize("hasAuthority('ROLE!!!')")
 public class LastVuedController {
     @Autowired
     LastVuedInterface lastVuedInterface;

@@ -33,6 +33,7 @@ public class Pickup implements Serializable {
     private int nbRequest;
     private String deliveryTimeInHoursBuyer;
     private String deliveryTimeInHoursSeller;
+    private String secondPhoneNumber;
     @Enumerated(EnumType.STRING)
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)

@@ -47,25 +47,9 @@ class ProductServiceTest {
     private SupplierRequestRepository supplierRequestRepository;
 
 
-    //    @MockBean
-//    private UserrRepository userrRepositoryMock;
     @MockBean
     private OrderMailSenderService mailSenderService;
 
-    //    @BeforeEach
-//    public void initTest() {
-//        User user = new User();
-//        user.setFirstName("test");
-//        userrRepository.save(user);
-//
-//        Store store = new Store();
-//        store.setName("STORE TEST");
-//        store.setSeller(user);
-//
-//        storeRepository.save(store);
-//
-//    }
-//
     @AfterEach
     public void afterEachTest() {
         productRepository.deleteAll();
@@ -75,7 +59,6 @@ class ProductServiceTest {
 
 
     }
-
 
     @Test
     void shouldCreate() throws Exception {

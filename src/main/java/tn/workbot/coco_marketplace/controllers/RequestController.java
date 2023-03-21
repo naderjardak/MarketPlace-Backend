@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("RequestController")
+@PreAuthorize("hasAuthority('ROLE!!!')")
 public class RequestController   {
     @Autowired
     RequestInterface ri;
@@ -41,13 +43,13 @@ public class RequestController   {
     }
 
     @PostMapping("assignRequestDeliveryAgencyandPickup")
-    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idDeliveryAgency,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
-       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request, idDeliveryAgency,idPickup,idDeliveryMenAgency);
+    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
+       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request,idPickup,idDeliveryMenAgency);
     }
 
     @PostMapping("assignRequestDeliveryMenFreelancerandPickup")
-    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idDeliveryMenFreelancer,@RequestParam Long idPickup) {
-        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idDeliveryMenFreelancer, idPickup);
+    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idPickup) {
+        return ri.assignRequestDeliveryMenFreelancerandPickup(request, idPickup);
     }
     @PostMapping("assignRequesttoseller")
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {

@@ -175,8 +175,8 @@ public class ReviewService implements ReviewInterface {
     }
 
     @Override
-    public List<Review> ClassifyReviewsByDateAndEmotons() {
-        return rvp.ClassifyReviewsByDateAndEmotons();
+    public List<Review> ClassifyReviewsByDateAndEmotons(ReviewEmotionStatus emotion) {
+        return rvp.ClassifyReviewsByDateAndEmotons(emotion);
     }
 
 
