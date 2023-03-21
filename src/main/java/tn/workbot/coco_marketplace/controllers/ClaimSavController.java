@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.ClaimSav;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("claims")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('TECHNICALSUPPORT')")
 public class ClaimSavController {
 
     @Autowired

@@ -1,11 +1,9 @@
 package tn.workbot.coco_marketplace.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,16 +20,15 @@ public class PromotionCode {
     private Long id;
 
     private String voucher;
-
+    //  percentage
+    private int discountValue;
     @Temporal(TemporalType.DATE)
     private Date startDate;
     @Temporal(TemporalType.DATE)
     private Date EndtDate;
 
     @ManyToOne
-    @JsonIgnore
     private Product product;
 
-    //  percentage
-    private int discountValue;
+
 }
