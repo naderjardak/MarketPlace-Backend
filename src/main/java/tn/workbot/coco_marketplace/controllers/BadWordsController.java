@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import tn.workbot.coco_marketplace.services.BadWordsService;
 
 @RestController
 @RequestMapping("BadWords")
+@PreAuthorize("hasAuthority('ADMIN')")
+
 public class BadWordsController {
 
     @Autowired

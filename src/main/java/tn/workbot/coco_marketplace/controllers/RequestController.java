@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.controllers;
 
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("RequestController")
+@PreAuthorize("hasAuthority('ROLE!!!')")
 public class RequestController   {
     @Autowired
     RequestInterface ri;

@@ -4,6 +4,7 @@ import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.Api.*;
 import tn.workbot.coco_marketplace.entities.*;
@@ -21,8 +22,9 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("pickup")
-public class PickupController {
+@RequestMapping("Pickup")
+@PreAuthorize("hasAuthority('ROLE!!!')")
+public class PickupController  {
     @Autowired
     PickupIService pis;
     @Autowired
