@@ -16,6 +16,8 @@ import org.webjars.NotFoundException;
 import tn.workbot.coco_marketplace.Api.OpenWeatherMapClient;
 import tn.workbot.coco_marketplace.Api.PickupTwilio;
 import tn.workbot.coco_marketplace.Api.ScraperEssence;
+import tn.workbot.coco_marketplace.Dto.auth.NewPassword;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.*;
 import tn.workbot.coco_marketplace.repositories.*;
@@ -27,10 +29,7 @@ import java.text.DecimalFormat;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PickupService implements PickupIService {
@@ -54,6 +53,12 @@ public class PickupService implements PickupIService {
     PickupTwilio pickupTwilio;
     @Autowired
     ScraperEssence se;
+    @Autowired
+    ShippingRepository shippingRepository;
+    @Autowired
+    SessionService sessionService;
+
+
 
 
     @Override
@@ -71,7 +76,7 @@ public class PickupService implements PickupIService {
             } else {
                 int randomNumber1 = random.nextInt(100) + 100;
                 String code1 = prefix + randomNumber + randomNumber1;
-                pickup.setCodePickup(code1);
+                pickup.setCodePickup(code1);//
             }
         }
         pickup.setCodePickup(code);
@@ -103,9 +108,12 @@ public class PickupService implements PickupIService {
     }
 
     @Override
-    public Pickup updatePickup(Pickup pickup) {
+    public Pickup updatePickup(Pickup pickup,Long idPikup) {
+         Pickup pickup1=pr.findById(idPikup).get();
+         pickup.setOrder(pickup1.getOrder());
+         pickup.setStore(pickup1.getStore());
         return pr.save(pickup);
-    }/**/
+    }
 
     @Override
     public List<Pickup> RetrievePickupsByGovernoratBetweenPickupAndStoreAndDeliveryAgencyMen(Long id) {
@@ -123,7 +131,8 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupsByGovernoratBetweenStoreAndDeliveryMenFreelancer() {
         //HADHI session variable
-        User u = ur.findById(3L).get();
+        User u=sessionService.getUserBySession();
+
         double a = openWeatherMapClient.getWeather(u.getGovernorate());
         List<Store> store = (List<Store>) sr.findAll();
         List<Store> storesInSameGovernorate = sr.findByGovernorate(u.getGovernorate());
@@ -149,28 +158,30 @@ public class PickupService implements PickupIService {
     }
 
 
+
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         //sessionManager Variable
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
-        ArrayList<Pickup> store = new ArrayList<>();
+        Set<Pickup> pickups = new HashSet<>(); // use Set instead of ArrayList
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {
-                    store.addAll(s.getPickups());
+                    pickups.addAll(s.getPickups()); // use addAll instead of add
                 }
             }
         }
-        return store;
+        return new ArrayList<>(pickups); // convert Set to ArrayList
     }
 
     @Override
     public Pickup AssignPickupByStoreAndOrder(Pickup pickup, Long id, Long IdSotre) {
         //Variable Of Session Manager
-        Store store2 = pr.storeoforder(IdSotre, id, 1L);
+        User u=sessionService.getUserBySession();
+        Store store2 = pr.storeoforder(IdSotre, id, u.getId());
         Store storeer = sr.findById(IdSotre).get();
         Pickup pickup1 = pr.save(pickup);
         Order order = or.findById(id).get();
@@ -181,8 +192,8 @@ public class PickupService implements PickupIService {
         String code = prefix + randomNumber;
         pr.countstoreorder(id);
         float totalPrice = 0;
-        List<Product> productList = pr.productOfTheStoreById(IdSotre, id, 1L);
-        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(IdSotre, id, 1L);
+        List<Product> productList = pr.productOfTheStoreById(IdSotre, id, u.getId());
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(IdSotre, id, u.getId());
         if (pr.countstoreorder(id) == 1) {
 
             pickup1.setStatusPickupSeller(StatusPickupSeller.valueOf("PICKED"));
@@ -360,48 +371,62 @@ public class PickupService implements PickupIService {
     @Override
     public Pickup trakingbyseller(String codePickup) {
         //session varaible
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.trakingS(codePickup, u.getId());
     }
 
     @Override
-    public Pickup trakingbybuyer(String codePickup, Long idBuyer) {
+    public Pickup trakingbybuyer(String codePickup) {
         //idBuyer mel session manager
-        return pr.trakingB(codePickup, idBuyer);
+        User u=sessionService.getUserBySession();
+        return pr.trakingB(codePickup, u.getId());
     }
 
     @Override
     public List<Pickup> retrievePickupByDeliveryMenFreelancer() {
         //session manager
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.pickupOfDeliveryMenFreelancer(u.getId());
     }
 
     @Override
     public List<Pickup> retrievePickupByAgence() {
         //session Manager Variable
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.pickupOfAgency(u.getId());
     }
 
     @Override
     public List<Pickup> retrievePickupByBranch(Long idbranch) {
         //session manager mt3 el agence
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.pickupOfBranch(u.getId(), idbranch);
     }
 
     @Override
-    public List<Order> retrieveOrderByseller() {
-        //session manager idseller
-        User u = ur.findById(1L).get();
-        return pr.orderOfstore(u.getId());
+    public List<Order> retrieveOrderByseller(Long idStore) {
+        User u=sessionService.getUserBySession();
+        List<Pickup> pickups = (List<Pickup>) pr.findAll();
+        List<Order> orders = pr.orderOfstore(idStore, u.getId());
+        List<Order> finalOrders = new ArrayList<>();
+        for (Order order : orders) {
+            boolean hasPickup = false;
+            for (Pickup pickup : pickups) {
+                if (pickup.getOrder().getId().equals(order.getId())) {
+                    hasPickup = true;
+                    break;
+                }
+            }
+            if (!hasPickup) {
+                finalOrders.add(order);
+            }
+        }
+        return finalOrders;
     }
-
     @Override
     public List<Pickup> retrievePickupBysellerAttent() {
         /////session manager
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.PickupBySeller(u.getId());
     }
 
@@ -409,84 +434,84 @@ public class PickupService implements PickupIService {
     @Override
     public int countPickupSellerPendingToday() {
         //Session Manager idSeller
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupSellerPendingToday(u.getId());
     }
 
     @Override
     public int countPickupSelleronTheWayToday() {
         //Session Manager idSeller
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupSelleronTheWayToday(u.getId());
     }
 
     @Override
     public int countPickupSellerDeliveredToday() {
         //Session Manager idSeller
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupSellerDeliveredToday(u.getId());
     }
 
     @Override
     public int countPickupSellerReturnToday() {
         //Session Manager idSeller
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupSellerReturnToday(u.getId());
     }
 
     @Override
     public int countPickupSellerRefundedToday() {
         //Session Manager idSeller
-        User u = ur.findById(1L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupSellerRefundedToday(u.getId());
     }
 
     @Override
     public int countPickupDeliveryManFreelancerPendingToday() {
         //Session Manager ManFreelancer
-        User u = ur.findById(3L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupDeliveryManFreelancerPendingToday(u.getId());
     }
 
     @Override
     public int countPickupAgencyToday() {
         //Session Manager Agency
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.countPickupAgencyToday(u.getId());
     }
 
     @Override
     public int countRequestRejectedDeliveryManFreelancerToday() {
         //Session Manager DeliveryManFreelancer
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.countRequestRejectedDeliveryManFreelancerToday(u.getId());
     }
 
     @Override
     public int countRequestApprovedDeliveryManFreelancerToday() {
         //Session Manager DeliveryManFreelancer
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.countRequestApprovedDeliveryManFreelancerToday(u.getId());
     }
 
     @Override
     public int countRequestRejectedAgencyToday() {
         //Session Manager Agency
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.countRequestRejectedAgencyToday(u.getId());
     }
 
     @Override
     public int countRequestApprovedAgencyToday() {
         //Session Manager Agency
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         return pr.countRequestApprovedAgencyToday(u.getId());
     }
 
     @Override
     public Float SumPricePickupDeliveredByFreelancerToday() {
         //Session Manager Agency
-        User u = ur.findById(3L).get();
+        User u=sessionService.getUserBySession();
         List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.SumPricePickupDeliveredByFreelancerToday(u.getId()));
         Float sum = Float.valueOf(0);
@@ -499,7 +524,7 @@ public class PickupService implements PickupIService {
     @Override
     public Float SumPricePickupDeliveredByAgencyToday() {
         //Session Manager Agency
-        User u = ur.findById(4L).get();
+        User u=sessionService.getUserBySession();
         List<Pickup> pickups = new ArrayList<>();
         pickups.addAll(pr.SumPricePickupDeliveredByAgencyToday(u.getId()));
         Float sum = Float.valueOf(0);
@@ -635,7 +660,7 @@ public class PickupService implements PickupIService {
     @Override
     public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
         //session manager idUser
-        User u = ur.findById(3L).get();
+        User u=sessionService.getUserBySession();
         List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
         List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
         float kiloSum = 0;
@@ -677,7 +702,7 @@ public class PickupService implements PickupIService {
     @Override
     public String FraisEssenceTotal() throws Exception {
         //sessionManager
-        User user = ur.findById(3L).get();
+        User user=sessionService.getUserBySession();
         Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
         double price = Float.valueOf(0);
         double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
@@ -709,7 +734,7 @@ public class PickupService implements PickupIService {
     @Override
     public double LimiteCo2() throws IOException, InterruptedException, ApiException {
         //sessionManager
-        User user = ur.findById(3L).get();
+        User user=sessionService.getUserBySession();
         double co2kilo = user.getCo2();
         if (co2kilo > 1200) {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -724,7 +749,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
-        User user = ur.findById(3L).get();
+        User user=sessionService.getUserBySession();
         Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
         double co2kilo = Float.valueOf(0);
 
@@ -746,15 +771,63 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupAgencyByRequestWithStatusRequestApproved() {
         //sessionManager
-        User agency = ur.findById(1L).get();
-        return pr.ListePickupByStatusAPPROVEDRequest(agency.getId());
+        User u=sessionService.getUserBySession();
+        return pr.ListePickupByStatusAPPROVEDRequest(u.getId());
     }
 
     @Override
     public List<Pickup> RetrievePickupFreelancerByRequestWithStatusRequestApproved() {
         //sessionManager
-        User freelancer = ur.findById(1L).get();
-        return pr.ListePickupByStatusAPPROVEDRequestFreelancer(freelancer.getId());
+        User u=sessionService.getUserBySession();
+        return pr.ListePickupByStatusAPPROVEDRequestFreelancer(u.getId());
+    }
+
+    @Override
+    public Set<Store> RetrieveStoreOfUser() {
+        User u=sessionService.getUserBySession();
+        List<Store> stores = sr.findAll();
+        Set<Store> stores1 = new TreeSet<>((s1, s2) -> Long.compare(s1.getId(), s2.getId())); // Use TreeSet with custom Comparator
+        for (Store store : stores) {
+            if (store.getSeller().getId().equals(u.getId())) {
+                stores1.add(store);
+            }
+        }
+        return stores1;
+    }
+
+    @Override
+    public Order GetOrderById(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        return order;
+    }
+
+    @Override
+    public Shipping getShippingByOrder(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        Shipping shipping=order.getShipping();
+        return shipping;
+    }
+
+    @Override
+    public User getBuyerByOrder(Long IdOrder) {
+        Order order=or.findById(IdOrder).get();
+        User buyer=order.getBuyer();
+        return buyer;
+    }
+
+    @Override
+    public Order getOrderByPickupId(Long idPickup) {
+        return pr.getOrderByPickupId(idPickup);
+    }
+
+    @Override
+    public User getBuyerByPickupId(Long idPickup) {
+        return pr.getUserByPickupId(idPickup);
+    }
+
+    @Override
+    public Shipping getShippingByPickupId(Long idPickup) {
+        return pr.getShippingByPickupId(idPickup);
     }
 
     @Scheduled(cron = "* * * 27 * *")

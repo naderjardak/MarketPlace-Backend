@@ -18,7 +18,7 @@ import tn.workbot.coco_marketplace.services.auth.ApplicationUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -51,14 +51,14 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement(
                         session -> session
 
-               .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                                 .invalidSessionUrl("/logout?expired")
                                 .maximumSessions(1)
                                 .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-       http.logout(logout ->logout.deleteCookies("JESSIONID").invalidateHttpSession(true));
+        http.logout(logout ->logout.deleteCookies("JESSIONID").invalidateHttpSession(true));
 
     }
 
@@ -79,4 +79,3 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 }
-

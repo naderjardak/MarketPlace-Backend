@@ -75,10 +75,12 @@ public class RequestService implements RequestInterface {
     }
 
     @Override
-    public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idDeliveryAgency, Long idPickup, Long idDeliveryMenAgency) {
+    public Request assignRequestDeliveryAgencyandDeliverymenandPickup(Request request, Long idPickup, Long idDeliveryMenAgency) {
 
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
-        User user = ur.findById(idDeliveryAgency).get();
+        User user = ur.findById(4L).get();
+        Request request1 = rr.save(request);
+
         //eli fou9o sessionManger
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
@@ -91,19 +93,17 @@ public class RequestService implements RequestInterface {
         Pickup pickup = pr.findById(idPickup).get();
         if (rr.countrequestwithsomedeliverymen(idDeliveryMenAgency, idPickup) < 1) {
             if (pickup.getGovernorate().equals(agencyDeliveryMan.getGovernorate())) {
-                Request request1 = rr.save(request);
                 request1.setAgencyDeliveryMan(agencyDeliveryMan);
                 request1.setAgency(user);
                 request1.setPickup(pickup);
                 request1.setRequestDate(LocalDateTime.now());
-                return rr.save(request);
+
             }
         }
-        return null;
-    }
+        return rr.save(request1);    }
 
     @Override
-    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idDeliveryMenFreelancer, Long idPickup) {
+    public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
         User u = pr.UserOfPickup(idPickup);
@@ -112,7 +112,7 @@ public class RequestService implements RequestInterface {
         i = i + 1;
         p.setNbRequest(i);
         pr.save(p);
-        User user = ur.findById(idDeliveryMenFreelancer).get();
+        User user = ur.findById(3L).get();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
         request1.setDeliveryman(user);
