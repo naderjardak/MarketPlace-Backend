@@ -5,11 +5,10 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
 import tn.workbot.coco_marketplace.Api.StatStorePDF;
 import tn.workbot.coco_marketplace.entities.Model.auth.ConfirmationToken;
 import tn.workbot.coco_marketplace.entities.User;
@@ -18,8 +17,6 @@ import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.MailSenderService;
 import tn.workbot.coco_marketplace.services.UserService;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -27,7 +24,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
-//@RequestMapping("User")
+
+@RequestMapping("User")
 public class UserController {
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -69,28 +67,30 @@ public class UserController {
 
             return u;
         }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users")
     public List<User> GetAll() {
         return userInterface.GetAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user/{id}")
     User getUserById(@RequestParam long id) {
 
         return userInterface.getUserById(id);
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{id}")
     public User updateUserById(@RequestParam long id,@RequestBody User u) {
         return userInterface.updateUserByID( id,u);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     void DeleteById(@RequestParam long id) {
         userInterface.DeleteById(id);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update")
     public User update(@RequestBody User u) {
         return userInterface.update(u);
@@ -121,7 +121,7 @@ public class UserController {
         return  msg;
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/PDF_StatStore", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> PDF_RankGouvernoratByOrdersNumber() throws IOException {
         List<String> stats = userrRepository.SellersGroupeByCityname();
@@ -138,7 +138,7 @@ public class UserController {
                 .body(new InputStreamResource(bis));
     }
 
-    //test
+
  }
 
 
