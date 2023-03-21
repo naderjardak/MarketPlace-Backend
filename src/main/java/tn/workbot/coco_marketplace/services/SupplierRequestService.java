@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
 import tn.workbot.coco_marketplace.entities.User;
@@ -40,10 +41,12 @@ public class SupplierRequestService implements SupplierRequestInterface {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Autowired
+    SessionService sessionService;
 
     @Override
     public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
-        User user = userrRepository.findAll().iterator().next();
+        User user = sessionService.getUserBySession();
         Product product = productService.getById(productId);
 
         Random random = new Random();
@@ -122,12 +125,6 @@ public class SupplierRequestService implements SupplierRequestInterface {
         return productService.retrieveAll().stream().filter(p -> p.getQuantity() == 0).toList();
     }
 
-    @Override
-    public List<SupplierRequest> retriveRequestsByProduct(Long idProduct) {
-        return productService.getById(idProduct).getSupplierRequests()
-                .stream().filter(s -> s.getRequestStatus().equals(SupplierRequestStatus.WAITING_FOR_VALIDATION)).toList();
-
-    }
 
     @Override
     public void accpetRequestBySeller(Long supplierRequestId) {

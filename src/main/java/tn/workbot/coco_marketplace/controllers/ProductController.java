@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.SupplierRequest;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.StoreRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
@@ -28,7 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("product")
-@PreAuthorize("hasAuthority('SELLER')")
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')")
 @Tag(name = "Product Management")
 @Slf4j
 public class ProductController {
@@ -117,27 +118,8 @@ public class ProductController {
                 .body(new InputStreamResource(pdf));
     }
 
-//    @GetMapping("/qrcode")
-//    public ResponseEntity<InputStreamResource> downloadQRCodeImage(@RequestParam String text,
-//                                                                   @RequestParam(defaultValue = "200") int width,
-//                                                                   @RequestParam(defaultValue = "200") int height) {
-//        try {
-//            BufferedImage qrCodeImage = QRCodeGenerator.generateQRCodeImage(text, width, height);
-//
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ImageIO.write(qrCodeImage, "png", bos);
-//            byte[] imageBytes = bos.toByteArray();
-//
-//            InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(imageBytes));
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentDispositionFormData("attachment", "qrcode.png");
-//            headers.setContentType(MediaType.IMAGE_PNG);
-//
-//            return new ResponseEntity<>(isr, headers, HttpStatus.OK);
-//        } catch (WriterException | IOException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
+    @GetMapping("retriveRequestsByProduct")
+    List<SupplierRequest> retriveRequestsByProduct(@RequestParam Long idProduct) {
+        return productInterface.retriveRequestsByProduct(idProduct);
+    }
 }

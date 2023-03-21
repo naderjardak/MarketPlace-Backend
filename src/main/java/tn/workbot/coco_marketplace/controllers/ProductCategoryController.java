@@ -10,8 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("productCategory")
-@PreAuthorize("hasAuthority('SELLER')")
-
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')")
 public class ProductCategoryController {
 
     @Autowired

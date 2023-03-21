@@ -19,7 +19,6 @@ public interface SupplierRequestInterface {
 
     List<Product> retriveProductsOutOfStock();
 
-    List<SupplierRequest> retriveRequestsByProduct(Long idProduct);
 
     void accpetRequestBySeller(Long supplierRequestId);
 
