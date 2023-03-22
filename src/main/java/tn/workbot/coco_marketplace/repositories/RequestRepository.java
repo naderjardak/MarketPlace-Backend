@@ -29,6 +29,11 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     @Query("select r from Request r,Pickup p where r.pickup.id=p.id and p.id=:v7")
     public List<Request> retrieveRequestByPickup(@Param("v7")Long id);
 
+    @Query("select distinct r from Request r where r.deliveryman.id=:v1")
+    public List<Request> RetrieveRequestByFreelancer(@Param("v1") Long IdFreelancer);
+    @Query("select distinct r from Request r where r.Agency.id=:v1")
+    public List<Request> RetrieveRequestByAgency(@Param("v1") Long idAgency);
+
 
 
 

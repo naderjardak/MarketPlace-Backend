@@ -214,6 +214,20 @@ public class RequestService implements RequestInterface {
         return rr.retrieveRequestByPickup(idPickup);
     }
 
+    @Override
+    public List<Request> RetrieveRequestByAgency() {
+        //session manager variable idseller
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestByAgency(u.getId());
+    }
+
+    @Override
+    public List<Request> RetrieveRequestByFreelancer() {
+        //session manager variable idseller
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestByFreelancer(u.getId());
+    }
+
 
     @Scheduled(cron = "0 0 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {

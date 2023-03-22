@@ -19,4 +19,6 @@ public interface RequestInterface {
     public Request assignRequesttoseller(Long idRequest,String status,Long idPickup) throws IOException, InterruptedException, ApiException;
     public List<Request> retrieveRequestBySeller();
     public List<Request> retrieveRequestByPickup(Long idPickup);
+    public List<Request> RetrieveRequestByAgency();
+    public List<Request> RetrieveRequestByFreelancer();
 }
