@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Request;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     public List<Request> RetrieveRequestByFreelancer(@Param("v1") Long IdFreelancer);
     @Query("select distinct r from Request r where r.Agency.id=:v1")
     public List<Request> RetrieveRequestByAgency(@Param("v1") Long idAgency);
+    @Query("select p from Pickup p,Request r where  r.pickup.id = p.id and r.id=:v1")
+    public Pickup retrievePickupbyRequestId(@Param("v1") Long idRequest);
 
 
 

@@ -64,4 +64,15 @@ public class RequestController   {
      public List<Request> retrieveRequestByPickup(Long idPickup) {
          return ri.retrieveRequestByPickup(idPickup);
      }
+
+    @GetMapping("RetrieveRequestByAgency")
+
+    public List<Request> RetrieveRequestByAgency() {
+        return ri.RetrieveRequestByAgency();
+    }
+
+    @GetMapping("RetrieveRequestByFreelancer")
+    public List<Request> RetrieveRequestByFreelancer() {
+        return ri.RetrieveRequestByFreelancer();
+    }
     }

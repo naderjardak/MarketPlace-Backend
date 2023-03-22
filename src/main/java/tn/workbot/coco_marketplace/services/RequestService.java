@@ -57,7 +57,11 @@ public class RequestService implements RequestInterface {
 
     @Override
     public void removeRequest(Long id) {
-        rr.deleteById(id);
+       Pickup p= rr.retrievePickupbyRequestId(id);
+      int nbRequest=p.getNbRequest()-1;
+       p.setNbRequest(nbRequest);
+       pr.save(p);
+       rr.deleteById(id);
     }
 
     @Override
