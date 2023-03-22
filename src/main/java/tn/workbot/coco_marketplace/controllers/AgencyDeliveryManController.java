@@ -11,10 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-
+@CrossOrigin(origins = "*")
 @RequestMapping("AgencyDeliveryMan")
-@PreAuthorize("hasAuthority('DELIVERYMEN') || hasAuthority('ADMIN')")
-
+@PreAuthorize(" hasAuthority('ADMIN') || hasAuthority('DELIVERYAGENCY')")
 public class AgencyDeliveryManController  {
     @Autowired
     AgencyDeliveryManIService ad;

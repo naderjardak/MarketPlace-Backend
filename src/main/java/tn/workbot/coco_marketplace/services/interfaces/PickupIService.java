@@ -44,24 +44,24 @@ public interface PickupIService {
     public int countRequestRejectedAgencyToday();
     public int countRequestApprovedAgencyToday();
 
-   public Float SumPricePickupDeliveredByFreelancerToday();
-   public Float SumPricePickupDeliveredByAgencyToday();
-   public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
-   public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
+    public Float SumPricePickupDeliveredByFreelancerToday();
+    public Float SumPricePickupDeliveredByAgencyToday();
+    public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
+    public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
 
-   public List<Product>RetrieveProductByPickup(Long idPickup);
-   /////////////stat Administrator
-   public int countAgencyAdministrator();
-   public int countDeliveryFreelancerAdministrator();
+    public List<Product>RetrieveProductByPickup(Long idPickup);
+    /////////////stat Administrator
+    public int countAgencyAdministrator();
+    public int countDeliveryFreelancerAdministrator();
     public int countPickupDeliveredTodayAdministrator();
     public int countOfPickupOnTheWayTodayAdministrator();
     public int countOfPickupReturnedTodayAdministrator();
     public int countOfPickupDeliveredweekAdministrator();
     public int countOfPickupOnTheWayweekAdministrator();
     public int countOfPickupReturnedweekAdministrator();
-   public Float sumOfPickupDeliveredTodayAdministrator();
-   public Float sumOfPickupOnTheWayTodayAdministrator();
-   public Float sumOfPickupReturnedTodayAdministrator();
+    public Float sumOfPickupDeliveredTodayAdministrator();
+    public Float sumOfPickupOnTheWayTodayAdministrator();
+    public Float sumOfPickupReturnedTodayAdministrator();
     public Float sumOfPickupDeliveredweekAdministrator();
     public Float sumOfPickupOnTheWayweekAdministrator();
     public Float sumOfPickupReturnedweekAdministrator();

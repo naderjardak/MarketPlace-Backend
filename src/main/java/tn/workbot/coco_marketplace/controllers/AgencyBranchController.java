@@ -12,7 +12,7 @@ import tn.workbot.coco_marketplace.services.interfaces.AgencyBranchIService;
 import java.util.List;
 
 @RestController
-
+@CrossOrigin(origins = "*")
 @RequestMapping("AgencyBranch")
 @PreAuthorize("hasAuthority('DELIVERYAGENCY') || hasAuthority('ADMIN')")
 public class AgencyBranchController {

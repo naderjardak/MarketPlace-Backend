@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("RequestController")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
 public class RequestController   {
     @Autowired
     RequestInterface ri;
@@ -52,8 +53,8 @@ public class RequestController   {
         return ri.assignRequestDeliveryMenFreelancerandPickup(request, idPickup);
     }
     @PostMapping("assignRequesttoseller")
-    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam Long idSeller,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
-        return ri.assignRequesttoseller(idRequest, idSeller, status,idPickup);
+    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
+        return ri.assignRequesttoseller(idRequest,  status,idPickup);
     }
      @GetMapping("retrieveRequestDeliveryAgencycBySeller")
      public List<Request> retrieveRequestBySeller() {
