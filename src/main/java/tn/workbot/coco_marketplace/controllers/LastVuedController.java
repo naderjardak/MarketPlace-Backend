@@ -9,7 +9,7 @@ import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
 import java.util.List;
 
 @RestController
-
+@CrossOrigin(origins = "*")
 @RequestMapping("/LastVued")
 @PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class LastVuedController {

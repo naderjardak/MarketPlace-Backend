@@ -13,7 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tn.workbot.coco_marketplace.services.auth.ApplicationUserDetailsService;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -37,12 +42,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable();
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**/auth",
-                        "/**/add",
-                        "/**/affectRole",
-                        "/**/ForgetPassword",
                         "/swagger-ui/**",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
@@ -52,12 +55,12 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement(
-                        session -> session
+                session -> session
 
-                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                                .invalidSessionUrl("/logout?expired")
-                                .maximumSessions(1)
-                                .maxSessionsPreventsLogin(true));
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/logout?expired")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -81,6 +84,17 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 }
-
-

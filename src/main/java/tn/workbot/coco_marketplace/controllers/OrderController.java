@@ -18,6 +18,7 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("order")
 @PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class OrderController {
