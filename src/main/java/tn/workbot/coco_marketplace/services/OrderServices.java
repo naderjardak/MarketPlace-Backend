@@ -73,6 +73,17 @@ public class OrderServices implements OrderInterface {
 
 
     @Override
+    public Order GetBasketOrder() {
+        return orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+    }
+
+    @Override
+    public List<ProductQuantity> productOfBasket() {
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+        return orderRepository.orderProductList(order.getId());
+    }
+
+    @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
@@ -100,32 +111,62 @@ public class OrderServices implements OrderInterface {
                 order.setProductQuantities(new ArrayList<>());
                 order.setPromotionCodeList(new ArrayList<>());
             }
+            order=orderRepository.save(order);
         }
+        else
+        {
+            System.out.println("----" +productQuantity.getProduct().getId()+"-----"+order.getId());
+            ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(productQuantity.getProduct().getId(),order.getId());
+            if(productQuantity1!=null)
+                productQuantityRepository.delete(productQuantity1);
+        }
+
         Product product=productRepository.findById(productQuantity.getProduct().getId()).get();
         productQuantity.setProduct(product);
-
-        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
         float sum =0;
         PromotionCode promotionCode=promotionCodeRepository.findByProductIdAndVoucher(product.getId(), voucher);
-        if(promotionCode==null )
-        {
-            sum=productQuantity.getProduct().getProductPriceBeforeDiscount() * productQuantity.getQuantity();
-        }
-        else
+        if(promotionCode!=null )
         {
             if((currentDate.after(promotionCode.getStartDate()) && currentDate.before(promotionCode.getEndtDate())))
             {
-                Product pr =productRepository.findById(productQuantity.getProduct().getId()).get();
-                sum = ((pr.getProductPriceBeforeDiscount() - pr.getPromotionCodes().get(0).getDiscountValue())) * productQuantity.getQuantity();
-
+                order.getPromotionCodeList().add(promotionCode);
             } else
                 return false;
         }
-        order.setSum(sum+order.getSum());
-        weight+=order.getProductsWeightKg();
-        order.setProductsWeightKg(weight);
+        productQuantity.setOrder(order);
+        productQuantity=productQuantityRepository.save(productQuantity);
+
+        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
+        List<ProductQuantity> productQuantityList=order.getProductQuantities();
+
+        if (promotionCodeList.size()>0)
+        {
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
+            }
+        }
+        boolean var=true;
+        float weight=0;
+        for (ProductQuantity pq :productQuantityList)
+        {
+            var=true;
+            if (promotionCodeList.size()>0)
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                if(productQuantity1==pq)
+                    var=false;
+            }
+            if (var)
+                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
+            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
+
+        }
+
         if(weight<=1)
             order.setDeliveryPrice(6);
         else if(weight<=10)
@@ -133,10 +174,9 @@ public class OrderServices implements OrderInterface {
         else
             order.setDeliveryPrice(60+(weight-10)*2);
 
-        order=orderRepository.save(order);
-
-        productQuantity.setOrder(order);
-        productQuantityRepository.save(productQuantity);
+        order.setProductsWeightKg(weight);
+        order.setSum(sum);
+        orderRepository.save(order);
         return true;
     }
 
@@ -151,16 +191,46 @@ public class OrderServices implements OrderInterface {
         Order order= orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
         productQuantity.setQuantity(quantity);
-        productQuantityRepository.save(productQuantity);
-        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-        weight=order.getProductsWeightKg()+weight;
+        productQuantity=productQuantityRepository.save(productQuantity);
+
+        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
+        List<ProductQuantity> productQuantityList=order.getProductQuantities();
+        float sum=0;
+        if (promotionCodeList.size()>0)
+        {
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
+            }
+        }
+        boolean var=true;
+        float weight=0;
+        for (ProductQuantity pq :productQuantityList)
+        {
+            var=true;
+            if (promotionCodeList.size()>0)
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                if(productQuantity1==pq)
+                    var=false;
+            }
+            if (var)
+                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
+            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
+
+        }
+
         if(weight<=1)
             order.setDeliveryPrice(6);
-        else
+        else if(weight<=10)
             order.setDeliveryPrice(6*weight);
+        else
+            order.setDeliveryPrice(60+(weight-10)*2);
 
         order.setProductsWeightKg(weight);
-        order.setSum(SummOrder());
+        order.setSum(sum);
         orderRepository.save(order);
         return productQuantity;
     }
@@ -175,12 +245,49 @@ public class OrderServices implements OrderInterface {
             order.getProductQuantities().remove(productQuantity);
             productQuantityRepository.delete(productQuantity);
         }
-        order.setSum(SummOrder());
-
         if (order.getProductQuantities().size() == 0) {
             orderRepository.deleteById(order.getId());
             return productQuantity;
         }
+        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
+        List<ProductQuantity> productQuantityList=order.getProductQuantities();
+        float sum=0;
+        if (promotionCodeList.size()>0)
+        {
+
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
+            }
+        }
+        boolean var=true;
+        float weight=0;
+        for (ProductQuantity pq :productQuantityList)
+        {
+            var=true;
+            if (promotionCodeList.size()>0)
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                if(productQuantity1==pq)
+                    var=false;
+            }
+            if (var)
+                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
+            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
+
+        }
+
+        if(weight<=1)
+            order.setDeliveryPrice(6);
+        else if(weight<=10)
+            order.setDeliveryPrice(6*weight);
+        else
+            order.setDeliveryPrice(60+(weight-10)*2);
+
+        order.setProductsWeightKg(weight);
+        order.setSum(sum);
         orderRepository.save(order);
         return productQuantity;
     }
@@ -472,6 +579,13 @@ public class OrderServices implements OrderInterface {
             sb.append(rand.nextInt(10));
         }
         return sb.toString();
+    }
+
+    @Override
+    public Order deleteBasket() {
+    Order order=orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+    orderRepository.delete(order);
+    return order;
     }
 
 

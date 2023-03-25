@@ -13,5 +13,6 @@ public interface ProductQuantityRepository extends JpaRepository<ProductQuantity
     List<ProductQuantity> findAllByProduct(Product product);
 
     ProductQuantity findByProductReferenceAndOrderId(String refProduct,Long idOrder);
+    ProductQuantity findByProductIdAndOrderId(Long ProductId,Long idOrder);
 
 }

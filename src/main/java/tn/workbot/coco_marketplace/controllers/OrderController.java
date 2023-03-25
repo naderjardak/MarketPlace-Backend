@@ -26,6 +26,12 @@ public class OrderController {
     @Autowired
     OrderInterface orderInterface;
 
+    @GetMapping("GetBasketOrder")
+    Order GetBasketOrder(){return orderInterface.GetBasketOrder();}
+
+    @GetMapping("GetBasketProduct")
+    List<ProductQuantity> getProductOfProducts(){return orderInterface.productOfBasket();}
+
     @GetMapping("GetAllOrders")
     List<Order> getAllOrders(){return orderInterface.getAllOrders();}
 
@@ -55,4 +61,9 @@ public class OrderController {
 
     @GetMapping ("validateCommand")
     public String validateCommand(@RequestParam String token) throws MessagingException {return orderInterface.validateCommand(token);}
+
+
+    @DeleteMapping("DeleteBasket")
+    public Order deleteBasket(){return orderInterface.deleteBasket();}
+
 }

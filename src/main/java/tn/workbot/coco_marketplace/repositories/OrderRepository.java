@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.ProductQuantity;
 
 import javax.persistence.OrderBy;
 import java.util.Date;
@@ -59,5 +60,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   @Query("SELECT p from Product p where p.name LIKE :nameProduct")
   List<Product> productsByNameLike(@Param("nameProduct") String nameProduct);
+
+  @Query("select pq from Order o,ProductQuantity pq where o.id=:id and pq.order=o ")
+  List<ProductQuantity> orderProductList(@Param("id") long id);
 }
 
