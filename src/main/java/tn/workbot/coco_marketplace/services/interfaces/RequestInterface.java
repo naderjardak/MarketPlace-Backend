@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import com.google.maps.errors.ApiException;
 import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Request;
+import tn.workbot.coco_marketplace.entities.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,4 +22,5 @@ public interface RequestInterface {
     public List<Request> retrieveRequestByPickup(Long idPickup);
     public List<Request> RetrieveRequestByAgency();
     public List<Request> RetrieveRequestByFreelancer();
+    public User RetrieveFreelancerDeliveryrByRequest(Long idRequest);
 }

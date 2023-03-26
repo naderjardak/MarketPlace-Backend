@@ -83,6 +83,8 @@ public interface PickupIService {
     public Order getOrderByPickupId(Long idPickup);
     public User getBuyerByPickupId(Long idPickup);
     public Shipping getShippingByPickupId(Long idPickup);
+    public User getUserNOw();
+    public int countOrderBySellerNoPickup(Long idStore);
 
 
 

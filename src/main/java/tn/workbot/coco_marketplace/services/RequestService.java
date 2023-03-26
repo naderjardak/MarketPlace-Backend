@@ -232,6 +232,12 @@ public class RequestService implements RequestInterface {
         return rr.RetrieveRequestByFreelancer(u.getId());
     }
 
+    @Override
+    public User RetrieveFreelancerDeliveryrByRequest(Long idRequest) {
+        User u=sessionService.getUserBySession();
+        return rr.retrieveFreelancerDeliveryByRequestAndStore(u.getId(),idRequest);
+    }
+
 
     @Scheduled(cron = "0 0 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {

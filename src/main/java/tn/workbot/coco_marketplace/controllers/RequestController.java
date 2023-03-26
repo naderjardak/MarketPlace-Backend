@@ -56,7 +56,7 @@ public class RequestController   {
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return ri.assignRequesttoseller(idRequest,  status,idPickup);
     }
-     @GetMapping("retrieveRequestDeliveryAgencycBySeller")
+     @GetMapping("retrieveRequestBySeller")
      public List<Request> retrieveRequestBySeller() {
          return ri.retrieveRequestBySeller();
      }
@@ -75,4 +75,10 @@ public class RequestController   {
     public List<Request> RetrieveRequestByFreelancer() {
         return ri.RetrieveRequestByFreelancer();
     }
+    @GetMapping("RetrieveFreelancerDeliveryrByRequest")
+    public User RetrieveFreelancerDeliveryrByRequest(@RequestParam Long idRequest) {
+       return ri.RetrieveFreelancerDeliveryrByRequest(idRequest);
     }
+    }
+
+

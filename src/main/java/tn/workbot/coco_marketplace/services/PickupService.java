@@ -797,6 +797,37 @@ public class PickupService implements PickupIService {
         return pr.getShippingByPickupId(idPickup);
     }
 
+    @Override
+    public User getUserNOw() {
+        User u=sessionService.getUserBySession();
+        return u;
+    }
+
+    @Override
+    public int countOrderBySellerNoPickup(Long idStore) {
+        User u=sessionService.getUserBySession();
+        List<Pickup> pickups = (List<Pickup>) pr.findAll();
+        List<Order> orders = pr.orderOfstore(idStore, u.getId());
+        List<Order> finalOrders = new ArrayList<>();
+        int nb=0;
+        for (Order order : orders) {
+            boolean hasPickup = false;
+            for (Pickup pickup : pickups) {
+                if (pickup.getOrder().getId().equals(order.getId())) {
+                    hasPickup = true;
+                    break;
+                }
+            }
+            if (!hasPickup) {
+                finalOrders.add(order);
+            }
+        }
+        for (Order o:finalOrders) {
+            nb++;
+        }
+        return nb;
+    }
+
     @Scheduled(cron = "* * * 27 * *")
     public void ModifyTheLevelOfDeliveryAgencyMonthly() {
         List<User> users = pr.ListOfDeliveryAgencywithStatusPickupDelivered();

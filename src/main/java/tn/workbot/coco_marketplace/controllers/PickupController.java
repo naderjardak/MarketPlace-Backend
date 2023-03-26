@@ -408,5 +408,13 @@ import java.util.Set;
     public User getBuyerByPickupId(@RequestParam Long idPickup) {
         return pis.getBuyerByPickupId(idPickup);
     }
+    @GetMapping("getUserNOw")
+    public User getUserNOw() {
+        return pis.getUserNOw();
+    }
+    @GetMapping("countOrderBySellerNoPickup")
+    public int countOrderBySellerNoPickup(@RequestParam Long idStore){
+        return pis.countOrderBySellerNoPickup(idStore);
     }
 
+}

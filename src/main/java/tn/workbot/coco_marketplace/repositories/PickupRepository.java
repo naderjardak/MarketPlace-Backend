@@ -54,15 +54,15 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select u from User u,Pickup p,Store s where p.store.seller.id=u.id and p.id=:v3")
     public User UserOfPickup(@Param("v3") Long idPickup);
     //Stat
-    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='PICKED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE ")
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='PICKED' and p.store.seller.id=u.id and u.id=:v1  ")
     public int countPickupSellerPendingToday(@Param("v1") Long idSeller);
-    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='ONTHEWAY' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='ONTHEWAY' and p.store.seller.id=u.id and u.id=:v1 ")
     public int countPickupSelleronTheWayToday(@Param("v1") Long idSeller);
-    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='DELIVERED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='DELIVERED' and p.store.seller.id=u.id and u.id=:v1 ")
     public int countPickupSellerDeliveredToday(@Param("v1") Long idSeller);
-    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='RETURN' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='RETURN' and p.store.seller.id=u.id and u.id=:v1 ")
     public int countPickupSellerReturnToday(@Param("v1") Long idSeller);
-    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='REFUNDED' and p.store.seller.id=u.id and u.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
+    @Query("select count(distinct p) from Pickup p ,Store  s,User u where p.statusPickupSeller='REFUNDED' and p.store.seller.id=u.id and u.id=:v1 ")
     public int countPickupSellerRefundedToday(@Param("v1") Long idSeller);
     @Query("select  count(distinct p) from Pickup p,Request r,User u where r.pickup.id=p.id and p.statusPickupSeller='PICKED' and r.requestStatus='APPROVED' and r.deliveryman.id=:v1 and DATE(p.dateCreationPickup) = CURRENT_DATE")
     public int countPickupDeliveryManFreelancerPendingToday(@Param("v1") Long iDFreelancer);
