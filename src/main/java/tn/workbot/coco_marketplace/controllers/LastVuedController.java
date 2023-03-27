@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/LastVued")
+@RequestMapping("LastVued")
 @PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class LastVuedController {
     @Autowired
@@ -19,7 +19,7 @@ public class LastVuedController {
     @PostMapping("CreateNewVued")
     public void createNewVueOrAddNb(@RequestParam Long id){lastVuedInterface.createNewVueOrAddNb(id);}
 
-    @PostMapping("DisplayAllLastVued")
+    @GetMapping("DisplayAllLastVued")
     public List<Product> afficherLastVued(){ return lastVuedInterface.afficherLastVued();}
 
 }

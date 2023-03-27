@@ -137,7 +137,7 @@ public class OrderServices implements OrderInterface {
         }
         productQuantity.setOrder(order);
         productQuantity=productQuantityRepository.save(productQuantity);
-
+        orderRepository.save(order);
         List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
         List<ProductQuantity> productQuantityList=order.getProductQuantities();
 

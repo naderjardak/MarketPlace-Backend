@@ -12,15 +12,16 @@ import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 import java.util.List;
 
 @RestController
-
+@CrossOrigin(origins = "*")
 @RequestMapping("/Event")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class EventController {
 
     @Autowired
     EventInterface eventInterface;
 
     @PostMapping("addEvent")
-    @PreAuthorize("hasAuthority('MODERATOR') || hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('MODERATOR') || hasAuthority('ADMIN')")
     public void addEvent(@RequestBody Event event){eventInterface.addEvent(event);}
 
     @GetMapping("findEventByTitle")

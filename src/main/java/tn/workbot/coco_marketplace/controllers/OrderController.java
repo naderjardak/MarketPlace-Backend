@@ -13,6 +13,7 @@ import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
+import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -25,12 +26,19 @@ public class OrderController {
 
     @Autowired
     OrderInterface orderInterface;
+    @Autowired
+    ProductInterface productInterface;
+
+    @GetMapping("GetProductById")
+    public Product getById(@RequestParam Long id) {
+        return productInterface.getById(id);
+    }
 
     @GetMapping("GetBasketOrder")
     Order GetBasketOrder(){return orderInterface.GetBasketOrder();}
 
     @GetMapping("GetBasketProduct")
-    List<ProductQuantity> getProductOfProducts(){return orderInterface.productOfBasket();}
+    List<ProductQuantity> getProductOfBasket(){return orderInterface.productOfBasket();}
 
     @GetMapping("GetAllOrders")
     List<Order> getAllOrders(){return orderInterface.getAllOrders();}

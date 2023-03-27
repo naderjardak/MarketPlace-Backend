@@ -94,6 +94,7 @@ public class EventService implements EventInterface {
     public void addKeyWordToEvent(Long id, KeyWords keyWords) {
     Event event=eventRepository.findById(id).get();
     event.getListkeyWords().add(keyWordsRepository.save(keyWords));
+    event.setProductList(displayProductForEvent(event.getId()));
     eventRepository.save(event);
     }
 
