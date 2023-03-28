@@ -92,4 +92,16 @@ public class AgencyBranchService implements AgencyBranchIService {
         List<Request> req = rr.ByDeliveryMen(id);
         return req;
     }
+
+    @Override
+    public int countAgencyBranchesInAgency() {
+        User u=sessionService.getUserBySession();
+        return abr.countAgencyBranch(u.getId());
+    }
+
+    @Override
+    public int countDeliveryMenInAllAgencyBranchesForAgench() {
+        User u=sessionService.getUserBySession();
+        return abr.countDeliveryMenInAllBranchtoAgency(u.getId());
+    }
 }

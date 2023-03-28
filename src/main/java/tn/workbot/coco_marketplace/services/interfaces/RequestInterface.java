@@ -23,4 +23,7 @@ public interface RequestInterface {
     public List<Request> RetrieveRequestByAgency();
     public List<Request> RetrieveRequestByFreelancer();
     public User RetrieveFreelancerDeliveryrByRequest(Long idRequest);
+    public int countRequestTotalForAgencyPending();
+    public int countRequestApprovedForAgency();
+    public int countRequestRejectForAgency();
 }

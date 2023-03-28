@@ -58,4 +58,13 @@ public class AgencyBranchController {
     public List<Request> test(@RequestParam Long id){
         return abi.test(id);
     }
+    @GetMapping("countAgencyBranchesInAgency")
+    public int countAgencyBranchesInAgency() {
+        return abi.countAgencyBranchesInAgency();
+    }
+
+    @GetMapping("countDeliveryMenInAllAgencyBranchesForAgench")
+    public int countDeliveryMenInAllAgencyBranchesForAgench() {
+        return abi.countDeliveryMenInAllAgencyBranchesForAgench() ;
+    }
 }

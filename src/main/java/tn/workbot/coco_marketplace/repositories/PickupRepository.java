@@ -166,6 +166,14 @@ public interface PickupRepository extends CrudRepository<Pickup,Long> {
     @Query("select distinct u from User u,Order o,Pickup p where p.order.id=o.id and o.buyer.id=u.id and p.id=:v1")
     public User getUserByPickupId(@Param("v1") Long idPickup);
 
+    @Query("select count (distinct p) from Pickup p,User u ,Request r where r.pickup.id=p.id and p.statusPickupSeller='DELIVERED' and r.Agency.id=:v1")
+    public int countPickupDeliveredForAgency(@Param("v1")Long idAgency);
+    @Query("select count (distinct p) from Pickup p,User u ,Request r where r.pickup.id=p.id and p.statusPickupSeller='RETURN' and r.Agency.id=:v1")
+    public int countPickupReturnedForAgency(@Param("v1")Long idAgency);
+    @Query("select count (distinct p) from Pickup p,User u ,Request r where r.pickup.id=p.id and p.statusPickupSeller='ONTHEWAY' and r.Agency.id=:v1")
+    public int countPickupOnTheWayForAgency(@Param("v1")Long idAgency);
+    @Query("select count (distinct p) from Pickup p,User u ,Request r where r.pickup.id=p.id and p.statusPickupSeller='REFUNDED' and r.Agency.id=:v1")
+    public int countPickupRefundedForAgency(@Param("v1")Long idAgency);
 
 
 

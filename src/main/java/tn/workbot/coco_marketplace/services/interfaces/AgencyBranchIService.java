@@ -15,4 +15,6 @@ public interface AgencyBranchIService {
     public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch);
     public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch,Long Id);
     public List<Request> test(Long id);
+    public int countAgencyBranchesInAgency();
+    public int countDeliveryMenInAllAgencyBranchesForAgench();
 }

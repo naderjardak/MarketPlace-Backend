@@ -1,11 +1,13 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.google.maps.errors.ApiException;
+import org.springframework.http.ResponseEntity;
 import tn.workbot.coco_marketplace.entities.*;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface PickupIService {
@@ -85,8 +87,14 @@ public interface PickupIService {
     public Shipping getShippingByPickupId(Long idPickup);
     public User getUserNOw();
     public int countOrderBySellerNoPickup(Long idStore);
-
-
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(Long idOrder,Long idStore) ;
+    public List<Product> getListProductOfOrder(Long idOrder,Long idStore);
+    public Float  getSumPriceProductOfOrder(Long idOrder,Long idStore);
+    public List<ProductQuantity> getAllProductQuantity();
+    public int countPickupDeliveredForAgency();
+    public int countPickupReturnedForAgency();
+    public int countPickupOnTheWayForAgency();
+    public int countPickupRefundedForAgency();
 
 
 

@@ -7,6 +7,7 @@ import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -57,6 +58,8 @@ public class PickupService implements PickupIService {
     ShippingRepository shippingRepository;
     @Autowired
     SessionService sessionService;
+    @Autowired
+    ProductQuantityRepository pq;
 
 
 
@@ -826,6 +829,105 @@ public class PickupService implements PickupIService {
             nb++;
         }
         return nb;
+    }
+
+    @Override
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(Long idOrder,Long idStore) {
+
+            //Variable Of Session Manager
+            User u=sessionService.getUserBySession();
+            Store store2 = pr.storeoforder(idStore, idOrder, u.getId());
+            Store storeer = sr.findById(idOrder).get();
+            Order order = or.findById(idOrder).get();
+
+        float totalPrice=0;
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(idStore, idOrder, u.getId());
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+
+
+        if (pr.countstoreorder(idOrder) == 1) {
+            totalPrice =order.getSum();
+            } else {
+                if (storeofsomeUser >= 1) {
+                    for (Product p : productList) {
+                         totalPrice = p.getProductPrice()+totalPrice;
+
+                    }
+
+                }
+            }
+        Map<Float, List<Product>> resultMap = new HashMap<>();
+        resultMap.put(totalPrice, productList);
+
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @Override
+    public List<Product> getListProductOfOrder(Long idOrder, Long idStore) {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+        return productList;
+    }
+
+    @Override
+    public Float getSumPriceProductOfOrder(Long idOrder, Long idStore) {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        Store store2 = pr.storeoforder(idStore, idOrder, u.getId());
+        Store storeer = sr.findById(idOrder).get();
+        Order order = or.findById(idOrder).get();
+
+        float totalPrice=0;
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(idStore, idOrder, u.getId());
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+
+
+        if (pr.countstoreorder(idOrder) == 1) {
+            totalPrice =order.getSum();
+        } else {
+            if (storeofsomeUser >= 1) {
+                for (Product p : productList) {
+                    totalPrice = p.getProductPrice()+totalPrice;
+
+                }
+
+            }
+        }
+        return totalPrice;
+    }
+
+    @Override
+    public List<ProductQuantity> getAllProductQuantity() {
+        return pq.findAll();
+    }
+
+    @Override
+    public int countPickupDeliveredForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupDeliveredForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupReturnedForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupReturnedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupOnTheWayForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupOnTheWayForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupRefundedForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupRefundedForAgency(u.getId());
     }
 
     @Scheduled(cron = "* * * 27 * *")

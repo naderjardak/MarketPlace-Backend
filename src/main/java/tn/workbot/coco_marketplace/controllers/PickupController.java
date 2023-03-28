@@ -416,5 +416,45 @@ import java.util.Set;
     public int countOrderBySellerNoPickup(@RequestParam Long idStore){
         return pis.countOrderBySellerNoPickup(idStore);
     }
+    @GetMapping("getProductSumANdListOfpRODUCTByOrder")
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(@RequestParam Long idOrder,@RequestParam Long idStore) {
+    return pis.getProduct(idOrder,idStore);
+    }
+    @GetMapping("getListProductOfOrder")
 
+    public List<Product> getListProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
+        return pis.getListProductOfOrder(idOrder,idStore);
+    }
+
+   @GetMapping("getSumPriceProductOfOrder")
+    public Float getSumPriceProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
+        return  pis.getSumPriceProductOfOrder(idOrder,idStore);
+    }
+    @GetMapping("getAllProductQuantity")
+    public List<ProductQuantity> getAllProductQuantity(){
+        return  pis.getAllProductQuantity();
+    }
+  //stat Agency
+
+
+
+    @GetMapping("countPickupDeliveredForAgency")
+    public int countPickupDeliveredForAgency() {
+        return pis.countPickupDeliveredForAgency();
+    }
+
+    @GetMapping("countPickupReturnedForAgency")
+    public int countPickupReturnedForAgency() {
+        return pis.countPickupReturnedForAgency();
+    }
+
+    @GetMapping("countPickupOnTheWayForAgency")
+    public int countPickupOnTheWayForAgency() {
+        return pis.countPickupOnTheWayForAgency();
+    }
+
+    @GetMapping("countPickupRefundedForAgency")
+    public int countPickupRefundedForAgency() {
+        return pis.countPickupRefundedForAgency();
+    }
 }

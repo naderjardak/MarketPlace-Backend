@@ -79,6 +79,20 @@ public class RequestController   {
     public User RetrieveFreelancerDeliveryrByRequest(@RequestParam Long idRequest) {
        return ri.RetrieveFreelancerDeliveryrByRequest(idRequest);
     }
+    @GetMapping("countRequestTotalForAgencyPending")
+    public int countRequestTotalForAgencyPending() {
+        return ri.countRequestTotalForAgencyPending() ;
+    }
+
+    @GetMapping("countRequestApprovedForAgency")
+    public int countRequestApprovedForAgency() {
+        return ri.countRequestApprovedForAgency();
+    }
+
+    @GetMapping("countRequestRejectForAgency")
+    public int countRequestRejectForAgency() {
+        return ri.countRequestRejectForAgency();
+    }
     }
 
 

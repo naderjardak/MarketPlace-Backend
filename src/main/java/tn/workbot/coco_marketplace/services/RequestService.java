@@ -238,6 +238,24 @@ public class RequestService implements RequestInterface {
         return rr.retrieveFreelancerDeliveryByRequestAndStore(u.getId(),idRequest);
     }
 
+    @Override
+    public int countRequestTotalForAgencyPending() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestTotalOfAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestApprovedForAgency() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestApprovedForAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestRejectForAgency() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestRejectForAgency(u.getId());
+    }
+
 
     @Scheduled(cron = "0 0 11 * * *")
     public void sendMailToApprovedAndRejectedRequestWithTimeContrainte() throws MessagingException {
