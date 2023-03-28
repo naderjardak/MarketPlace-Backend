@@ -77,7 +77,7 @@ class ProductServiceTest {
         product.setDescription("test");
         product.setProductWeight(2);
         product.setProductCategory(subCategory);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -118,7 +118,7 @@ class ProductServiceTest {
         product.setDescription("test");
         product.setProductWeight(2);
         product.setProductCategory(subCategory);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -141,7 +141,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -170,7 +170,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -210,7 +210,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");

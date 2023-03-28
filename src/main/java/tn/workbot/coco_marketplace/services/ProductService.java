@@ -78,7 +78,7 @@ public class ProductService implements ProductInterface {
         int nbRand = random.nextInt(99999);
         p.setReference(("REF-" + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
-        p.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        p.setProductStatus(ProductStatus.PENDING);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
         p.setStore(store);
