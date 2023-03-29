@@ -37,12 +37,12 @@ public class LoyaltyService implements LoyaltyInterface {
             Loyalty loyalty = new Loyalty();
             loyalty.setUser(user);
             loyalty.setPoints(0);
-            loyalty.setLastActivity(LocalDateTime.now());
+            loyalty.setLastActivity(LocalDateTime.now().minusDays(1));
             loyalty.setLink(token);
             loyaltyRepository.save(loyalty);
             return link;
         }
-        return lt.getLink();
+        return "http://localhost:8081/claim?link="+lt.getLink();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class LoyaltyService implements LoyaltyInterface {
         if (loyalty.getLink() == null) {
             return ResponseEntity.notFound().build();
         }
-        if (loyalty.getLastActivity().plusDays(1).isBefore(LocalDateTime.now())) {
+        if (loyalty.getLastActivity().plusDays(0).isBefore(LocalDateTime.now())) {
             int pt=loyalty.getPoints();
             loyalty.setPoints(pt+1);
             loyalty.setLastActivity(LocalDateTime.now());
@@ -67,6 +67,8 @@ public class LoyaltyService implements LoyaltyInterface {
     public int claimedPaoints(){
         //Session Manager
         User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
+        if(loyaltyRepository.pointsClaimed(user.getId())!=null)
         return loyaltyRepository.pointsClaimed(user.getId());
+        return 0;
     }
 }
