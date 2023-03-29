@@ -24,6 +24,8 @@ public interface ProductInterface {
 
     ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String status);
 
+    List<Product> getProductBySeller();
+
 
 
 

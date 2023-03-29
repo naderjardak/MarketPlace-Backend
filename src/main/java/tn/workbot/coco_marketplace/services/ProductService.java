@@ -22,6 +22,7 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -247,8 +248,18 @@ public class ProductService implements ProductInterface {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
+    @Override
+    public List<Product> getProductBySeller() {
+        User user = sessionService.getUserBySession();
+        List<Product> products=new ArrayList<>();
+        for(Store s:user.getStores()){
+            products.addAll(productRepository.findProductsByStore(s)) ;
+        }
+        return products;
+    }
 
-    @Scheduled(cron = "* * 8 * * *")
+
+    @Scheduled(cron = "* * 7 * * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.SELLER);
         for (User user : userList) {

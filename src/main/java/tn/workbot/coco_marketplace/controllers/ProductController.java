@@ -123,4 +123,9 @@ public class ProductController {
     List<SupplierRequest> retriveRequestsByProduct(@RequestParam Long idProduct) {
         return productInterface.retriveRequestsByProduct(idProduct);
     }
+
+    @GetMapping("retriveProductsByStore")
+    List<Product> retriveProductsByStore() {
+        return productInterface.getProductBySeller();
+    }
 }
