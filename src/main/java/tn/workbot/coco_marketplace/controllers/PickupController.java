@@ -457,4 +457,27 @@ import java.util.Set;
     public int countPickupRefundedForAgency() {
         return pis.countPickupRefundedForAgency();
     }
+
+
+    //stat freelancer
+    @GetMapping("countPickupDeliveredForfreelancer")
+    public int countPickupDeliveredForfreelancer() {
+        return pis.countPickupDeliveredForfreelancer();
+    }
+
+    @GetMapping("countPickupReturnedForfreelancer")
+    public int countPickupReturnedForfreelancer() {
+        return pis.countPickupReturnedForfreelancer();
+    }
+
+    @GetMapping("countPickupOnTheWayForfreelancer")
+    public int countPickupOnTheWayForfreelancer() {
+        return pis.countPickupOnTheWayForfreelancer();
+    }
+
+    @GetMapping("countPickupRefundedForfreelancer")
+    public int countPickupRefundedForfreelancer() {
+        return pis.countPickupRefundedForfreelancer();
+    }
+
 }

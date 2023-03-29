@@ -165,19 +165,32 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         //sessionManager Variable
-        User u=sessionService.getUserBySession();
+        User u = sessionService.getUserBySession();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
-        Set<Pickup> pickups = new HashSet<>(); // use Set instead of ArrayList
+        Set<Pickup> pickups = new HashSet<>();
+        List<Request> requests=pr.REQUESTofuser(u.getId());
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {
-                    pickups.addAll(s.getPickups()); // use addAll instead of add
+                    // Filter pickups based on whether they have an associated request or not
+                    for (Pickup pickup : s.getPickups()) {
+                        boolean hasRequest = false;
+                        for (Request request : pickup.getRequests()) {
+                            if  (request.getAgency().getId()!=null){
+                                hasRequest = true;
+                                break;
+                            }
+                        }
+                        if (!hasRequest) {
+                            pickups.add(pickup);
+                        }
+                    }
                 }
             }
         }
-        return new ArrayList<>(pickups); // convert Set to ArrayList
+        return new ArrayList<>(pickups);
     }
 
     @Override
@@ -928,6 +941,30 @@ public class PickupService implements PickupIService {
         //Variable Of Session Manager
         User u=sessionService.getUserBySession();
         return pr.countPickupRefundedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupDeliveredForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupDeliveredForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupReturnedForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupReturnedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupOnTheWayForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupOnTheWayForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupRefundedForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupRefundedForFreelancer(u.getId());
     }
 
     @Scheduled(cron = "* * * 27 * *")

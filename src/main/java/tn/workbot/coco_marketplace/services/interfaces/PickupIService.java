@@ -95,6 +95,11 @@ public interface PickupIService {
     public int countPickupReturnedForAgency();
     public int countPickupOnTheWayForAgency();
     public int countPickupRefundedForAgency();
+    ///stat freelancer
+    public int countPickupDeliveredForfreelancer();
+    public int countPickupReturnedForfreelancer();
+    public int countPickupOnTheWayForfreelancer();
+    public int countPickupRefundedForfreelancer();
 
 
 

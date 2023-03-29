@@ -20,6 +20,7 @@ public class AgencyBranch implements Serializable {
     private String governorate;
     private String city;
     private String gpsPoint;
+    private String BrandName;
     @JsonIgnore
     @ManyToOne
     User deliveryAgency;

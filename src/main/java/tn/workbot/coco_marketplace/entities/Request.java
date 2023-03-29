@@ -30,14 +30,12 @@ public class Request implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User seller;
-
-    @JsonIgnore
     @ManyToOne
     private User Agency;
     @JsonIgnore
     @ManyToOne
     private Pickup pickup;
-    @JsonIgnore
+
     @ManyToOne
     private AgencyDeliveryMan agencyDeliveryMan;
 
