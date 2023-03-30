@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,6 @@ public class SessionService {
 
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     // Get the user details from the authentication object
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
