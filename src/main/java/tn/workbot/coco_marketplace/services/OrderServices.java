@@ -80,6 +80,9 @@ public class OrderServices implements OrderInterface {
     @Override
     public List<ProductQuantity> productOfBasket() {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+        List<ProductQuantity> productquantity=new ArrayList<>();
+        if(order==null)
+            return productquantity;
         return orderRepository.orderProductList(order.getId());
     }
 
@@ -107,10 +110,8 @@ public class OrderServices implements OrderInterface {
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
             order.setProductsWeightKg(0);
-            if (order.getProductQuantities() == null) {
                 order.setProductQuantities(new ArrayList<>());
                 order.setPromotionCodeList(new ArrayList<>());
-            }
             order=orderRepository.save(order);
         }
         else
@@ -125,7 +126,6 @@ public class OrderServices implements OrderInterface {
         productQuantity.setProduct(product);
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
-        float sum =0;
         PromotionCode promotionCode=promotionCodeRepository.findByProductIdAndVoucher(product.getId(), voucher);
         if(promotionCode!=null )
         {
@@ -138,45 +138,7 @@ public class OrderServices implements OrderInterface {
         productQuantity.setOrder(order);
         productQuantity=productQuantityRepository.save(productQuantity);
         orderRepository.save(order);
-        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
-        List<ProductQuantity> productQuantityList=order.getProductQuantities();
-
-        if (promotionCodeList.size()>0)
-        {
-            for(PromotionCode p :promotionCodeList)
-            {
-                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
-                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
-            }
-        }
-        boolean var=true;
-        float weight=0;
-        for (ProductQuantity pq :productQuantityList)
-        {
-            var=true;
-            if (promotionCodeList.size()>0)
-            for(PromotionCode p :promotionCodeList)
-            {
-                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
-                if(productQuantity1==pq)
-                    var=false;
-            }
-            if (var)
-                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
-            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
-
-        }
-
-        if(weight<=1)
-            order.setDeliveryPrice(6);
-        else if(weight<=10)
-            order.setDeliveryPrice(6*weight);
-        else
-            order.setDeliveryPrice(60+(weight-10)*2);
-
-        order.setProductsWeightKg(weight);
-        order.setSum(sum);
-        orderRepository.save(order);
+        UpdateQuantiyOfProduct(productQuantity.getProduct().getReference(),productQuantity.getQuantity());
         return true;
     }
 
@@ -189,7 +151,7 @@ public class OrderServices implements OrderInterface {
         }
 
         Order order= orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
+        ProductQuantity productQuantity = productQuantityRepository.findByOrderIdAndProductReference(order.getId(),refProuct);
         productQuantity.setQuantity(quantity);
         productQuantity=productQuantityRepository.save(productQuantity);
 
@@ -239,15 +201,18 @@ public class OrderServices implements OrderInterface {
     @Override
     public ProductQuantity DeleteProductFromOrder(String refProduct) {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
+       List<ProductQuantity> productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
 
-        if (productQuantity != null) {
-            order.getProductQuantities().remove(productQuantity);
-            productQuantityRepository.delete(productQuantity);
+        if (productQuantity.size()!=0) {
+            for(int i=0;i<productQuantity.size();i++) {
+                order.getProductQuantities().remove(productQuantity.get(i));
+                productQuantityRepository.delete(productQuantity.get(i));
+            }
+
         }
         if (order.getProductQuantities().size() == 0) {
             orderRepository.deleteById(order.getId());
-            return productQuantity;
+            return productQuantity.get(0);
         }
         List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
         List<ProductQuantity> productQuantityList=order.getProductQuantities();
@@ -289,13 +254,13 @@ public class OrderServices implements OrderInterface {
         order.setProductsWeightKg(weight);
         order.setSum(sum);
         orderRepository.save(order);
-        return productQuantity;
+        return productQuantity.get(0);
     }
 
     @Override
-    public Order AffectShippingAdressToOrder(Shipping shipping) {
+    public Order AffectShippingAdressToOrder(Long idshipping) {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        shipping=shippingRepository.save(shipping);
+        Shipping shipping=shippingRepository.findById(idshipping).get();
         order.setShipping(shipping);
         return orderRepository.save(order);
     }

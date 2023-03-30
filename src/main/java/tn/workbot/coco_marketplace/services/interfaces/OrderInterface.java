@@ -27,7 +27,7 @@ public interface OrderInterface {
     ProductQuantity UpdateQuantiyOfProduct(String refProuct,int quantity);
 
     //add Shipping to order
-    Order AffectShippingAdressToOrder(Shipping shipping);
+    Order AffectShippingAdressToOrder(Long idshipping);
 
 
     //Ending command Paiment Prosess

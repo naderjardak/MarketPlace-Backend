@@ -56,7 +56,7 @@ public class OrderController {
     public ProductQuantity DeleteProductFromOrder(@RequestParam String refProduct){return orderInterface.DeleteProductFromOrder(refProduct);}
 
     @PutMapping("AddShippingToCard")
-    public Order AffectShippingAdressToOrder(@RequestBody Shipping shipping){return orderInterface.AffectShippingAdressToOrder(shipping);}
+    public Order AffectShippingAdressToOrder(@RequestBody Long idshipping){return orderInterface.AffectShippingAdressToOrder(idshipping);}
 
     @PostMapping("payements")
     public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException, MessagingException { return orderInterface.StripePayementService(data); }

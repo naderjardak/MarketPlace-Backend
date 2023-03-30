@@ -12,4 +12,6 @@ import java.util.List;
 public interface ShippingRepository extends JpaRepository<Shipping,Long> {
     @Query("select distinct (o.shipping) from Order o where o.buyer.id=:iduser")
     List<Shipping> findShippingListByUserId(@Param("iduser") Long iduser);
+
+    List<Shipping> findShippingByBuyerId(Long idb);
 }

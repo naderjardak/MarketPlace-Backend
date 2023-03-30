@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.ShippingRepository;
@@ -19,6 +20,8 @@ public class ShippingServices implements ShippingInterface {
     ShippingRepository shippingRepository;
     @Autowired
     UserrRepository userrRepository;
+    @Autowired
+    SessionService sessionService;
 
 
     public List<Shipping> getAllShippingsByUserID(Long idU) {
@@ -38,7 +41,7 @@ public class ShippingServices implements ShippingInterface {
             shipping.setId(id);
             return shippingRepository.save(shipping);
         }
-            return null;
+        return null;
     }
 
     public Boolean deleteShipping(Long id) {
@@ -48,5 +51,9 @@ public class ShippingServices implements ShippingInterface {
         }
         shippingRepository.delete(existingShipping);
         return true;
+    }
+
+    public List<Shipping> getAllUserShippings() {
+        return shippingRepository.findShippingByBuyerId(sessionService.getUserBySession().getId());
     }
 }
