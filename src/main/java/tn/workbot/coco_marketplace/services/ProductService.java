@@ -259,7 +259,7 @@ public class ProductService implements ProductInterface {
     }
 
 
-    @Scheduled(cron = "* * 7 * * *")
+    @Scheduled(cron = "* * 11 * * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.SELLER);
         for (User user : userList) {

@@ -12,4 +12,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
         List<Store> findByGovernorate(String governorat);
 
         Store findByNameAndSeller(String name, User user);
+
+        List<Store> findStoreBySeller(User user);
 }
