@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
 
 import java.io.ByteArrayInputStream;
@@ -25,6 +26,8 @@ public interface ProductInterface {
     ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String status);
 
     List<Product> getProductBySeller();
+
+    List<Product> getProductsByStore(String store);
 
 
 

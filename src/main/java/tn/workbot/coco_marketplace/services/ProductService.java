@@ -258,6 +258,12 @@ public class ProductService implements ProductInterface {
         return products;
     }
 
+    @Override
+    public List<Product> getProductsByStore(String store) {
+        User user = sessionService.getUserBySession();
+        Store store1=storeRepository.findByNameAndSeller(store,user);
+        return new ArrayList<>(store1.getProducts());    }
+
 
     @Scheduled(cron = "* * 11 * * *")
     void productsOutOfStock() {

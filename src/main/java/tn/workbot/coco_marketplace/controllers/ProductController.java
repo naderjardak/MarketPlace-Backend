@@ -69,8 +69,7 @@ public class ProductController {
 
     @PostMapping("CreateProductAndAssignCatAndSub")
     public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName, @RequestParam String storeName) throws Exception {
-        Product andAssignCategoryAndSubCategory = productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName, storeName);
-        return andAssignCategoryAndSubCategory;
+        return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName, storeName);
 
     }
 
@@ -129,4 +128,9 @@ public class ProductController {
     List<Product> retriveProductsByStore() {
         return productInterface.getProductBySeller();
     }
-}
+
+    @GetMapping("getProductsByStore")
+    public List<Product> getProductsByStore(@RequestParam String store) {
+        return productInterface.getProductsByStore(store);
+    }
+    }
