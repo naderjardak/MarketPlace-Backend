@@ -6,6 +6,7 @@ import tn.workbot.coco_marketplace.entities.SupplierRequest;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Set;
 
 public interface ProductInterface {
 
@@ -21,7 +22,7 @@ public interface ProductInterface {
     List<SupplierRequest> retriveRequestsByProduct(Long idProduct);
 
 
-    Product createAndAssignCategoryAndSubCategory(Product p,String categoryName,String subCatName,String storeName) throws Exception;
+    Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, Set<String> storeName) throws Exception;
 
     ByteArrayInputStream allSupplierRequestsOnProduct(Long id,String status);
 

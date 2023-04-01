@@ -22,10 +22,8 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
@@ -77,14 +75,14 @@ public class ProductService implements ProductInterface {
 
         Random random = new Random();
         int nbRand = random.nextInt(99999);
-        p.setReference(("REF-" + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
+        p.setReference(("REF-" +store.getName().substring(store.getName().length()-2)+ p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
         p.setProductStatus(ProductStatus.PENDING);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
         p.setStore(store);
 
-        return productRepository.save(p);
+        return productRepository.saveAndFlush(p);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class ProductService implements ProductInterface {
 //    }
 
     @Override
-    public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, String storeName) throws Exception {
+    public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, Set<String> storeName) throws Exception {
 
         ProductCategory category = productCategoryRepository.findByName(categoryName);
         ProductCategory subCategory = productCategoryRepository.findByNameAndCategoryName(subCatName, categoryName);
@@ -143,11 +141,16 @@ public class ProductService implements ProductInterface {
 
 
         }
+
+
         //cascade
         p.setProductCategory(subCategory);
+        for(String st:storeName.stream().toList()){
 
+            this.create(p,st);
+        }
 
-        return this.create(p, storeName);
+        return p;
     }
 
     @Override
@@ -265,7 +268,7 @@ public class ProductService implements ProductInterface {
         return new ArrayList<>(store1.getProducts());    }
 
 
-    @Scheduled(cron = "* * 11 * * *")
+    @Scheduled(cron = "0 0 11 1 * *")
     void productsOutOfStock() {
         List<User> userList = userrRepository.findUserByRoleType(RoleType.SELLER);
         for (User user : userList) {

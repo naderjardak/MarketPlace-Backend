@@ -184,11 +184,13 @@ class ProductServiceTest {
         Store store = new Store();
         store.setName("STORE TEST");
         store.setSeller(user);
+        Set<String> storen=new HashSet<>();
+        storen.add(store.getName());
 
         storeRepository.save(store);
         when(sessionService.getUserBySession()).thenReturn(user);
 
-        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", "STORE TEST");
+        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", storen);
 
 
         assertNotNull(savedProduct);
@@ -225,11 +227,12 @@ class ProductServiceTest {
         Store store = new Store();
         store.setName("STORE TEST");
         store.setSeller(user);
-
+        Set<String> storen=new HashSet<>();
+        storen.add(store.getName());
         storeRepository.save(store);
         when(sessionService.getUserBySession()).thenReturn(user);
 
-        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", "STORE TEST");
+        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", storen);
 
 
         assertNotNull(savedProduct);
