@@ -43,11 +43,10 @@ public class Order implements Serializable {
     @JsonIgnore
     private List<Pickup> pickups;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private Shipping shipping;
 
     @ManyToOne
-    @JsonIgnore
     private User buyer;
     @JsonIgnore
     @OneToMany(mappedBy = "order")

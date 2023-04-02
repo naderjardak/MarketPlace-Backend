@@ -9,7 +9,6 @@ import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
-import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
@@ -73,5 +72,8 @@ public class OrderController {
 
     @DeleteMapping("DeleteBasket")
     public Order deleteBasket(){return orderInterface.deleteBasket();}
+
+    @GetMapping("getAllOrdersByUserId")
+    public List<Order> getAllOrdersByUserId(){return orderInterface.getAllOrdersByUserId();}
 
 }

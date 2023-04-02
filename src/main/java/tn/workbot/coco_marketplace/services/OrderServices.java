@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -106,7 +107,10 @@ public class OrderServices implements OrderInterface {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         if (order == null) {
             User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
             order = new Order();
+            order.setCreationDate(currentDate);
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
             order.setProductsWeightKg(0);
@@ -302,9 +306,9 @@ public class OrderServices implements OrderInterface {
             order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
             order.setPayment(PaymentType.BANK_CARD);
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-            orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+            //orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
             //Twilio mna7iha 3al flous
-            OrderTwilioService.sendSMS(msg);
+            //OrderTwilioService.sendSMS(msg);
             List<String> refList=orderRepository.reflist();
             String referance="";
             do{
@@ -416,19 +420,31 @@ public class OrderServices implements OrderInterface {
 
 
     @Override
-    public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {
+    public CustemerModel StripePayementService(CustemerModel data) throws StripeException, MessagingException {
         Stripe.apiKey = stripeApiKey;
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", data.getName());
-        params.put("email", data.getEmail());
-        Customer customer = Customer.create(params);
-        data.setCustemerId(customer.getId());
-        if(customer.getId()!=null)
-        {
-            endCommandProsess(PaymentType.valueOf("BANK_CARD"),true);
+
+        // Create a customer object with a new card
+        Map<String, Object> customerParams = new HashMap<>();
+        customerParams.put("name", data.getName());
+        customerParams.put("email", data.getEmail());
+        customerParams.put("source", data.getCardToken()); // Card token obtained from Stripe.js
+        Customer customer = Customer.create(customerParams);
+
+        // Charge the customer's card
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", data.getPaidAmount()); // Amount in cents ($10)
+        chargeParams.put("currency", "usd");
+        chargeParams.put("customer", customer.getId());
+        Charge charge = Charge.create(chargeParams);
+
+        // Check if the payment succeeded and set the payment status in the data object
+        if (charge.getPaid()) {
+            endCommandProsess(PaymentType.BANK_CARD, true);
+            data.setPaidAmount(charge.getAmount());
+        } else {
+            endCommandProsess(PaymentType.BANK_CARD, false);
         }
-        else
-            endCommandProsess(PaymentType.valueOf("BANK_CARD"),false);
+
         return data;
     }
 
@@ -551,6 +567,11 @@ public class OrderServices implements OrderInterface {
     Order order=orderRepository.BasketExistance(sessionService.getUserBySession().getId());
     orderRepository.delete(order);
     return order;
+    }
+
+    @Override
+    public List<Order> getAllOrdersByUserId() {
+        return orderRepository.findOrderByBuyerIdAndStatusIsNotLike(sessionService.getUserBySession().getId(),StatusOrderType.BASKET);
     }
 
 

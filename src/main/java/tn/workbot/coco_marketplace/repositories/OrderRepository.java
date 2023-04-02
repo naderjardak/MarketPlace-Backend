@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
+import tn.workbot.coco_marketplace.entities.Shipping;
+import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 
 import javax.persistence.OrderBy;
 import java.util.Date;
@@ -63,5 +65,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   @Query("select pq from Order o,ProductQuantity pq where o.id=:id and pq.order=o ")
   List<ProductQuantity> orderProductList(@Param("id") long id);
+
+
+  List<Order> findByShipping(Shipping shipping);
+
+
+  List<Order> findOrderByBuyerIdAndStatusIsNotLike(Long id, StatusOrderType st);
+
+
 }
 

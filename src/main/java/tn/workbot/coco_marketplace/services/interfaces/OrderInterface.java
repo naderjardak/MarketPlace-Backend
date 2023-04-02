@@ -73,4 +73,6 @@ public interface OrderInterface {
 
     public Order deleteBasket();
 
+    public List<Order> getAllOrdersByUserId();
+
     }

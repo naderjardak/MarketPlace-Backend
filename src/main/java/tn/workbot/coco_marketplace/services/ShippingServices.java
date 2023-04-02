@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.configuration.SessionService;
+import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.ShippingRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ShippingInterface;
@@ -21,6 +23,8 @@ public class ShippingServices implements ShippingInterface {
     @Autowired
     UserrRepository userrRepository;
     @Autowired
+    OrderRepository orderRepository;
+    @Autowired
     SessionService sessionService;
 
 
@@ -33,6 +37,7 @@ public class ShippingServices implements ShippingInterface {
     }
 
     public Shipping createShipping(Shipping shipping) {
+        shipping.setBuyer(sessionService.getUserBySession());
         return shippingRepository.save(shipping);
     }
 
@@ -45,11 +50,12 @@ public class ShippingServices implements ShippingInterface {
     }
 
     public Boolean deleteShipping(Long id) {
-        Shipping existingShipping = shippingRepository.findById(id).orElse(null);
-        if (existingShipping == null) {
-            return false;
-        }
-        shippingRepository.delete(existingShipping);
+        Shipping shipping = shippingRepository.findById(id).orElse(null);
+        List<Order> orders = orderRepository.findByShipping(shipping);
+        orders.forEach(order -> order.setShipping(null));
+        if (shipping != null)
+        shippingRepository.delete(shipping);
+
         return true;
     }
 
