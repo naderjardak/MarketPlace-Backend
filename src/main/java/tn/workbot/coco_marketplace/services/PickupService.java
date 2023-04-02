@@ -154,7 +154,19 @@ public class PickupService implements PickupIService {
         if (u.getGear().equals("CAR")) {
             for (Store storee : storesInSameGovernorate) {
 
-                pickups.addAll(storee.getPickups());
+                for(Pickup pe:storee.getPickups()){
+                    boolean hasRequest=false;
+                    for(Request re:pe.getRequests()){
+                        if(re.getDeliveryman()!=null && re.getDeliveryman().getId().equals(u.getId())){
+                            hasRequest=true;
+                            break;
+                        }
+                    }
+                    if(!hasRequest){
+                        pickups.add(pe);
+                    }
+                }
+               // pickups.addAll(storee.getPickups());
             }
         }
         return pickups;
@@ -177,14 +189,18 @@ public class PickupService implements PickupIService {
                     // Filter pickups based on whether they have an associated request or not
                     for (Pickup pickup : s.getPickups()) {
                         boolean hasRequest = false;
-                        for (Request request : pickup.getRequests()) {
-                            if  (request.getAgency().getId()!=null){
-                                hasRequest = true;
-                                break;
+
+                            for (Request request : pickup.getRequests()) {
+                                if (request.getAgency() != null && request.getAgency().getId().equals(u.getId())) {
+                                    hasRequest = true;
+                                    break;
+                                }
                             }
-                        }
+
                         if (!hasRequest) {
+                            if(pickup.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)) {
                             pickups.add(pickup);
+                        }
                         }
                     }
                 }
@@ -262,17 +278,24 @@ public class PickupService implements PickupIService {
 
             }
         }
+
         return pr.save(pickup1);
     }
 
     @Override
     public Pickup ModifyStatusOfPickupByDelivery(String Status, Long idPickup) {
         Pickup pickup = pr.findById(idPickup).get();
-        if (Status.equals("SHIPPED")) {
-            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("SHIPPED"));
+        if (Status.equals("TAKED")) {
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("TAKED"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("TAKED"));
+            pr.save(pickup);
+        }
+        else if (Status.equals("ONTHEWAY")) {
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("ONTHEWAY"));
             pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("ONTHEWAY"));
             pr.save(pickup);
-        } else if (Status.equals("DELIVERED")) {
+        }
+        else if (Status.equals("DELIVERED")) {
             pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("DELIVERED"));
             pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("DELIVERED"));
             pr.save(pickup);
@@ -965,6 +988,12 @@ public class PickupService implements PickupIService {
     public int countPickupRefundedForfreelancer() {
         User u=sessionService.getUserBySession();
         return pr.countPickupRefundedForFreelancer(u.getId());
+    }
+
+    @Override
+    public List<Pickup> RetrievePickupInProgress() {
+        User u=sessionService.getUserBySession();
+        return pr.retrievePickupInprogress(u.getId());
     }
 
     @Scheduled(cron = "* * * 27 * *")

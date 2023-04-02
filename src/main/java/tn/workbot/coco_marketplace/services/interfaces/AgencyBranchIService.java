@@ -13,8 +13,10 @@ public interface AgencyBranchIService {
     public List<AgencyBranch> retrievethebranchesofeachagency();
     public List<AgencyBranch> RetrieveAllAgencyBranch();
     public AgencyBranch updateAgencyBranch(AgencyBranch agencyBranch);
-    public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch,Long Id);
+    public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch);
     public List<Request> test(Long id);
     public int countAgencyBranchesInAgency();
     public int countDeliveryMenInAllAgencyBranchesForAgench();
+    public List<AgencyBranch> retrieveAgencyBranchOfUser();
+    public int countDeliveryMenInAgency(Long idBranch);
 }

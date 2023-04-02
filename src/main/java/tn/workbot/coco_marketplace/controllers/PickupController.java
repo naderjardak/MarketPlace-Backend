@@ -479,5 +479,8 @@ import java.util.Set;
     public int countPickupRefundedForfreelancer() {
         return pis.countPickupRefundedForfreelancer();
     }
-
+    @GetMapping("RetrievePickupInProgress")
+    public List<Pickup> RetrievePickupInProgress() {
+         return pis.RetrievePickupInProgress();
+    }
 }

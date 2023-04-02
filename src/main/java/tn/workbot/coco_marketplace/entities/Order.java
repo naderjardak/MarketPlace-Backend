@@ -47,7 +47,7 @@ public class Order implements Serializable {
     private Shipping shipping;
 
     @ManyToOne
-    @JsonIgnore
+
     private User buyer;
     @JsonIgnore
     @OneToMany(mappedBy = "order")

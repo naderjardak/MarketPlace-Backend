@@ -48,7 +48,10 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     @Query("select count (distinct r) from Request  r,User u where r.Agency.id=:v1 and r.requestStatus='REJECTED'")
     public int countRequestRejectForAgency(@Param("v1") Long idAgency);
 
-
+    @Query("SELECT DISTINCT r FROM Request r ,Pickup p WHERE r.deliveryman.id = :v1 AND r.requestStatus = 'APPROVED' AND (r.pickup.statusPickupSeller = 'TAKED' OR r.pickup.statusPickupSeller = 'ONTHEWAY' OR r.pickup.statusPickupSeller = 'RETURN' OR r.pickup.statusPickupSeller = 'ASSIGNED')")
+    public List<Request> RetrieveRequestApprovedByFreelancer(@Param("v1") Long IdFreelancer);
+    @Query("SELECT DISTINCT r FROM Request r ,Pickup p WHERE r.Agency.id = :v1 AND r.requestStatus = 'APPROVED' AND (r.pickup.statusPickupSeller = 'TAKED' OR r.pickup.statusPickupSeller = 'ONTHEWAY' OR r.pickup.statusPickupSeller = 'RETURN' OR r.pickup.statusPickupSeller = 'ASSIGNED')")
+    public List<Request> RetrieveRequestApprovedByAgency(@Param("v1") Long IdAgency);
 
 
 }

@@ -100,7 +100,7 @@ public interface PickupIService {
     public int countPickupReturnedForfreelancer();
     public int countPickupOnTheWayForfreelancer();
     public int countPickupRefundedForfreelancer();
-
+    public List<Pickup> RetrievePickupInProgress();
 
 
 }

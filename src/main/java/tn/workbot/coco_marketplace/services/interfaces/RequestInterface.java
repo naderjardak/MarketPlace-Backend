@@ -26,4 +26,6 @@ public interface RequestInterface {
     public int countRequestTotalForAgencyPending();
     public int countRequestApprovedForAgency();
     public int countRequestRejectForAgency();
+    public List<Request> retrieveRequestApprovedOfPickupFreelancer();
+    public List<Request> retrieveRequestApprovedOfPickupAgency();
 }

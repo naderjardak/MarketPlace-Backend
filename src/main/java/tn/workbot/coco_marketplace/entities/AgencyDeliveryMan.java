@@ -17,23 +17,22 @@ import java.util.List;
 public class AgencyDeliveryMan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private  Long id;
-    private  String firstName;
-    private  String lastName;
-    private  String cin;
-    private  String gearv;
-    private  String governorate;
-    private  String city;
-    private  String gearmatricuel;
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String cin;
+    private String gearv;
+    private String governorate;
+    private String city;
+    private String gearmatricuel;
     @Enumerated(EnumType.STRING)
     private TypeOfGear typeOfGear;
 
     @ManyToOne
     private AgencyBranch agencyBranch;
-@JsonIgnore
-    @OneToMany(mappedBy = "agencyDeliveryMan",cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "agencyDeliveryMan", cascade = CascadeType.ALL)
     private List<Request> requests;
-
 
 
 }

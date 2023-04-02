@@ -93,6 +93,15 @@ public class RequestController   {
     public int countRequestRejectForAgency() {
         return ri.countRequestRejectForAgency();
     }
+
+    @GetMapping("retrieveRequestApprovedOfPickupFreelancer")
+    public List<Request> retrieveRequestApprovedOfPickupFreelancer(){
+        return ri.retrieveRequestApprovedOfPickupFreelancer();
+    }
+    @GetMapping("retrieveRequestApprovedOfPickupAgency")
+    public List<Request> retrieveRequestApprovedOfPickupAgency() {
+        return ri.retrieveRequestApprovedOfPickupAgency();
+    }
     }
 
 
