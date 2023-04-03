@@ -35,6 +35,7 @@ public class ProductCategory {
     private ProductCategory category;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<ProductCategory> subCategory;
 
 

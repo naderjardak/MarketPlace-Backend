@@ -7,8 +7,10 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
@@ -24,6 +26,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +44,8 @@ class SupplierRequestServiceTest {
     private UserrRepository userrRepository;
     @Autowired
     private StoreRepository storeRepository;
-
+    @MockBean
+    SessionService sessionService;
     @AfterEach
     public void afterEachTest() {
         supplierRequestRepository.deleteAll();
@@ -87,6 +91,7 @@ class SupplierRequestServiceTest {
         supplierRequest.setQuantity(100);
         supplierRequest.setUnityPrice(0.4f);
         supplierRequest.setDeliveryDate(new Date(newTimeInMillis));
+        when(sessionService.getUserBySession()).thenReturn(user);
 
         SupplierRequest supplierRequestSaved = supplierRequestService.create(supplierRequest, product.getId());
 
@@ -129,6 +134,7 @@ class SupplierRequestServiceTest {
         supplierRequest.setQuantity(100);
         supplierRequest.setUnityPrice(0.6f);
         supplierRequest.setDeliveryDate(new Date(newTimeInMillis));
+        when(sessionService.getUserBySession()).thenReturn(user);
 
         SupplierRequest supplierRequestSaved = supplierRequestService.create(supplierRequest, product.getId());
 

@@ -38,7 +38,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
-    }
+
+   }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -83,7 +84,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static boolean matchPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -98,3 +98,4 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 }
+

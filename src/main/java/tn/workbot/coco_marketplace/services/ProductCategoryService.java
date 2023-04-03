@@ -50,5 +50,22 @@ public class ProductCategoryService implements ProductCategoryInterface {
         return new ProductCategory();
     }
 
+    @Override
+    public List<ProductCategory> findAllCategories() {
+        return productCategoryRepository.findProductCategoriesByCategoryIsNull();
+
+    }
+
+    @Override
+    public List<ProductCategory> findAllSubCategories() {
+        return productCategoryRepository.findProductCategoriesByCategoryIsNotNull();
+
+    }
+
+    @Override
+    public List<ProductCategory> findSubCategoriesByCategoryId(Long idCat) {
+        return productCategoryRepository.findProductCategoriesByCategory(productCategoryRepository.findById(idCat).get());
+    }
+
 
 }
