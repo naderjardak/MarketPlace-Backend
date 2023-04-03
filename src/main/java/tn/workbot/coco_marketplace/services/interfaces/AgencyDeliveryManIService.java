@@ -14,5 +14,6 @@ public interface AgencyDeliveryManIService {
     public List<AgencyDeliveryMan> RetrieveAgencyDeliveryMen();
     public AgencyDeliveryMan AssignAgencyDeliveryManByBranch(AgencyDeliveryMan agencyDeliveryMan,Long Id);
     public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup);
-
+    public List<AgencyDeliveryMan> RetrieveDeliveryMenByBranch(Long idBranch);
+    public int countDeliveryMenInBranch(Long idBranch);
 }

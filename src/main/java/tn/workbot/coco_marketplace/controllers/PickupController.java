@@ -22,6 +22,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
+
 @RequestMapping("Pickup")
 @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
 public class PickupController  {
@@ -409,5 +410,79 @@ public class PickupController  {
     public User getBuyerByPickupId(@RequestParam Long idPickup) {
         return pis.getBuyerByPickupId(idPickup);
     }
+    @GetMapping("getUserNOw")
+    public User getUserNOw() {
+        return pis.getUserNOw();
+    }
+    @GetMapping("countOrderBySellerNoPickup")
+    public int countOrderBySellerNoPickup(@RequestParam Long idStore){
+        return pis.countOrderBySellerNoPickup(idStore);
+    }
+    @GetMapping("getProductSumANdListOfpRODUCTByOrder")
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(@RequestParam Long idOrder,@RequestParam Long idStore) {
+    return pis.getProduct(idOrder,idStore);
+    }
+    @GetMapping("getListProductOfOrder")
+
+    public List<Product> getListProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
+        return pis.getListProductOfOrder(idOrder,idStore);
     }
 
+   @GetMapping("getSumPriceProductOfOrder")
+    public Float getSumPriceProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
+        return  pis.getSumPriceProductOfOrder(idOrder,idStore);
+    }
+    @GetMapping("getAllProductQuantity")
+    public List<ProductQuantity> getAllProductQuantity(){
+        return  pis.getAllProductQuantity();
+    }
+  //stat Agency
+
+
+
+    @GetMapping("countPickupDeliveredForAgency")
+    public int countPickupDeliveredForAgency() {
+        return pis.countPickupDeliveredForAgency();
+    }
+
+    @GetMapping("countPickupReturnedForAgency")
+    public int countPickupReturnedForAgency() {
+        return pis.countPickupReturnedForAgency();
+    }
+
+    @GetMapping("countPickupOnTheWayForAgency")
+    public int countPickupOnTheWayForAgency() {
+        return pis.countPickupOnTheWayForAgency();
+    }
+
+    @GetMapping("countPickupRefundedForAgency")
+    public int countPickupRefundedForAgency() {
+        return pis.countPickupRefundedForAgency();
+    }
+
+
+    //stat freelancer
+    @GetMapping("countPickupDeliveredForfreelancer")
+    public int countPickupDeliveredForfreelancer() {
+        return pis.countPickupDeliveredForfreelancer();
+    }
+
+    @GetMapping("countPickupReturnedForfreelancer")
+    public int countPickupReturnedForfreelancer() {
+        return pis.countPickupReturnedForfreelancer();
+    }
+
+    @GetMapping("countPickupOnTheWayForfreelancer")
+    public int countPickupOnTheWayForfreelancer() {
+        return pis.countPickupOnTheWayForfreelancer();
+    }
+
+    @GetMapping("countPickupRefundedForfreelancer")
+    public int countPickupRefundedForfreelancer() {
+        return pis.countPickupRefundedForfreelancer();
+    }
+    @GetMapping("RetrievePickupInProgress")
+    public List<Pickup> RetrievePickupInProgress() {
+         return pis.RetrievePickupInProgress();
+    }
+}

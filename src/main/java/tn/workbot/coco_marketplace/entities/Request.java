@@ -20,24 +20,23 @@ import java.util.Date;
 public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private LocalDateTime RequestDate;
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
-    @JsonIgnore
+
     @ManyToOne
     private User deliveryman;
     @JsonIgnore
     @ManyToOne
     private User seller;
-
-    @JsonIgnore
     @ManyToOne
     private User Agency;
-    @JsonIgnore
+
     @ManyToOne
     private Pickup pickup;
-    @JsonIgnore
+
     @ManyToOne
     private AgencyDeliveryMan agencyDeliveryMan;
 

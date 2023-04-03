@@ -7,6 +7,7 @@ import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -57,6 +58,8 @@ public class PickupService implements PickupIService {
     ShippingRepository shippingRepository;
     @Autowired
     SessionService sessionService;
+    @Autowired
+    ProductQuantityRepository pq;
 
 
 
@@ -109,9 +112,9 @@ public class PickupService implements PickupIService {
 
     @Override
     public Pickup updatePickup(Pickup pickup,Long idPikup) {
-         Pickup pickup1=pr.findById(idPikup).get();
-         pickup.setOrder(pickup1.getOrder());
-         pickup.setStore(pickup1.getStore());
+        Pickup pickup1=pr.findById(idPikup).get();
+        pickup.setOrder(pickup1.getOrder());
+        pickup.setStore(pickup1.getStore());
         return pr.save(pickup);
     }
 
@@ -151,7 +154,19 @@ public class PickupService implements PickupIService {
         if (u.getGear().equals("CAR")) {
             for (Store storee : storesInSameGovernorate) {
 
-                pickups.addAll(storee.getPickups());
+                for(Pickup pe:storee.getPickups()){
+                    boolean hasRequest=false;
+                    for(Request re:pe.getRequests()){
+                        if(re.getDeliveryman()!=null && re.getDeliveryman().getId().equals(u.getId())){
+                            hasRequest=true;
+                            break;
+                        }
+                    }
+                    if(!hasRequest){
+                        pickups.add(pe);
+                    }
+                }
+               // pickups.addAll(storee.getPickups());
             }
         }
         return pickups;
@@ -162,19 +177,36 @@ public class PickupService implements PickupIService {
     @Override
     public List<Pickup> RetrievePickupsbetweenAgencyBranchAndStoreInTheSomeGovernorat() {
         //sessionManager Variable
-        User u=sessionService.getUserBySession();
+        User u = sessionService.getUserBySession();
         List<Store> stores = sr.findAll();
         List<AgencyBranch> agencyBranches = new ArrayList<>();
-        Set<Pickup> pickups = new HashSet<>(); // use Set instead of ArrayList
+        Set<Pickup> pickups = new HashSet<>();
+        List<Request> requests=pr.REQUESTofuser(u.getId());
         agencyBranches.addAll(u.getAgencyBranches());
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {
-                    pickups.addAll(s.getPickups()); // use addAll instead of add
+                    // Filter pickups based on whether they have an associated request or not
+                    for (Pickup pickup : s.getPickups()) {
+                        boolean hasRequest = false;
+
+                            for (Request request : pickup.getRequests()) {
+                                if (request.getAgency() != null && request.getAgency().getId().equals(u.getId())) {
+                                    hasRequest = true;
+                                    break;
+                                }
+                            }
+
+                        if (!hasRequest) {
+                            if(pickup.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)) {
+                            pickups.add(pickup);
+                        }
+                        }
+                    }
                 }
             }
         }
-        return new ArrayList<>(pickups); // convert Set to ArrayList
+        return new ArrayList<>(pickups);
     }
 
     @Override
@@ -246,17 +278,24 @@ public class PickupService implements PickupIService {
 
             }
         }
+
         return pr.save(pickup1);
     }
 
     @Override
     public Pickup ModifyStatusOfPickupByDelivery(String Status, Long idPickup) {
         Pickup pickup = pr.findById(idPickup).get();
-        if (Status.equals("SHIPPED")) {
-            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("SHIPPED"));
+        if (Status.equals("TAKED")) {
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("TAKED"));
+            pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("TAKED"));
+            pr.save(pickup);
+        }
+        else if (Status.equals("ONTHEWAY")) {
+            pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("ONTHEWAY"));
             pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("ONTHEWAY"));
             pr.save(pickup);
-        } else if (Status.equals("DELIVERED")) {
+        }
+        else if (Status.equals("DELIVERED")) {
             pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("DELIVERED"));
             pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("DELIVERED"));
             pr.save(pickup);
@@ -795,6 +834,166 @@ public class PickupService implements PickupIService {
     @Override
     public Shipping getShippingByPickupId(Long idPickup) {
         return pr.getShippingByPickupId(idPickup);
+    }
+
+    @Override
+    public User getUserNOw() {
+        User u=sessionService.getUserBySession();
+        return u;
+    }
+
+    @Override
+    public int countOrderBySellerNoPickup(Long idStore) {
+        User u=sessionService.getUserBySession();
+        List<Pickup> pickups = (List<Pickup>) pr.findAll();
+        List<Order> orders = pr.orderOfstore(idStore, u.getId());
+        List<Order> finalOrders = new ArrayList<>();
+        int nb=0;
+        for (Order order : orders) {
+            boolean hasPickup = false;
+            for (Pickup pickup : pickups) {
+                if (pickup.getOrder().getId().equals(order.getId())) {
+                    hasPickup = true;
+                    break;
+                }
+            }
+            if (!hasPickup) {
+                finalOrders.add(order);
+            }
+        }
+        for (Order o:finalOrders) {
+            nb++;
+        }
+        return nb;
+    }
+
+    @Override
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(Long idOrder,Long idStore) {
+
+            //Variable Of Session Manager
+            User u=sessionService.getUserBySession();
+            Store store2 = pr.storeoforder(idStore, idOrder, u.getId());
+            Store storeer = sr.findById(idOrder).get();
+            Order order = or.findById(idOrder).get();
+
+        float totalPrice=0;
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(idStore, idOrder, u.getId());
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+
+
+        if (pr.countstoreorder(idOrder) == 1) {
+            totalPrice =order.getSum();
+            } else {
+                if (storeofsomeUser >= 1) {
+                    for (Product p : productList) {
+                         totalPrice = p.getProductPrice()+totalPrice;
+
+                    }
+
+                }
+            }
+        Map<Float, List<Product>> resultMap = new HashMap<>();
+        resultMap.put(totalPrice, productList);
+
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @Override
+    public List<Product> getListProductOfOrder(Long idOrder, Long idStore) {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+        return productList;
+    }
+
+    @Override
+    public Float getSumPriceProductOfOrder(Long idOrder, Long idStore) {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        Store store2 = pr.storeoforder(idStore, idOrder, u.getId());
+        Store storeer = sr.findById(idOrder).get();
+        Order order = or.findById(idOrder).get();
+
+        float totalPrice=0;
+        int storeofsomeUser = pr.countstoreofproductinorderOfSomeseller(idStore, idOrder, u.getId());
+        List<Product> productList = pr.productOfTheStoreById(idStore, idOrder, u.getId());
+
+
+        if (pr.countstoreorder(idOrder) == 1) {
+            totalPrice =order.getSum();
+        } else {
+            if (storeofsomeUser >= 1) {
+                for (Product p : productList) {
+                    totalPrice = p.getProductPrice()+totalPrice;
+
+                }
+
+            }
+        }
+        return totalPrice;
+    }
+
+    @Override
+    public List<ProductQuantity> getAllProductQuantity() {
+        return pq.findAll();
+    }
+
+    @Override
+    public int countPickupDeliveredForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupDeliveredForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupReturnedForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupReturnedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupOnTheWayForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupOnTheWayForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupRefundedForAgency() {
+        //Variable Of Session Manager
+        User u=sessionService.getUserBySession();
+        return pr.countPickupRefundedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupDeliveredForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupDeliveredForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupReturnedForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupReturnedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupOnTheWayForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupOnTheWayForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupRefundedForfreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupRefundedForFreelancer(u.getId());
+    }
+
+    @Override
+    public List<Pickup> RetrievePickupInProgress() {
+        User u=sessionService.getUserBySession();
+        return pr.retrievePickupInprogress(u.getId());
     }
 
     @Scheduled(cron = "* * * 27 * *")

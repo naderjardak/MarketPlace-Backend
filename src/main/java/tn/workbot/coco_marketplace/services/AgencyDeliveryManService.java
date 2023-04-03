@@ -84,4 +84,14 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
         Pickup p=pr.findById(idPickup).get();
         return admr.deliveryMenByAgency(u.getId(),p.getId());
     }
+
+    @Override
+    public List<AgencyDeliveryMan> RetrieveDeliveryMenByBranch(Long idBranch) {
+        return admr.retrieveDMbYbRANCHE(idBranch);
+    }
+
+    @Override
+    public int countDeliveryMenInBranch(Long idBranch) {
+        return admr.countDmInBranch(idBranch);
+    }
 }

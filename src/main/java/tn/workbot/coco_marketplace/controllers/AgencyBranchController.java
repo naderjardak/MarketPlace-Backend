@@ -24,7 +24,7 @@ public class AgencyBranchController {
         return abi.addAgencyBranch(agencyBranch);
     }
 
-    @DeleteMapping("Delete AgencyBranch")
+    @DeleteMapping("DeleteAgencyBranch")
     public void removeAgencyBranch(@RequestParam Long id) {
         abi.removeAgencyBranch(id);
     }
@@ -45,17 +45,36 @@ public class AgencyBranchController {
     }
 
     @PostMapping("AssignBranchManByDeliveryAgency")
-    public AgencyBranch AssignBranchManByDeliveryAgency(@RequestBody AgencyBranch agencyBranch, @RequestParam Long Id) {
-        return abi.AssignBranchManByDeliveryAgency(agencyBranch, Id);
+    public AgencyBranch AssignBranchManByDeliveryAgency(@RequestBody AgencyBranch agencyBranch) {
+        return abi.AssignBranchManByDeliveryAgency(agencyBranch);
     }
 
     @GetMapping("retrievethebranchesofeachagency")
-    public List<AgencyBranch>  retrievethebranchesofeachagency() {
+    public List<AgencyBranch> retrievethebranchesofeachagency() {
         return abi.retrievethebranchesofeachagency();
     }
 
     @GetMapping("testsst")
-    public List<Request> test(@RequestParam Long id){
+    public List<Request> test(@RequestParam Long id) {
         return abi.test(id);
+    }
+
+    @GetMapping("countAgencyBranchesInAgency")
+    public int countAgencyBranchesInAgency() {
+        return abi.countAgencyBranchesInAgency();
+    }
+
+    @GetMapping("countDeliveryMenInAllAgencyBranchesForAgench")
+    public int countDeliveryMenInAllAgencyBranchesForAgench() {
+        return abi.countDeliveryMenInAllAgencyBranchesForAgench();
+    }
+
+    @GetMapping("retrieveAgencyBranchOfUser")
+    public List<AgencyBranch> retrieveAgencyBranchOfUser() {
+        return abi.retrieveAgencyBranchOfUser();
+    }
+    @GetMapping("countDeliveryMenInAgency")
+    public int countDeliveryMenInAgency(@RequestParam Long idBranch) {
+        return abi.countDeliveryMenInAgency(idBranch);
     }
 }

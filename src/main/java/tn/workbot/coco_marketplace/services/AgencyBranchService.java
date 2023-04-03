@@ -29,6 +29,7 @@ public class AgencyBranchService implements AgencyBranchIService {
     @Autowired
     SessionService sessionService;
 
+
     @Override
     public AgencyBranch addAgencyBranch(AgencyBranch agencyBranch) {
         return abr.save(agencyBranch);
@@ -38,18 +39,20 @@ public class AgencyBranchService implements AgencyBranchIService {
     public void removeAgencyBranch(Long id) {
         AgencyBranch branch = abr.findById(id).get();
         List<Request> requests = (List<Request>) rr.findAll();
+        boolean hasMatch = false;
         for (Request r : requests) {
             if (r.getAgencyDeliveryMan().getAgencyBranch().getId().equals(branch.getId())) {
                 if (!r.getRequestStatus().equals(RequestStatus.APPROVED)) {
                     if (rr.countApproved(id) == 0) {
-                        abr.deleteById(id);
+                        hasMatch = true;
+                        break;
                     }
                 }
             }
-
         }
-
-
+        if (!hasMatch) {
+            abr.deleteById(id);
+        }
     }
 
     @Override
@@ -79,10 +82,10 @@ public class AgencyBranchService implements AgencyBranchIService {
     }
 
     @Override
-    public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch, Long Id) {
+    public AgencyBranch AssignBranchManByDeliveryAgency(AgencyBranch agencyBranch) {
         AgencyBranch agencyBranch1 = abr.save(agencyBranch);
-        User user1 = user.findById(Id).get();
-        agencyBranch1.setDeliveryAgency(user1);
+        User u=sessionService.getUserBySession();
+        agencyBranch1.setDeliveryAgency(u);
         return abr.save(agencyBranch1);
     }
 
@@ -91,5 +94,28 @@ public class AgencyBranchService implements AgencyBranchIService {
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(id).get();
         List<Request> req = rr.ByDeliveryMen(id);
         return req;
+    }
+
+    @Override
+    public int countAgencyBranchesInAgency() {
+        User u=sessionService.getUserBySession();
+        return abr.countAgencyBranch(u.getId());
+    }
+
+    @Override
+    public int countDeliveryMenInAllAgencyBranchesForAgench() {
+        User u=sessionService.getUserBySession();
+        return abr.countDeliveryMenInAllBranchtoAgency(u.getId());
+    }
+
+    @Override
+    public List<AgencyBranch> retrieveAgencyBranchOfUser() {
+        User u=sessionService.getUserBySession();
+        return abr.retrieveAgency(u.getId());
+    }
+
+    @Override
+    public int countDeliveryMenInAgency(Long idBranch) {
+        return abr.countDeliveryMenInBranchByIdBranch(idBranch);
     }
 }

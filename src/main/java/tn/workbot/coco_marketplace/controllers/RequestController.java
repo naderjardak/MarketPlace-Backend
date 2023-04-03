@@ -54,9 +54,10 @@ public class RequestController   {
     }
     @PostMapping("assignRequesttoseller")
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
-        return ri.assignRequesttoseller(idRequest, status,idPickup);
+        return ri.assignRequesttoseller(idRequest,  status,idPickup);
+
     }
-     @GetMapping("retrieveRequestDeliveryAgencycBySeller")
+     @GetMapping("retrieveRequestBySeller")
      public List<Request> retrieveRequestBySeller() {
          return ri.retrieveRequestBySeller();
      }
@@ -64,4 +65,44 @@ public class RequestController   {
      public List<Request> retrieveRequestByPickup(Long idPickup) {
          return ri.retrieveRequestByPickup(idPickup);
      }
+
+    @GetMapping("RetrieveRequestByAgency")
+
+    public List<Request> RetrieveRequestByAgency() {
+        return ri.RetrieveRequestByAgency();
     }
+
+    @GetMapping("RetrieveRequestByFreelancer")
+    public List<Request> RetrieveRequestByFreelancer() {
+        return ri.RetrieveRequestByFreelancer();
+    }
+    @GetMapping("RetrieveFreelancerDeliveryrByRequest")
+    public User RetrieveFreelancerDeliveryrByRequest(@RequestParam Long idRequest) {
+       return ri.RetrieveFreelancerDeliveryrByRequest(idRequest);
+    }
+    @GetMapping("countRequestTotalForAgencyPending")
+    public int countRequestTotalForAgencyPending() {
+        return ri.countRequestTotalForAgencyPending() ;
+    }
+
+    @GetMapping("countRequestApprovedForAgency")
+    public int countRequestApprovedForAgency() {
+        return ri.countRequestApprovedForAgency();
+    }
+
+    @GetMapping("countRequestRejectForAgency")
+    public int countRequestRejectForAgency() {
+        return ri.countRequestRejectForAgency();
+    }
+
+    @GetMapping("retrieveRequestApprovedOfPickupFreelancer")
+    public List<Request> retrieveRequestApprovedOfPickupFreelancer(){
+        return ri.retrieveRequestApprovedOfPickupFreelancer();
+    }
+    @GetMapping("retrieveRequestApprovedOfPickupAgency")
+    public List<Request> retrieveRequestApprovedOfPickupAgency() {
+        return ri.retrieveRequestApprovedOfPickupAgency();
+    }
+    }
+
+

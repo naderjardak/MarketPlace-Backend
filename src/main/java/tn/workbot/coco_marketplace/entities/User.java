@@ -70,7 +70,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     private Set<Store> stores;
 
-    @JsonIgnore
+
     @ManyToOne
     private Role role;
 
@@ -97,7 +97,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "seller")
     @JsonIgnore
     private List<Request> requestsellers;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "Agency")
     private List<Request> requestsAgencys;
     @OneToMany(mappedBy = "deliveryAgency")

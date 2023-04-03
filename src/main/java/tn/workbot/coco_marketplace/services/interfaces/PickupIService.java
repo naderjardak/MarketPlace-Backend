@@ -1,11 +1,13 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
 import com.google.maps.errors.ApiException;
+import org.springframework.http.ResponseEntity;
 import tn.workbot.coco_marketplace.entities.*;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface PickupIService {
@@ -44,24 +46,24 @@ public interface PickupIService {
     public int countRequestRejectedAgencyToday();
     public int countRequestApprovedAgencyToday();
 
-   public Float SumPricePickupDeliveredByFreelancerToday();
-   public Float SumPricePickupDeliveredByAgencyToday();
-   public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
-   public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
+    public Float SumPricePickupDeliveredByFreelancerToday();
+    public Float SumPricePickupDeliveredByAgencyToday();
+    public Float SumPriceDeliveryPickupisDeliveredByFreelancerToday();
+    public Float SumPriceDeliveryPickupisDeliveredByAgencyToday();
 
-   public List<Product>RetrieveProductByPickup(Long idPickup);
-   /////////////stat Administrator
-   public int countAgencyAdministrator();
-   public int countDeliveryFreelancerAdministrator();
+    public List<Product>RetrieveProductByPickup(Long idPickup);
+    /////////////stat Administrator
+    public int countAgencyAdministrator();
+    public int countDeliveryFreelancerAdministrator();
     public int countPickupDeliveredTodayAdministrator();
     public int countOfPickupOnTheWayTodayAdministrator();
     public int countOfPickupReturnedTodayAdministrator();
     public int countOfPickupDeliveredweekAdministrator();
     public int countOfPickupOnTheWayweekAdministrator();
     public int countOfPickupReturnedweekAdministrator();
-   public Float sumOfPickupDeliveredTodayAdministrator();
-   public Float sumOfPickupOnTheWayTodayAdministrator();
-   public Float sumOfPickupReturnedTodayAdministrator();
+    public Float sumOfPickupDeliveredTodayAdministrator();
+    public Float sumOfPickupOnTheWayTodayAdministrator();
+    public Float sumOfPickupReturnedTodayAdministrator();
     public Float sumOfPickupDeliveredweekAdministrator();
     public Float sumOfPickupOnTheWayweekAdministrator();
     public Float sumOfPickupReturnedweekAdministrator();
@@ -83,9 +85,22 @@ public interface PickupIService {
     public Order getOrderByPickupId(Long idPickup);
     public User getBuyerByPickupId(Long idPickup);
     public Shipping getShippingByPickupId(Long idPickup);
-
-
-
+    public User getUserNOw();
+    public int countOrderBySellerNoPickup(Long idStore);
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(Long idOrder,Long idStore) ;
+    public List<Product> getListProductOfOrder(Long idOrder,Long idStore);
+    public Float  getSumPriceProductOfOrder(Long idOrder,Long idStore);
+    public List<ProductQuantity> getAllProductQuantity();
+    public int countPickupDeliveredForAgency();
+    public int countPickupReturnedForAgency();
+    public int countPickupOnTheWayForAgency();
+    public int countPickupRefundedForAgency();
+    ///stat freelancer
+    public int countPickupDeliveredForfreelancer();
+    public int countPickupReturnedForfreelancer();
+    public int countPickupOnTheWayForfreelancer();
+    public int countPickupRefundedForfreelancer();
+    public List<Pickup> RetrievePickupInProgress();
 
 
 }

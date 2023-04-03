@@ -33,7 +33,7 @@ public class AgencyDeliveryManController  {
         return ad.RetrieveAgencyDeliveryMan(id);
     }
 
-    @GetMapping("RetrieveAgencyDeliveryMen")
+    @GetMapping("RetrieveAllAgencyDeliveryMen")
     public List<AgencyDeliveryMan> RetrieveAgencyDeliveryMen() {
         return ad.RetrieveAgencyDeliveryMen();
     }
@@ -48,5 +48,13 @@ public class AgencyDeliveryManController  {
     @GetMapping("RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen")
     public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup) {
         return ad.RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(idPickup);
+    }
+    @GetMapping("RetrieveDeliveryMenByBranch")
+    public List<AgencyDeliveryMan> RetrieveDeliveryMenByBranch(@RequestParam Long idBranch) {
+        return ad.RetrieveDeliveryMenByBranch(idBranch);
+    }
+    @GetMapping("countDeliveryMenInBranch")
+    public int countDeliveryMenInBranch(@RequestParam Long idBranch) {
+    return ad.countDeliveryMenInBranch(idBranch);
     }
     }

@@ -19,6 +19,8 @@ import tn.workbot.coco_marketplace.entities.Pickup;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.repositories.AgencyDeliveryManRepository;
 import tn.workbot.coco_marketplace.repositories.PickupRepository;
 import tn.workbot.coco_marketplace.repositories.RequestRepository;
@@ -57,7 +59,11 @@ public class RequestService implements RequestInterface {
 
     @Override
     public void removeRequest(Long id) {
-        rr.deleteById(id);
+       Pickup p= rr.retrievePickupbyRequestId(id);
+      int nbRequest=p.getNbRequest()-1;
+       p.setNbRequest(nbRequest);
+       pr.save(p);
+       rr.deleteById(id);
     }
 
     @Override
@@ -87,8 +93,7 @@ public class RequestService implements RequestInterface {
         //eli fou9o sessionManger
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest(u.getId());
-        i = i + 1;
+        int i = pr.countrequest();
         p.setNbRequest(i);
         pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
@@ -111,17 +116,18 @@ public class RequestService implements RequestInterface {
         //eliconnectetawa session id bech yet7at lena fel idSeller
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest(u.getId());
-        i = i + 1;
+        int i = pr.countrequest();
         p.setNbRequest(i);
         pr.save(p);
         User user=sessionService.getUserBySession();
         request1.setRequestStatus(RequestStatus.valueOf("PENDING"));
         Pickup pickup = pr.findById(idPickup).get();
+        request1.setAgencyDeliveryMan(null);
+        request1.setAgency(null);
         request1.setDeliveryman(user);
         request1.setPickup(pickup);
         request1.setRequestDate(LocalDateTime.now());
-        return rr.save(request);
+        return rr.save(request1);
     }
     public String calculateDeliveryTime(Long idPickup, Long idRequest) throws IOException, InterruptedException, ApiException {
 
@@ -197,6 +203,8 @@ public class RequestService implements RequestInterface {
         request.setSeller(seller);
         String deliverytime=calculateDeliveryTime(idPickup,idRequest);
         pickup.setDeliveryTimeInHoursBuyer(deliverytime);
+        pickup.setStatusPickupSeller(StatusPickupSeller.valueOf("ASSIGNED"));
+        pickup.setStatusPickupBuyer(StatusPickupBuyer.valueOf("ASSIGNED"));
         pr.save(pickup);
         return rr.save(request);
     }
@@ -212,6 +220,56 @@ public class RequestService implements RequestInterface {
     public List<Request> retrieveRequestByPickup(Long idPickup) {
         //na5o idPickup mel URL
         return rr.retrieveRequestByPickup(idPickup);
+    }
+
+    @Override
+    public List<Request> RetrieveRequestByAgency() {
+        //session manager variable idseller
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestByAgency(u.getId());
+    }
+
+    @Override
+    public List<Request> RetrieveRequestByFreelancer() {
+        //session manager variable idseller
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestByFreelancer(u.getId());
+    }
+
+    @Override
+    public User RetrieveFreelancerDeliveryrByRequest(Long idRequest) {
+        User u=sessionService.getUserBySession();
+        return rr.retrieveFreelancerDeliveryByRequestAndStore(u.getId(),idRequest);
+    }
+
+    @Override
+    public int countRequestTotalForAgencyPending() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestTotalOfAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestApprovedForAgency() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestApprovedForAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestRejectForAgency() {
+        User u=sessionService.getUserBySession();
+        return rr.countRequestRejectForAgency(u.getId());
+    }
+
+    @Override
+    public List<Request> retrieveRequestApprovedOfPickupFreelancer() {
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestApprovedByFreelancer(u.getId());
+    }
+
+    @Override
+    public List<Request> retrieveRequestApprovedOfPickupAgency() {
+        User u=sessionService.getUserBySession();
+        return rr.RetrieveRequestApprovedByAgency(u.getId());
     }
 
 
