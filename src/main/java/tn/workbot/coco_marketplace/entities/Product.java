@@ -71,7 +71,6 @@ public class Product {
     private List<ProductQuantity> productQuantities;
 
     @ManyToOne
-    @JsonIgnore
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "product")
@@ -79,7 +78,6 @@ public class Product {
     private List<PromotionCode> promotionCodes;
 
     @ManyToOne
-    @JsonIgnore
     private Store store;
 
     @OneToMany(mappedBy = "product")
@@ -90,16 +88,21 @@ public class Product {
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id != null && Objects.equals(id, product.id);
+        return Float.compare(product.productPrice, productPrice) == 0 && Float.compare(product.productPriceBeforeDiscount, productPriceBeforeDiscount) == 0 && Float.compare(product.deliveryPrice, deliveryPrice) == 0 && Float.compare(product.unityPriceFromSupplier, unityPriceFromSupplier) == 0 && Float.compare(product.rating, rating) == 0 && automaticRequestAcceptance == product.automaticRequestAcceptance && numberOfRatings == product.numberOfRatings && quantity == product.quantity && Float.compare(product.productWeight, productWeight) == 0 && deliveryQuantity == product.deliveryQuantity && enabled == product.enabled && numberOfPurchase == product.numberOfPurchase && Objects.equals(id, product.id) && reference.equals(product.reference) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(Image, product.Image) && Objects.equals(creationDate, product.creationDate) && Objects.equals(AdditionalDeliveryInstructions, product.AdditionalDeliveryInstructions) && productStatus == product.productStatus && Objects.equals(productQuantities, product.productQuantities) && Objects.equals(productCategory, product.productCategory) && Objects.equals(promotionCodes, product.promotionCodes) && Objects.equals(store, product.store) && Objects.equals(reviews, product.reviews) && Objects.equals(supplierRequests, product.supplierRequests) && Objects.equals(image1, product.image1) && Objects.equals(image2, product.image2) && Objects.equals(image3, product.image3);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, reference, name, description, Image, productPrice, productPriceBeforeDiscount, deliveryPrice, unityPriceFromSupplier, rating, automaticRequestAcceptance, numberOfRatings, quantity, productWeight, deliveryQuantity, enabled, creationDate, AdditionalDeliveryInstructions, numberOfPurchase, productStatus, productQuantities, productCategory, promotionCodes, store, reviews, supplierRequests, image1, image2, image3);
     }
+
+    private String image1;
+    private String image2;
+    private String image3;
 }

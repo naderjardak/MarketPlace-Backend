@@ -17,4 +17,8 @@ public interface ProductCategoryInterface {
     void delete(ProductCategory p);
     ProductCategory findByName(String name);
 
+    List<ProductCategory> findAllCategories();
+    List<ProductCategory> findAllSubCategories();
+    List<ProductCategory> findSubCategoriesByCategoryId(Long idCat);
+
 }

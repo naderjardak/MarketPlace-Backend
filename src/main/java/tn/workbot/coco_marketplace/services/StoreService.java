@@ -57,5 +57,10 @@ public class StoreService implements StoreInterface {
         storeRepository.delete(s);
     }
 
+    @Override
+    public List<Store> getStoresByUser(Long idUser) {
+        return storeRepository.findStoreBySeller(userrRepository.findById(idUser).get());
+    }
+
 
 }

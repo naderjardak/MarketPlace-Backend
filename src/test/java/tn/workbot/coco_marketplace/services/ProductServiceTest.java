@@ -4,13 +4,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import tn.workbot.coco_marketplace.Api.OrderMailSenderService;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ProductStatus;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
@@ -46,10 +49,11 @@ class ProductServiceTest {
     @Autowired
     private SupplierRequestRepository supplierRequestRepository;
 
-
     @MockBean
     private OrderMailSenderService mailSenderService;
 
+    @MockBean
+    SessionService sessionService;
     @AfterEach
     public void afterEachTest() {
         productRepository.deleteAll();
@@ -77,7 +81,7 @@ class ProductServiceTest {
         product.setDescription("test");
         product.setProductWeight(2);
         product.setProductCategory(subCategory);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -88,7 +92,7 @@ class ProductServiceTest {
         store.setSeller(user);
 
         storeRepository.save(store);
-
+        when(sessionService.getUserBySession()).thenReturn(user);
         Product savedProduct = productService.create(product, "STORE TEST");
 
         assertNotNull(savedProduct);
@@ -118,11 +122,12 @@ class ProductServiceTest {
         product.setDescription("test");
         product.setProductWeight(2);
         product.setProductCategory(subCategory);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
         userrRepository.save(user);
+        when(sessionService.getUserBySession()).thenReturn(user);
 
 
         Exception thrown = assertThrows(Exception.class, () -> productService.create(product, "STORE TEST"));
@@ -141,7 +146,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -170,7 +175,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -179,10 +184,13 @@ class ProductServiceTest {
         Store store = new Store();
         store.setName("STORE TEST");
         store.setSeller(user);
+        Set<String> storen=new HashSet<>();
+        storen.add(store.getName());
 
         storeRepository.save(store);
+        when(sessionService.getUserBySession()).thenReturn(user);
 
-        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", "STORE TEST");
+        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", storen);
 
 
         assertNotNull(savedProduct);
@@ -210,7 +218,7 @@ class ProductServiceTest {
         product.setProductPrice(25);
         product.setDescription("test");
         product.setProductWeight(2);
-        product.setProductStatus(ProductStatus.WAITING_FOR_VALIDATION);
+        product.setProductStatus(ProductStatus.PENDING);
 
         User user = new User();
         user.setFirstName("test");
@@ -219,10 +227,12 @@ class ProductServiceTest {
         Store store = new Store();
         store.setName("STORE TEST");
         store.setSeller(user);
-
+        Set<String> storen=new HashSet<>();
+        storen.add(store.getName());
         storeRepository.save(store);
+        when(sessionService.getUserBySession()).thenReturn(user);
 
-        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", "STORE TEST");
+        Product savedProduct = productService.createAndAssignCategoryAndSubCategory(product, "CatTest", "subCatTest", storen);
 
 
         assertNotNull(savedProduct);
