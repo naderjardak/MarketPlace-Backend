@@ -55,6 +55,7 @@ public class RequestController   {
     @PostMapping("assignRequesttoseller")
     public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
         return ri.assignRequesttoseller(idRequest,  status,idPickup);
+
     }
      @GetMapping("retrieveRequestBySeller")
      public List<Request> retrieveRequestBySeller() {

@@ -11,7 +11,8 @@ import java.util.List;
 public interface ProductQuantityRepository extends JpaRepository<ProductQuantity,Long> {
 
     List<ProductQuantity> findAllByProduct(Product product);
-
-    ProductQuantity findByProductReferenceAndOrderId(String refProduct,Long idOrder);
+    List<ProductQuantity> findByProductReferenceAndOrderId(String refProduct,Long idOrder);
+    ProductQuantity findByOrderIdAndProductReference(Long idOrder,String refProduct);
+    ProductQuantity findByProductIdAndOrderId(Long ProductId,Long idOrder);
 
 }

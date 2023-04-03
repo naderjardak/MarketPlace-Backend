@@ -9,21 +9,35 @@ import tn.workbot.coco_marketplace.entities.Model.CustemerModel;
 import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.ProductQuantity;
-import tn.workbot.coco_marketplace.entities.Shipping;
 import tn.workbot.coco_marketplace.entities.enmus.PaymentType;
 import tn.workbot.coco_marketplace.entities.enmus.ProductFiltre;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
+import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 
 import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("order")
-@PreAuthorize("hasAuthority('BUYER')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class OrderController {
 
     @Autowired
     OrderInterface orderInterface;
+    @Autowired
+    ProductInterface productInterface;
+
+    @GetMapping("GetProductById")
+    public Product getById(@RequestParam Long id) {
+        return productInterface.getById(id);
+    }
+
+    @GetMapping("GetBasketOrder")
+    Order GetBasketOrder(){return orderInterface.GetBasketOrder();}
+
+    @GetMapping("GetBasketProduct")
+    List<ProductQuantity> getProductOfBasket(){return orderInterface.productOfBasket();}
 
     @GetMapping("GetAllOrders")
     List<Order> getAllOrders(){return orderInterface.getAllOrders();}
@@ -41,7 +55,7 @@ public class OrderController {
     public ProductQuantity DeleteProductFromOrder(@RequestParam String refProduct){return orderInterface.DeleteProductFromOrder(refProduct);}
 
     @PutMapping("AddShippingToCard")
-    public Order AffectShippingAdressToOrder(@RequestBody Shipping shipping){return orderInterface.AffectShippingAdressToOrder(shipping);}
+    public Order AffectShippingAdressToOrder(@RequestBody Long idshipping){return orderInterface.AffectShippingAdressToOrder(idshipping);}
 
     @PostMapping("payements")
     public CustemerModel payement(@RequestBody CustemerModel data) throws StripeException, MessagingException { return orderInterface.StripePayementService(data); }
@@ -54,4 +68,12 @@ public class OrderController {
 
     @GetMapping ("validateCommand")
     public String validateCommand(@RequestParam String token) throws MessagingException {return orderInterface.validateCommand(token);}
+
+
+    @DeleteMapping("DeleteBasket")
+    public Order deleteBasket(){return orderInterface.deleteBasket();}
+
+    @GetMapping("getAllOrdersByUserId")
+    public List<Order> getAllOrdersByUserId(){return orderInterface.getAllOrdersByUserId();}
+
 }

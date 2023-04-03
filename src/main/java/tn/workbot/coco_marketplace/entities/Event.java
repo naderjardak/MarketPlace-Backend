@@ -29,6 +29,9 @@ public class Event {
     @Temporal(TemporalType.DATE)
     private Date lastDate;
 
+    @OneToMany
+    private List<Product> productList;
+
     @ManyToOne
     @JsonIgnore
     private User user;

@@ -23,7 +23,8 @@ public class Shipping implements Serializable {
     private String governorate;
     private String city;
     private String gpsPoint;
-
+    @ManyToOne
+    private User buyer;
 
 
 }

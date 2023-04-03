@@ -10,14 +10,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("productCategory")
-@PreAuthorize("hasAuthority('SELLER')")
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')|| hasAuthority('BUYER')")
+@CrossOrigin(origins = "http://localhost:4200/")
+
 
 public class ProductCategoryController {
 
     @Autowired
     private ProductCategoryInterface productCategoryInterface;
 
-    @GetMapping("GetAllProductCategories")
+    @GetMapping("GetAllProductCategoriesAndSub")
     public List<ProductCategory> retrieveAll() {
         return productCategoryInterface.retrieveAll();
     }
@@ -41,5 +43,14 @@ public class ProductCategoryController {
     public void delete(ProductCategory p) {
         productCategoryInterface.delete(p);
     }
+    @GetMapping("GetAllProductCategories")
+    public List<ProductCategory> retrieveAllCategories() {
+        return productCategoryInterface.findAllCategories();
+    }
+    @GetMapping("GetAllProductSubCategories")
+    public List<ProductCategory> retrieveAllSubCategories() {
+        return productCategoryInterface.findAllSubCategories();
+    }
+
 
 }

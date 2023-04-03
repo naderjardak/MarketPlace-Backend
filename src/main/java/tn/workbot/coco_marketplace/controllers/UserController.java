@@ -5,12 +5,12 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
 import tn.workbot.coco_marketplace.Api.StatStorePDF;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Model.auth.ConfirmationToken;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.ConfirmationTokenRepository;
@@ -19,35 +19,30 @@ import tn.workbot.coco_marketplace.services.MailSenderService;
 import tn.workbot.coco_marketplace.services.UserService;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/")
-//@RequestMapping("User")
+@CrossOrigin(origins = "*")
+@RequestMapping("User")
 public class UserController {
     @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
-
-    @Autowired
-    private MailSenderService emailService;
-    @Autowired
     UserInterface userInterface;
-
     @Autowired
     UserService userService;
-
     @Autowired
     MailSenderService mailSenderService;
-
-
+    @Autowired
+    SessionService sessionService;
     @Autowired
     UserrRepository userrRepository;
-
     PasswordEncoder passwordEncoder;
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
+    @Autowired
+    private MailSenderService emailService;
 
     {
         this.passwordEncoder = new BCryptPasswordEncoder();
@@ -56,41 +51,45 @@ public class UserController {
     @PostMapping("/add")
     public User Create(@RequestBody User u) {
 
-            userInterface.Create(u);
+        userInterface.Create(u);
 
-            ConfirmationToken confirmationToken = new ConfirmationToken(u);
+        ConfirmationToken confirmationToken = new ConfirmationToken(u);
 
-            confirmationTokenRepository.save(confirmationToken);
+        confirmationTokenRepository.save(confirmationToken);
 
-            emailService.sendEmail(u.getEmail(), "Complete Registration!", "To confirm your account, please check your token : "
-                    + "token=" + confirmationToken.getConfirmationToken());
+        emailService.sendEmail(u.getEmail(), "Complete Registration!", "To confirm your account, please check your token : "
+                + "token=" + confirmationToken.getConfirmationToken());
 
 
+        return u;
+    }
 
-            return u;
-        }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users")
     public List<User> GetAll() {
         return userInterface.GetAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/user/{id}")
     User getUserById(@RequestParam long id) {
 
         return userInterface.getUserById(id);
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{id}")
-    public User updateUserById(@RequestParam long id,@RequestBody User u) {
-        return userInterface.updateUserByID( id,u);
+    public User updateUserById(@RequestParam long id, @RequestBody User u) {
+        return userInterface.updateUserByID(id, u);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     void DeleteById(@RequestParam long id) {
         userInterface.DeleteById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update")
     public User update(@RequestBody User u) {
         return userInterface.update(u);
@@ -103,7 +102,7 @@ public class UserController {
 
 
     @GetMapping("/confirm-account")
-    public String confirmUserAccount(@RequestParam("token") String  ConfirmationToken) {
+    public String confirmUserAccount(@RequestParam("token") String ConfirmationToken) {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(ConfirmationToken);
         String msg;
 
@@ -118,10 +117,10 @@ public class UserController {
 
             msg = "error";
         }
-        return  msg;
+        return msg;
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/PDF_StatStore", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> PDF_RankGouvernoratByOrdersNumber() throws IOException {
         List<String> stats = userrRepository.SellersGroupeByCityname();
@@ -129,7 +128,7 @@ public class UserController {
         ByteArrayInputStream bis = StatStorePDF.SellersGroupeByCitynamee(stats);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
-        headers.add("Content-Disposition", "attachment; filename="+new Date(System.currentTimeMillis())+".pdf");
+        headers.add("Content-Disposition", "attachment; filename=" + new Date(System.currentTimeMillis()) + ".pdf");
 
         return ResponseEntity
                 .ok()
@@ -137,7 +136,13 @@ public class UserController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(bis));
     }
- }
+
+    @GetMapping("getUserBySession")
+    public User getUserBySession() {
+        return sessionService.getUserBySession();
+    }
+
+}
 
 
 

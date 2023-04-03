@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.workbot.coco_marketplace.Dto.ProductForm.ProductFormDTO;
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.SupplierRequest;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.StoreRepository;
 import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
@@ -24,11 +26,14 @@ import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("product")
-@PreAuthorize("hasAuthority('SELLER')")
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')")
 @Tag(name = "Product Management")
 @Slf4j
 public class ProductController {
@@ -66,8 +71,22 @@ public class ProductController {
     }
 
     @PostMapping("CreateProductAndAssignCatAndSub")
-    public Product createAndAssignCategoryAndSubCategory(@RequestBody Product p, @RequestParam String categoryName, @RequestParam String subCatName, @RequestParam String storeName) throws Exception {
-        return productInterface.createAndAssignCategoryAndSubCategory(p, categoryName, subCatName, storeName);
+    public Product createAndAssignCategoryAndSubCategory(@RequestBody ProductFormDTO p) throws Exception {
+        String categoryName=p.getProductCategory().getCategory().getName();
+        String subCatName=p.getProductCategory().getName();
+        Set<String> storeName=p.getStoresNames();
+        Product p2=new Product();
+        p2.setName(p.getName());
+        p2.setProductWeight(p.getProductWeight());
+        p2.setProductPrice(p.getProductPrice());
+        p2.setDescription(p.getDescription());
+        p2.setQuantity(p.getQuantity());
+        p2.setAdditionalDeliveryInstructions(p.getAdditionalDeliveryInstructions());
+        p2.setImage(p.getImage());
+        p2.setImage1(p.getImage1());
+        p2.setImage2(p.getImage2());
+        p2.setImage3(p.getImage3());
+        return productInterface.createAndAssignCategoryAndSubCategory(p2, categoryName, subCatName, storeName);
 
     }
 
@@ -95,10 +114,11 @@ public class ProductController {
             //p.setStore(storeRepository.findStoreByNameAndAndSeller(storeName, user));
             p.setDescription(row.getCell(6).getStringCellValue());
             p.setAdditionalDeliveryInstructions(row.getCell(8).getStringCellValue());
-
+            Set<String> store=new HashSet<>();
+            store.add(storeName);
             log.info(p.getName());
 
-            productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat, storeName);
+            productInterface.createAndAssignCategoryAndSubCategory(p, cat, subCat, store);
         }
     }
 
@@ -117,27 +137,18 @@ public class ProductController {
                 .body(new InputStreamResource(pdf));
     }
 
-//    @GetMapping("/qrcode")
-//    public ResponseEntity<InputStreamResource> downloadQRCodeImage(@RequestParam String text,
-//                                                                   @RequestParam(defaultValue = "200") int width,
-//                                                                   @RequestParam(defaultValue = "200") int height) {
-//        try {
-//            BufferedImage qrCodeImage = QRCodeGenerator.generateQRCodeImage(text, width, height);
-//
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ImageIO.write(qrCodeImage, "png", bos);
-//            byte[] imageBytes = bos.toByteArray();
-//
-//            InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(imageBytes));
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentDispositionFormData("attachment", "qrcode.png");
-//            headers.setContentType(MediaType.IMAGE_PNG);
-//
-//            return new ResponseEntity<>(isr, headers, HttpStatus.OK);
-//        } catch (WriterException | IOException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @GetMapping("retriveRequestsByProduct")
+    List<SupplierRequest> retriveRequestsByProduct(@RequestParam Long idProduct) {
+        return productInterface.retriveRequestsByProduct(idProduct);
+    }
 
-}
+    @GetMapping("retriveProductsByStore")
+    List<Product> retriveProductsByStore() {
+        return productInterface.getProductBySeller();
+    }
+
+    @GetMapping("getProductsByStore")
+    public List<Product> getProductsByStore(@RequestParam String store) {
+        return productInterface.getProductsByStore(store);
+    }
+    }

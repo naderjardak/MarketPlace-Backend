@@ -14,6 +14,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 @RequestMapping("AgencyDeliveryMan")
 @PreAuthorize(" hasAuthority('ADMIN') || hasAuthority('DELIVERYAGENCY')")
+
 public class AgencyDeliveryManController  {
     @Autowired
     AgencyDeliveryManIService ad;

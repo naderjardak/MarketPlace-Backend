@@ -9,9 +9,9 @@ import tn.workbot.coco_marketplace.services.interfaces.LastVuedInterface;
 import java.util.List;
 
 @RestController
-
-@RequestMapping("/LastVued")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@CrossOrigin(origins = "*")
+@RequestMapping("LastVued")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class LastVuedController {
     @Autowired
     LastVuedInterface lastVuedInterface;
@@ -19,7 +19,7 @@ public class LastVuedController {
     @PostMapping("CreateNewVued")
     public void createNewVueOrAddNb(@RequestParam Long id){lastVuedInterface.createNewVueOrAddNb(id);}
 
-    @PostMapping("DisplayAllLastVued")
+    @GetMapping("DisplayAllLastVued")
     public List<Product> afficherLastVued(){ return lastVuedInterface.afficherLastVued();}
 
 }

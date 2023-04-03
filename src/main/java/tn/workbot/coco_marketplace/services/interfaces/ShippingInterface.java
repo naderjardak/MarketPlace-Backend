@@ -11,5 +11,5 @@ public interface ShippingInterface {
     public Shipping createShipping(Shipping shipping); // Creates a new shipping with the provided details
     public Shipping updateShipping(Long id, Shipping shipping); // Updates an existing shipping with the provided details
     public Boolean deleteShipping(Long id); // Deletes a shipping with the given ID
-
+    public List<Shipping> getAllUserShippings();
 }

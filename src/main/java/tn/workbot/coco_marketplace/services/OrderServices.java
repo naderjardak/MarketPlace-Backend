@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -73,6 +74,20 @@ public class OrderServices implements OrderInterface {
 
 
     @Override
+    public Order GetBasketOrder() {
+        return orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+    }
+
+    @Override
+    public List<ProductQuantity> productOfBasket() {
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+        List<ProductQuantity> productquantity=new ArrayList<>();
+        if(order==null)
+            return productquantity;
+        return orderRepository.orderProductList(order.getId());
+    }
+
+    @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
@@ -89,54 +104,45 @@ public class OrderServices implements OrderInterface {
     public Boolean AddProductToOrder(ProductQuantity productQuantity,String voucher) {
         System.out.println(productQuantity.getProduct().getId());
 
-        Order order = orderRepository.BasketExistance(3L);
+        Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
         if (order == null) {
-            User user=userrRepository.findById(3L).get();
+            User user=userrRepository.findById(sessionService.getUserBySession().getId()).get();
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
             order = new Order();
+            order.setCreationDate(currentDate);
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
             order.setProductsWeightKg(0);
-            if (order.getProductQuantities() == null) {
                 order.setProductQuantities(new ArrayList<>());
                 order.setPromotionCodeList(new ArrayList<>());
-            }
-        }
-        Product product=productRepository.findById(productQuantity.getProduct().getId()).get();
-        productQuantity.setProduct(product);
-
-        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-        Calendar calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
-        float sum =0;
-        PromotionCode promotionCode=promotionCodeRepository.findByProductIdAndVoucher(product.getId(), voucher);
-        if(promotionCode==null )
-        {
-            sum=productQuantity.getProduct().getProductPriceBeforeDiscount() * productQuantity.getQuantity();
+            order=orderRepository.save(order);
         }
         else
+        {
+            System.out.println("----" +productQuantity.getProduct().getId()+"-----"+order.getId());
+            ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(productQuantity.getProduct().getId(),order.getId());
+            if(productQuantity1!=null)
+                productQuantityRepository.delete(productQuantity1);
+        }
+
+        Product product=productRepository.findById(productQuantity.getProduct().getId()).get();
+        productQuantity.setProduct(product);
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        PromotionCode promotionCode=promotionCodeRepository.findByProductIdAndVoucher(product.getId(), voucher);
+        if(promotionCode!=null )
         {
             if((currentDate.after(promotionCode.getStartDate()) && currentDate.before(promotionCode.getEndtDate())))
             {
-                Product pr =productRepository.findById(productQuantity.getProduct().getId()).get();
-                sum = ((pr.getProductPriceBeforeDiscount() - pr.getPromotionCodes().get(0).getDiscountValue())) * productQuantity.getQuantity();
-
+                order.getPromotionCodeList().add(promotionCode);
             } else
                 return false;
         }
-        order.setSum(sum+order.getSum());
-        weight+=order.getProductsWeightKg();
-        order.setProductsWeightKg(weight);
-        if(weight<=1)
-            order.setDeliveryPrice(6);
-        else if(weight<=10)
-            order.setDeliveryPrice(6*weight);
-        else
-            order.setDeliveryPrice(60+(weight-10)*2);
-
-        order=orderRepository.save(order);
-
         productQuantity.setOrder(order);
-        productQuantityRepository.save(productQuantity);
+        productQuantity=productQuantityRepository.save(productQuantity);
+        orderRepository.save(order);
+        UpdateQuantiyOfProduct(productQuantity.getProduct().getReference(),productQuantity.getQuantity());
         return true;
     }
 
@@ -149,18 +155,48 @@ public class OrderServices implements OrderInterface {
         }
 
         Order order= orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProuct,order.getId());
+        ProductQuantity productQuantity = productQuantityRepository.findByOrderIdAndProductReference(order.getId(),refProuct);
         productQuantity.setQuantity(quantity);
-        productQuantityRepository.save(productQuantity);
-        float weight=productQuantity.getProduct().getProductWeight()*productQuantity.getQuantity();
-        weight=order.getProductsWeightKg()+weight;
+        productQuantity=productQuantityRepository.save(productQuantity);
+
+        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
+        List<ProductQuantity> productQuantityList=order.getProductQuantities();
+        float sum=0;
+        if (promotionCodeList.size()>0)
+        {
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
+            }
+        }
+        boolean var=true;
+        float weight=0;
+        for (ProductQuantity pq :productQuantityList)
+        {
+            var=true;
+            if (promotionCodeList.size()>0)
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                if(productQuantity1==pq)
+                    var=false;
+            }
+            if (var)
+                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
+            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
+
+        }
+
         if(weight<=1)
             order.setDeliveryPrice(6);
-        else
+        else if(weight<=10)
             order.setDeliveryPrice(6*weight);
+        else
+            order.setDeliveryPrice(60+(weight-10)*2);
 
         order.setProductsWeightKg(weight);
-        order.setSum(SummOrder());
+        order.setSum(sum);
         orderRepository.save(order);
         return productQuantity;
     }
@@ -169,26 +205,66 @@ public class OrderServices implements OrderInterface {
     @Override
     public ProductQuantity DeleteProductFromOrder(String refProduct) {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        ProductQuantity productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
+       List<ProductQuantity> productQuantity = productQuantityRepository.findByProductReferenceAndOrderId(refProduct, order.getId());
 
-        if (productQuantity != null) {
-            order.getProductQuantities().remove(productQuantity);
-            productQuantityRepository.delete(productQuantity);
+        if (productQuantity.size()!=0) {
+            for(int i=0;i<productQuantity.size();i++) {
+                order.getProductQuantities().remove(productQuantity.get(i));
+                productQuantityRepository.delete(productQuantity.get(i));
+            }
+
         }
-        order.setSum(SummOrder());
-
         if (order.getProductQuantities().size() == 0) {
             orderRepository.deleteById(order.getId());
-            return productQuantity;
+            return productQuantity.get(0);
         }
+        List<PromotionCode> promotionCodeList=order.getPromotionCodeList();
+        List<ProductQuantity> productQuantityList=order.getProductQuantities();
+        float sum=0;
+        if (promotionCodeList.size()>0)
+        {
+
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                sum+=productQuantity1.getQuantity()*(productQuantity1.getProduct().getProductPrice()-p.getDiscountValue());
+            }
+        }
+        boolean var=true;
+        float weight=0;
+        for (ProductQuantity pq :productQuantityList)
+        {
+            var=true;
+            if (promotionCodeList.size()>0)
+            for(PromotionCode p :promotionCodeList)
+            {
+                ProductQuantity productQuantity1=productQuantityRepository.findByProductIdAndOrderId(p.getProduct().getId(),order.getId());
+                if(productQuantity1==pq)
+                    var=false;
+            }
+            if (var)
+                sum+=pq.getQuantity()*pq.getProduct().getProductPrice();
+            weight+=pq.getQuantity()*pq.getProduct().getProductWeight();
+
+        }
+
+        if(weight<=1)
+            order.setDeliveryPrice(6);
+        else if(weight<=10)
+            order.setDeliveryPrice(6*weight);
+        else
+            order.setDeliveryPrice(60+(weight-10)*2);
+
+        order.setProductsWeightKg(weight);
+        order.setSum(sum);
         orderRepository.save(order);
-        return productQuantity;
+        return productQuantity.get(0);
     }
 
     @Override
-    public Order AffectShippingAdressToOrder(Shipping shipping) {
+    public Order AffectShippingAdressToOrder(Long idshipping) {
         Order order = orderRepository.BasketExistance(sessionService.getUserBySession().getId());
-        shipping=shippingRepository.save(shipping);
+        Shipping shipping=shippingRepository.findById(idshipping).get();
         order.setShipping(shipping);
         return orderRepository.save(order);
     }
@@ -230,9 +306,9 @@ public class OrderServices implements OrderInterface {
             order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
             order.setPayment(PaymentType.BANK_CARD);
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-            orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+            //orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
             //Twilio mna7iha 3al flous
-            OrderTwilioService.sendSMS(msg);
+            //OrderTwilioService.sendSMS(msg);
             List<String> refList=orderRepository.reflist();
             String referance="";
             do{
@@ -344,19 +420,31 @@ public class OrderServices implements OrderInterface {
 
 
     @Override
-    public CustemerModel StripePayementService( CustemerModel data) throws StripeException, MessagingException {
+    public CustemerModel StripePayementService(CustemerModel data) throws StripeException, MessagingException {
         Stripe.apiKey = stripeApiKey;
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", data.getName());
-        params.put("email", data.getEmail());
-        Customer customer = Customer.create(params);
-        data.setCustemerId(customer.getId());
-        if(customer.getId()!=null)
-        {
-            endCommandProsess(PaymentType.valueOf("BANK_CARD"),true);
+
+        // Create a customer object with a new card
+        Map<String, Object> customerParams = new HashMap<>();
+        customerParams.put("name", data.getName());
+        customerParams.put("email", data.getEmail());
+        customerParams.put("source", data.getCardToken()); // Card token obtained from Stripe.js
+        Customer customer = Customer.create(customerParams);
+
+        // Charge the customer's card
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", data.getPaidAmount()); // Amount in cents ($10)
+        chargeParams.put("currency", "usd");
+        chargeParams.put("customer", customer.getId());
+        Charge charge = Charge.create(chargeParams);
+
+        // Check if the payment succeeded and set the payment status in the data object
+        if (charge.getPaid()) {
+            endCommandProsess(PaymentType.BANK_CARD, true);
+            data.setPaidAmount(charge.getAmount());
+        } else {
+            endCommandProsess(PaymentType.BANK_CARD, false);
         }
-        else
-            endCommandProsess(PaymentType.valueOf("BANK_CARD"),false);
+
         return data;
     }
 
@@ -472,6 +560,18 @@ public class OrderServices implements OrderInterface {
             sb.append(rand.nextInt(10));
         }
         return sb.toString();
+    }
+
+    @Override
+    public Order deleteBasket() {
+    Order order=orderRepository.BasketExistance(sessionService.getUserBySession().getId());
+    orderRepository.delete(order);
+    return order;
+    }
+
+    @Override
+    public List<Order> getAllOrdersByUserId() {
+        return orderRepository.findOrderByBuyerIdAndStatusIsNotLike(sessionService.getUserBySession().getId(),StatusOrderType.BASKET);
     }
 
 

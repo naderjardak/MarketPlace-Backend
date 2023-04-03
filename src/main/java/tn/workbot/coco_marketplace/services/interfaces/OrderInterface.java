@@ -12,6 +12,8 @@ import java.util.Map;
 
 public interface OrderInterface {
 
+    Order GetBasketOrder();
+    List<ProductQuantity> productOfBasket();
     // Get all orders from the database
     List<Order> getAllOrders();
 
@@ -25,7 +27,7 @@ public interface OrderInterface {
     ProductQuantity UpdateQuantiyOfProduct(String refProuct,int quantity);
 
     //add Shipping to order
-    Order AffectShippingAdressToOrder(Shipping shipping);
+    Order AffectShippingAdressToOrder(Long idshipping);
 
 
     //Ending command Paiment Prosess
@@ -68,4 +70,9 @@ public interface OrderInterface {
     public String parseToken(String token);
 
     public String generateRandomNumber(int n);
+
+    public Order deleteBasket();
+
+    public List<Order> getAllOrdersByUserId();
+
     }
