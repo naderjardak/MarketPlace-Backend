@@ -34,7 +34,7 @@ public class Store {
     @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Product> products;
-
+    @JsonIgnore
     @ManyToOne
     private User seller;
 
