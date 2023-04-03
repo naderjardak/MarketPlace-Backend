@@ -44,7 +44,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
-
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**/auth",
@@ -102,5 +101,3 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 }
-
-
