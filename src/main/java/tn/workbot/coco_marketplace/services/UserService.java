@@ -36,8 +36,11 @@ public class UserService implements UserInterface {
 
     @Override
     public User Create(User u) {
+
         u.setPassword(this.passwordEncoder.encode(u.getPassword()));
-        return userRepository.save(u);
+        User user=   userRepository.save(u);
+        return  user;
+
     }
 
     @Override

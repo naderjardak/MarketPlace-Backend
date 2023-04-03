@@ -47,4 +47,4 @@ public class RoleController {
         roleInterface.AssignRolePrivilege(idRole,idPrivilege);
     }
 }
-//test 
+//test
