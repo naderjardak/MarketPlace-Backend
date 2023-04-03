@@ -22,7 +22,9 @@ import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.auth.ApplicationUserDetailsService;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("Authentication")
+
 public class AuthenticationController {
 
     @Autowired
