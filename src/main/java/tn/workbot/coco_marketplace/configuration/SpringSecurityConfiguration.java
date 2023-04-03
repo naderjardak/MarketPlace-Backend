@@ -47,9 +47,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**/auth",
-                        "/**/add",
-                        "/**/affectRole",
-                        "/**/ForgetPassword",
                         "/swagger-ui/**",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
@@ -59,12 +56,12 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement(
-                        session -> session
+                session -> session
 
-                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                                .invalidSessionUrl("/logout?expired")
-                                .maximumSessions(1)
-                                .maxSessionsPreventsLogin(true));
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/logout?expired")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -101,3 +98,4 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 }
+

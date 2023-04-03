@@ -73,6 +73,8 @@ public class Product {
     @ManyToOne
     private ProductCategory productCategory;
 
+    private String videoLink;
+
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<PromotionCode> promotionCodes;

@@ -7,7 +7,9 @@ import lombok.Setter;
 @Setter
 public class CustemerModel
 {
-    public String custemerId;
-    public String name;
-    public String email;
+    private String customerId;
+    private String name;
+    private String email;
+    private Long paidAmount;
+    private String cardToken;
 }

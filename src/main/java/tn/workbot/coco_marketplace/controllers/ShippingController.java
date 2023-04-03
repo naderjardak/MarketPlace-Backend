@@ -27,4 +27,6 @@ public class ShippingController {
     Shipping updateShipping(@RequestParam Long id, @RequestBody Shipping shipping){return shippingInterface.updateShipping(id,shipping);}
     @DeleteMapping("DeleteShippingAdresse")
     Boolean deleteShipping(@RequestParam Long id){return shippingInterface.deleteShipping(id);}
+    @GetMapping("getAllUserShippings")
+    List<Shipping> getAllUserShippings(){return shippingInterface.getAllUserShippings();}
 }

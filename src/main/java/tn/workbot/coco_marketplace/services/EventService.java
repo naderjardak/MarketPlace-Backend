@@ -94,6 +94,7 @@ public class EventService implements EventInterface {
     public void addKeyWordToEvent(Long id, KeyWords keyWords) {
     Event event=eventRepository.findById(id).get();
     event.getListkeyWords().add(keyWordsRepository.save(keyWords));
+    event.setProductList(displayProductForEvent(event.getId()));
     eventRepository.save(event);
     }
 
@@ -107,10 +108,14 @@ public class EventService implements EventInterface {
     {
         List<Product> productList=new ArrayList<>();
         Event event=eventRepository.findById(id).get();
+        String key;
         for (KeyWords k:event.getListkeyWords())
         {
-            productList.addAll(orderRepository.productsByNameLike(k.getWord()));
+            key='%'+k.getWord()+'%';
+            productList.addAll(orderRepository.productsByNameLike(key));
         }
+        if(productList.size()>0)
         return productList;
+        return new ArrayList<>();
     }
 }

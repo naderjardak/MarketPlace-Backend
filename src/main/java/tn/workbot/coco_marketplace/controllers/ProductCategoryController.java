@@ -10,9 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("productCategory")
+@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')|| hasAuthority('BUYER')")
 @CrossOrigin(origins = "http://localhost:4200/")
 
-@PreAuthorize("hasAuthority('SELLER') || hasAuthority('ADMIN')")
+
 public class ProductCategoryController {
 
     @Autowired
