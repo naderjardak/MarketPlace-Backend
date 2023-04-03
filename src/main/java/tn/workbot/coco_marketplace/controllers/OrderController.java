@@ -28,6 +28,7 @@ public class OrderController {
     @Autowired
     ProductInterface productInterface;
 
+    //getProductById
     @GetMapping("GetProductById")
     public Product getById(@RequestParam Long id) {
         return productInterface.getById(id);
