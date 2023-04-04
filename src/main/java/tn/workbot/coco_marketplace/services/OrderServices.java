@@ -111,11 +111,13 @@ public class OrderServices implements OrderInterface {
             Date currentDate = calendar.getTime();
             order = new Order();
             order.setCreationDate(currentDate);
+            order.setSum(0);
+            order.setDeliveryPrice(0);
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
             order.setProductsWeightKg(0);
-                order.setProductQuantities(new ArrayList<>());
-                order.setPromotionCodeList(new ArrayList<>());
+            order.setProductQuantities(new ArrayList<>());
+            order.setPromotionCodeList(new ArrayList<>());
             order=orderRepository.save(order);
         }
         else
