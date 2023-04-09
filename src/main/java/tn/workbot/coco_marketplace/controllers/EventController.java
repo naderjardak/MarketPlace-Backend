@@ -14,12 +14,12 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/Event")
-@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
 public class EventController {
 
     @Autowired
     EventInterface eventInterface;
 
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("addEvent")
     //@PreAuthorize("hasAuthority('MODERATOR') || hasAuthority('ADMIN')")
     public void addEvent(@RequestBody Event event){eventInterface.addEvent(event);}
@@ -27,21 +27,26 @@ public class EventController {
     @GetMapping("findEventByTitle")
     public Event findEventByTitle(@RequestParam String title){return eventInterface.findEventByTitle(title);}
 
+    @PreAuthorize("hasAuthority('Admin')")
     @GetMapping("findEventById")
     public Event findEventById(@RequestParam Long id){return eventInterface.findEventById(id);}
 
     @GetMapping("displayRunningEvents")
     public List<Event> displayRunningEvents(){return eventInterface.displayRunningEvents();}
 
+    @PreAuthorize("hasAuthority('Admin')")
     @GetMapping("displayAllEvents")
     public List<Event> displayAllEvents(){return eventInterface.displayAllEvents();}
 
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("updateEvent")
     public void updateEvent(@RequestBody Event event){eventInterface.updateEvent(event);}
 
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("addKeywordToEvent")
     public void addKeyWordToEvent(@RequestParam Long id,@RequestBody KeyWords keyWords){eventInterface.addKeyWordToEvent(id,keyWords);}
 
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("deleteEvent")
     public void deleteEvent(@RequestParam Long id){eventInterface.deleteEvent(id);}
 

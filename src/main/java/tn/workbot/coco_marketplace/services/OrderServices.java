@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -32,6 +35,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -72,6 +76,10 @@ public class OrderServices implements OrderInterface {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Override
+    public Order addOrder(Order order){
+        return orderRepository.save(order);
+    }
 
     @Override
     public Order GetBasketOrder() {
@@ -410,8 +418,14 @@ public class OrderServices implements OrderInterface {
     }
 
     @Override
-    public List<String> statsByStatusTypeOrdred() {
-        return orderRepository.RankUsersByOrdersAcceptedPayement();
+    public List<Map<String,Integer>> statsByStatusTypeOrdred() {
+        List<Map<String,Integer>> results = orderRepository.RankUsersByOrdersAcceptedPayement();
+        return results.subList(0, Math.min(10, results.size()));
+    }
+
+    @Override
+    public List<String> PDFstatsByStatusTypeOrdred() {
+        return orderRepository.PDFRankUsersByOrdersAcceptedPayement();
     }
 
     @Override
@@ -577,6 +591,17 @@ public class OrderServices implements OrderInterface {
     }
 
 
+    @Override
+    public boolean sessionReteurn() {
+        User user=sessionService.getUserBySession();
+    return user!=null;
+    }
+
+    @Override
+    public List<Order> getBestOrdersUser() {
+        List<Order> results = orderRepository.usersBestOrders();
+        return results.subList(0, Math.min(10, results.size()));
+    }
 }
 
 
