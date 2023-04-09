@@ -663,42 +663,78 @@ public class PickupService implements PickupIService {
         return sum;
     }
 
-    @Override
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
+    @Scheduled(cron = "* * * 1 * *")
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws Exception {
         //session manager idUser
-        User u=sessionService.getUserBySession();
-        List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
-        List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
+        List<User> u1= (List<User>) ur.findAll();
+        double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
         float kiloSum = 0;
+        double price = Float.valueOf(0);
+        double co2kilo = Float.valueOf(0);
+        double Co2Car = 2.55;
         //////
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
                 .build();
         // Get the distance and travel time using the DistanceMatrixApi
-        if (u.getRole().getType().equals(RoleType.DELIVERYMEN)) {
-            for (Pickup p : pickups) {
-                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                        .origins(p.getGovernorate())
-                        .destinations(p.getStore().getGovernorate())
-                        .mode(TravelMode.DRIVING);
+        for (User u: u1) {
+            List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
+            List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
+            if (u.getRole().getType().equals(RoleType.DELIVERYMEN)) {
+                for (Pickup p : pickups) {
+                    DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                            .origins(p.getCity())
+                            .destinations(p.getStore().getCity())
+                            .mode(TravelMode.DRIVING);
 
-                DistanceMatrix matrix = request.await();
-                Distance distance = matrix.rows[0].elements[0].distance;
-                double distanceInKm = distance.inMeters / 1000.0;
-                kiloSum = (float) distanceInKm + kiloSum;
-            }
-        } else if (u.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
-            for (Pickup p : pickups1) {
-                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                        .origins(p.getGovernorate())
-                        .destinations(p.getStore().getGovernorate())
-                        .mode(TravelMode.DRIVING);
+                    DistanceMatrix matrix = request.await();
+                    Distance distance = matrix.rows[0].elements[0].distance;
+                    double distanceInKm = distance.inMeters / 1000.0;
+                    kiloSum = (float) distanceInKm + kiloSum;
+                    if(u.getGear().equals("CAR")){
+                        if (u.getGearAge() > 0 && u.getGearAge() < 5) {
+                            price = kiloSum * (5.8 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (5.8 / 100) * Co2Car;
+                        } else if (u.getGearAge() >= 5 && u.getGearAge() < 10) {
+                            price = kiloSum * (6.9 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (6.9 / 100) * Co2Car;
+                        } else if (u.getGearAge() >= 10) {
+                            price = kiloSum * (7.8 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (7.8 / 100) * Co2Car;
+                        }
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    String formattedNumber = decimalFormat.format(price);
+                    u.setFraisEssance(formattedNumber);
+                    u.setKilometreConsomer(kiloSum);
+                    u.setCo2(co2kilo);
+                    ur.save(u);
+                }
+            } else if (u.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
+                for (Pickup p : pickups1) {
+                    DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                            .origins(p.getGovernorate())
+                            .destinations(p.getStore().getGovernorate())
+                            .mode(TravelMode.DRIVING);
 
-                DistanceMatrix matrix = request.await();
-                Distance distance = matrix.rows[0].elements[0].distance;
-                double distanceInKm = distance.inMeters / 1000.0;
-                kiloSum = (float) distanceInKm + kiloSum;
+                    DistanceMatrix matrix = request.await();
+                    Distance distance = matrix.rows[0].elements[0].distance;
+                    double distanceInKm = distance.inMeters / 1000.0;
+                    kiloSum = (float) distanceInKm + kiloSum;
+                    if(u.getGear().equals("CAR")){
+                            price = kiloSum * (5.8 / 100) * priceEssnceliters;
+                        co2kilo = kiloSum * (5.8 / 100) * Co2Car;
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    String formattedNumber = decimalFormat.format(price);
+                    u.setFraisEssance(formattedNumber);
+                    u.setKilometreConsomer(kiloSum);
+                    u.setCo2(co2kilo);
+                    ur.save(u);
+                }
             }
+
+
         }
 
         return kiloSum;
@@ -707,33 +743,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public String FraisEssenceTotal() throws Exception {
-        //sessionManager
-        User user=sessionService.getUserBySession();
-        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
-        double price = Float.valueOf(0);
-        double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
-        if (user.getRole().getType().equals(RoleType.DELIVERYMEN)) {
-            if (user.getGear().equals("CAR")) {
-                if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                    price = kiloSum * (5.8 / 100) * priceEssnceliters;
-                } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                    price = kiloSum * (6.9 / 100) * priceEssnceliters;
-                } else if (user.getGearAge() >= 10) {
-                    price = kiloSum * (7.8 / 100) * priceEssnceliters;
-                }
-            }
-        } else if (user.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
-            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                price = kiloSum * (5.8 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                price = kiloSum * (6.9 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() >= 10) {
-                price = kiloSum * (7.8 / 100) * priceEssnceliters;
-            }
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String formattedNumber = decimalFormat.format(price);
-        return formattedNumber;
+        return null;
     }
 
 
@@ -755,23 +765,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
-        User user=sessionService.getUserBySession();
-        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
-        double co2kilo = Float.valueOf(0);
-
-        double Co2Car = 2.55;
-        if (user.getGear().equals("CAR")) {
-            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                co2kilo = kiloSum * (5.8 / 100) * Co2Car;
-            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                co2kilo = kiloSum * (6.9 / 100) * Co2Car;
-            } else if (user.getGearAge() >= 10) {
-                co2kilo = kiloSum * (7.8 / 100) * Co2Car;
-            }
-
-        }
-        user.setCo2(co2kilo);
-        return ur.save(user);
+        return null;
     }
 
     @Override
@@ -967,6 +961,18 @@ public class PickupService implements PickupIService {
     }
 
     @Override
+    public int countPickupAssignedForAgency() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupAssignedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedForAgency() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupTakedForAgency(u.getId());
+    }
+
+    @Override
     public int countPickupDeliveredForfreelancer() {
         User u=sessionService.getUserBySession();
         return pr.countPickupDeliveredForFreelancer(u.getId());
@@ -991,9 +997,38 @@ public class PickupService implements PickupIService {
     }
 
     @Override
+    public int countPickupAssignedForFreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupAssignedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedForFreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupTakedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupAssignedSeller() {
+        User u=sessionService.getUserBySession();
+        return pr.countpickupassignedSeller(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedSeller() {
+        User u=sessionService.getUserBySession();
+        return pr.countpickupTakedSeller(u.getId());
+    }
+
+    @Override
     public List<Pickup> RetrievePickupInProgress() {
         User u=sessionService.getUserBySession();
         return pr.retrievePickupInprogress(u.getId());
+    }
+
+    @Override
+    public int countProductQuantityInOrderProduct(Long idOrder, Long idProduct) {
+        return pr.countProductQuantityByOrderAndProduct(idOrder,idProduct);
     }
 
     @Scheduled(cron = "* * * 27 * *")

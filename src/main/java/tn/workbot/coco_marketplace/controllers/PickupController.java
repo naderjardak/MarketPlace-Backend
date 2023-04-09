@@ -294,17 +294,6 @@ public class PickupController  {
     }
 
 
-    ///////////Kilometre Cra
-    @GetMapping("kilometreTotalConsommerParFreelancerDelivery")
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
-        return pis.kilometreTotalConsommerParFreelancerDelivery();
-    }
-
-    //////FraisEssenceTotalParGearConsommer
-    @GetMapping("FraisEssenceTotal")
-    public String FraisEssenceTotal() throws Exception {
-        return pis.FraisEssenceTotal();
-    }
 
     //////////////calculer co2 and update in user entity
     @PostMapping("UpdateTheCO2ConsoFreelancer")
@@ -459,7 +448,15 @@ public class PickupController  {
     public int countPickupRefundedForAgency() {
         return pis.countPickupRefundedForAgency();
     }
+    @GetMapping("countPickupAssignedForAgency")
+    public int countPickupAssignedForAgency() {
+        return  pis.countPickupAssignedForAgency();
+    }
 
+    @GetMapping("countPickupTakedForAgency")
+    public int countPickupTakedForAgency() {
+        return pis.countPickupTakedForAgency();
+    }
 
     //stat freelancer
     @GetMapping("countPickupDeliveredForfreelancer")
@@ -481,8 +478,30 @@ public class PickupController  {
     public int countPickupRefundedForfreelancer() {
         return pis.countPickupRefundedForfreelancer();
     }
+    @GetMapping("countPickupAssignedForFreelancer")
+    public int countPickupAssignedForFreelancer() {
+        return pis.countPickupAssignedForFreelancer();
+    }
+
+    @GetMapping("countPickupTakedForFreelancer")
+    public int countPickupTakedForFreelancer() {
+        return pis.countPickupTakedForFreelancer();
+    }
+    ////
     @GetMapping("RetrievePickupInProgress")
     public List<Pickup> RetrievePickupInProgress() {
          return pis.RetrievePickupInProgress();
     }
-}
+    @GetMapping("countProductQuantityInOrderProduct")
+    public int countProductQuantityInOrderProduct(@RequestParam Long idOrder,@RequestParam Long idProduct) {
+        return pis.countProductQuantityInOrderProduct(idOrder, idProduct);
+    }
+    @GetMapping("countPickupAssignedSeller")
+    public int countPickupAssignedSeller() {
+    return pis.countPickupAssignedSeller();
+    }
+    @GetMapping("countPickupTakedSeller")
+    public int countPickupTakedSeller() {
+        return pis.countPickupTakedSeller();
+    }
+    }

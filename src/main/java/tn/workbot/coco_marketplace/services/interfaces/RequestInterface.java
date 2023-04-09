@@ -28,4 +28,5 @@ public interface RequestInterface {
     public int countRequestRejectForAgency();
     public List<Request> retrieveRequestApprovedOfPickupFreelancer();
     public List<Request> retrieveRequestApprovedOfPickupAgency();
+    public int countRequestByPickup(Long idPickup);
 }

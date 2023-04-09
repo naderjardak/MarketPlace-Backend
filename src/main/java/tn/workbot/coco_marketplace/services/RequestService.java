@@ -89,11 +89,11 @@ public class RequestService implements RequestInterface {
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
         User user=sessionService.getUserBySession();
         Request request1 = rr.save(request);
-
         //eli fou9o sessionManger
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest();
+        int i = pr.countrequest(idPickup);
+        i=i+1;
         p.setNbRequest(i);
         pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
@@ -116,7 +116,8 @@ public class RequestService implements RequestInterface {
         //eliconnectetawa session id bech yet7at lena fel idSeller
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest();
+        int i = pr.countrequest(idPickup);
+        i=i+1;
         p.setNbRequest(i);
         pr.save(p);
         User user=sessionService.getUserBySession();
@@ -270,6 +271,11 @@ public class RequestService implements RequestInterface {
     public List<Request> retrieveRequestApprovedOfPickupAgency() {
         User u=sessionService.getUserBySession();
         return rr.RetrieveRequestApprovedByAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestByPickup(Long idPickup) {
+        return pr.countrequest(idPickup);
     }
 
 

@@ -69,7 +69,7 @@ public interface PickupIService {
     public Float sumOfPickupReturnedweekAdministrator();
 
     ///////////Gear Delivery Alers (Kilometre || ESSENCE)
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws Exception;
     public String FraisEssenceTotal() throws Exception;
 
     //////////Envoyer Un sms si vous avez cconsoumer ton limite  CO2  ,
@@ -91,16 +91,24 @@ public interface PickupIService {
     public List<Product> getListProductOfOrder(Long idOrder,Long idStore);
     public Float  getSumPriceProductOfOrder(Long idOrder,Long idStore);
     public List<ProductQuantity> getAllProductQuantity();
+    //stat agency
     public int countPickupDeliveredForAgency();
     public int countPickupReturnedForAgency();
     public int countPickupOnTheWayForAgency();
     public int countPickupRefundedForAgency();
+    public int countPickupAssignedForAgency();
+    public int countPickupTakedForAgency();
     ///stat freelancer
     public int countPickupDeliveredForfreelancer();
     public int countPickupReturnedForfreelancer();
     public int countPickupOnTheWayForfreelancer();
     public int countPickupRefundedForfreelancer();
+    public int countPickupAssignedForFreelancer();
+    public int countPickupTakedForFreelancer();
+    ////seller
+    public int countPickupAssignedSeller();
+    public int countPickupTakedSeller();
     public List<Pickup> RetrievePickupInProgress();
-
+    public int countProductQuantityInOrderProduct(Long idOrder,Long idProduct);
 
 }

@@ -45,7 +45,7 @@ public class Pickup implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "pickup", cascade = CascadeType.ALL)
     private List<Request> requests;
-    @JsonIgnore
+
     @ManyToOne
     private Store store;
 /////////////fff

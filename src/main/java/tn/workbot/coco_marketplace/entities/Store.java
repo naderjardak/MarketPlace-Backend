@@ -32,10 +32,9 @@ public class Store {
     private String IBAN;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
-    @JsonIgnore
     private Set<Product> products;
-    @JsonIgnore
     @ManyToOne
+
     private User seller;
 
     @OneToMany(mappedBy = "seller")
