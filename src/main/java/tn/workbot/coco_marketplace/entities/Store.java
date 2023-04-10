@@ -36,6 +36,7 @@ public class Store {
     private Set<Product> products;
 
     @ManyToOne
+    @JsonIgnore
     private User seller;
 
     @OneToMany(mappedBy = "seller")
