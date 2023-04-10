@@ -86,6 +86,7 @@ public class ProductController {
         p2.setImage1(p.getImage1());
         p2.setImage2(p.getImage2());
         p2.setImage3(p.getImage3());
+
         return productInterface.createAndAssignCategoryAndSubCategory(p2, categoryName, subCatName, storeName);
 
     }

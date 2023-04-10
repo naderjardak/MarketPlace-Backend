@@ -51,7 +51,6 @@ public class StoreService implements StoreInterface {
 
         return new Store();
     }
-    //
     @Override
     public void delete(Store s) {
         storeRepository.delete(s);

@@ -31,7 +31,6 @@ public class ProductCategory {
     private List<Product> products;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
     private ProductCategory category;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

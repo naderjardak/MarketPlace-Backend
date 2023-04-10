@@ -53,17 +53,17 @@ public class ProductService implements ProductInterface {
     @Autowired
     SessionService sessionService;
 
+
     @Override
     public Product create(Product p, String storeName) throws Exception {
         if (p.getProductCategory() == null)
             throw new Exception("Missing Category");
+        //User user = sessionService.getUserBySession();
 
-        User user = sessionService.getUserBySession();
-        log.info(user.getId().toString());
 
-        Store store = storeRepository.findByNameAndSeller(storeName, user);
-        if (store == null)
-            throw new Exception("Store not found");
+//        Store store = storeRepository.findByNameAndSeller(storeName, user);
+//        if (store == null)
+//            throw new Exception("Store not found");
 
         if (p.getProductWeight() <= 1) {
             p.setDeliveryPrice(6);
@@ -75,12 +75,12 @@ public class ProductService implements ProductInterface {
 
         Random random = new Random();
         int nbRand = random.nextInt(99999);
-        p.setReference(("REF-" +store.getName().substring(store.getName().length()-2)+ p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
+        p.setReference(("REF-" +p.getStore().getName().substring(p.getStore().getName().length()-2)+ p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
         p.setProductStatus(ProductStatus.PENDING);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
-        p.setStore(store);
+       // p.setStore(store);
 
         return productRepository.saveAndFlush(p);
     }
@@ -119,9 +119,9 @@ public class ProductService implements ProductInterface {
 
     @Override
     public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, Set<String> storeName) throws Exception {
-
         ProductCategory category = productCategoryRepository.findByName(categoryName);
         ProductCategory subCategory = productCategoryRepository.findByNameAndCategoryName(subCatName, categoryName);
+        User user = sessionService.getUserBySession();
 
         if (category == null && subCategory == null) {
             ProductCategory category1 = new ProductCategory();
@@ -146,8 +146,26 @@ public class ProductService implements ProductInterface {
         //cascade
         p.setProductCategory(subCategory);
         for(String st:storeName.stream().toList()){
+            Product p2=new Product();
+            Store store = storeRepository.findByNameAndSeller(st, user);
+            if (store == null)
+                throw new Exception("Store not found");
+            p2.setStore(store);
+            p2.setName(p.getName());
+            p2.setProductWeight(p.getProductWeight());
+            p2.setProductPrice(p.getProductPrice());
+            p2.setDescription(p.getDescription());
+            p2.setQuantity(p.getQuantity());
+            p2.setAdditionalDeliveryInstructions(p.getAdditionalDeliveryInstructions());
+            p2.setImage(p.getImage());
+            p2.setImage1(p.getImage1());
+            p2.setImage2(p.getImage2());
+            p2.setImage3(p.getImage3());
+            p2.setProductCategory(p.getProductCategory());
 
-            this.create(p,st);
+
+
+            this.create(p2,st);
         }
 
         return p;
