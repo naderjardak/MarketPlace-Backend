@@ -72,8 +72,8 @@ public class ProductController {
 
     @PostMapping("CreateProductAndAssignCatAndSub")
     public Product createAndAssignCategoryAndSubCategory(@RequestBody ProductFormDTO p) throws Exception {
-        String categoryName=p.getProductCategory().getCategory().getName();
-        String subCatName=p.getProductCategory().getName();
+        String subCatName=p.getProductCategory().getCategory().getName();
+        String categoryName=p.getProductCategory().getCategory().getCategory().getName();
         Set<String> storeName=p.getStoresNames();
         Product p2=new Product();
         p2.setName(p.getName());
