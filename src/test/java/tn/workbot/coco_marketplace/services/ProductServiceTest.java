@@ -90,7 +90,7 @@ class ProductServiceTest {
         Store store = new Store();
         store.setName("STORE TEST");
         store.setSeller(user);
-
+        product.setStore(store);
         storeRepository.save(store);
         when(sessionService.getUserBySession()).thenReturn(user);
         Product savedProduct = productService.create(product, "STORE TEST");
