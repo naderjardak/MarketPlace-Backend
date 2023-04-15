@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/Event")
-@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('ADMIN')")
 public class EventController {
 
     @Autowired
