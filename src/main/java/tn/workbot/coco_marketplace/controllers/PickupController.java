@@ -504,4 +504,11 @@ public class PickupController  {
     public int countPickupTakedSeller() {
         return pis.countPickupTakedSeller();
     }
+    @GetMapping("getStoreByPickup")
+    public Store getStoreByPickup(@RequestParam Long idPickup) {
+        return pis.getStoreByPickup(idPickup);
     }
+
+
+    }
+

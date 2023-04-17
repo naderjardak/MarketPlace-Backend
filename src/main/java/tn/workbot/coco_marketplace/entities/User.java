@@ -63,6 +63,7 @@ public class User implements Serializable {
     private String LevelDelivery;
     private Float KilometreConsomer;
     private String FraisEssance;
+    private Integer points;
 
     @OneToMany(mappedBy = "buyer")
     @JsonIgnore

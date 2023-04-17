@@ -114,7 +114,6 @@ public class RequestService implements RequestInterface {
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
-        User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
         int i = pr.countrequest(idPickup);
         i=i+1;
@@ -128,6 +127,8 @@ public class RequestService implements RequestInterface {
         request1.setDeliveryman(user);
         request1.setPickup(pickup);
         request1.setRequestDate(LocalDateTime.now());
+        user.setPoints(user.getPoints()-p.getPoints());
+        ur.save(user);
         return rr.save(request1);
     }
     public String calculateDeliveryTime(Long idPickup, Long idRequest) throws IOException, InterruptedException, ApiException {

@@ -19,4 +19,5 @@ public interface AgencyBranchIService {
     public int countDeliveryMenInAllAgencyBranchesForAgench();
     public List<AgencyBranch> retrieveAgencyBranchOfUser();
     public int countDeliveryMenInAgency(Long idBranch);
+    public AgencyBranch updatebRANCHwithMAP(Long idBranch,AgencyBranch agencyBranch);
 }

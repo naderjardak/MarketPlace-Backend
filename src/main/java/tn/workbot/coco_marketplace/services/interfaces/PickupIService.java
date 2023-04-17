@@ -110,5 +110,5 @@ public interface PickupIService {
     public int countPickupTakedSeller();
     public List<Pickup> RetrievePickupInProgress();
     public int countProductQuantityInOrderProduct(Long idOrder,Long idProduct);
-
+    public Store getStoreByPickup(Long idPickup);
 }

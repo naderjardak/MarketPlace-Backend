@@ -38,6 +38,7 @@ public class Pickup implements Serializable {
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupBuyer statusPickupBuyer;
+    private Integer points;
 
 
     @ManyToOne

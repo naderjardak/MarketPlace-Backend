@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("AgencyBranch")
-@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('DELIVERYAGENCY')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
 public class AgencyBranchController {
     @Autowired
     AgencyBranchIService abi;
@@ -77,4 +77,9 @@ public class AgencyBranchController {
     public int countDeliveryMenInAgency(@RequestParam Long idBranch) {
         return abi.countDeliveryMenInAgency(idBranch);
     }
-}
+    @PutMapping("updatebRANCHwithMAP")
+    public AgencyBranch updatebRANCHwithMAP(@RequestParam Long idBranch,@RequestBody AgencyBranch agencyBranch) {
+    return abi.updatebRANCHwithMAP(idBranch, agencyBranch);
+    }
+
+    }

@@ -249,6 +249,11 @@ public class PickupService implements PickupIService {
             // pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(storeer);
             pickup1.setSum(order.getSum());
+            if(order.getDeliveryPrice()>=1 && order.getDeliveryPrice()<=8){
+                pickup.setPoints(4);
+            } else {
+                pickup1.setPoints(6);
+            }
             if (order.getPayment().equals(PaymentType.BANK_CARD)) {
                 pickup1.setPayed(true);
             } else {
@@ -270,6 +275,11 @@ public class PickupService implements PickupIService {
                             String code1 = prefix + randomNumber + randomNumber1;
                             pickup1.setCodePickup(code1);
                         }
+                    }
+                    if(order.getDeliveryPrice()>=1 && order.getDeliveryPrice()<=8){
+                        pickup.setPoints(4);
+                    } else {
+                        pickup1.setPoints(6);
                     }
                     pickup1.setShippingStatus(order.getPayment().toString());
                     pickup1.setCodePickup(code);
@@ -1029,6 +1039,11 @@ public class PickupService implements PickupIService {
     @Override
     public int countProductQuantityInOrderProduct(Long idOrder, Long idProduct) {
         return pr.countProductQuantityByOrderAndProduct(idOrder,idProduct);
+    }
+
+    @Override
+    public Store getStoreByPickup(Long idPickup) {
+        return pr.getStoreByPickup(idPickup);
     }
 
     @Scheduled(cron = "* * * 27 * *")

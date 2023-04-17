@@ -13,7 +13,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("AgencyDeliveryMan")
-@PreAuthorize(" hasAuthority('ADMIN') || hasAuthority('DELIVERYAGENCY')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
 
 public class AgencyDeliveryManController  {
     @Autowired

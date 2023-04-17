@@ -66,7 +66,6 @@ public class AgencyBranchService implements AgencyBranchIService {
     public List<AgencyBranch> retrievethebranchesofeachagency() {
         User u=sessionService.getUserBySession();
         List<AgencyBranch> agencyBranches = u.getAgencyBranches();
-
         return agencyBranches;
     }
 
@@ -86,6 +85,8 @@ public class AgencyBranchService implements AgencyBranchIService {
         AgencyBranch agencyBranch1 = abr.save(agencyBranch);
         User u=sessionService.getUserBySession();
         agencyBranch1.setDeliveryAgency(u);
+        agencyBranch1.setX(0);
+        agencyBranch1.setY(0);
         return abr.save(agencyBranch1);
     }
 
@@ -117,5 +118,12 @@ public class AgencyBranchService implements AgencyBranchIService {
     @Override
     public int countDeliveryMenInAgency(Long idBranch) {
         return abr.countDeliveryMenInBranchByIdBranch(idBranch);
+    }
+
+    @Override
+    public AgencyBranch updatebRANCHwithMAP(Long idBranch, AgencyBranch agencyBranch) {
+        AgencyBranch agencyBranch1=abr.findById(idBranch).get();
+        agencyBranch.setDeliveryAgency(agencyBranch1.getDeliveryAgency());
+        return abr.save(agencyBranch);
     }
 }
