@@ -56,10 +56,6 @@ public class UserService implements UserInterface {
     @Override
     public User updateUserByID(long id,User u) {
         User user1 = userRepository.findById(id).get();
-//        user1.setEmail(u.getEmail());
-//        user1.setFirstName(u.getFirstName());
-//        user1.setPhoneNumber(u.getPhoneNumber());
-//        user1.setPassword(u.getPassword());
         return userRepository.save(user1);
     }
 

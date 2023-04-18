@@ -64,27 +64,27 @@ public class UserController {
         return u;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/users")
+   // @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("users")
     public List<User> GetAll() {
         return userInterface.GetAll();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/user/{id}")
+   // @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("user/{id}")
     User getUserById(@RequestParam long id) {
 
         return userInterface.getUserById(id);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/update/{id}")
+   // @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("update/{id}")
     public User updateUserById(@RequestParam long id, @RequestBody User u) {
         return userInterface.updateUserByID(id, u);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{id}")
+   // @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("delete/{id}")
     void DeleteById(@RequestParam long id) {
         userInterface.DeleteById(id);
     }
