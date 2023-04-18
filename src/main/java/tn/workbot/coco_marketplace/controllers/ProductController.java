@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @PutMapping("UpdateProduct")
-    public Product updateProduct(@RequestBody Product p) {
+    public Product updateProduct(@RequestBody Product p) throws Exception {
         return productInterface.update(p);
     }
 

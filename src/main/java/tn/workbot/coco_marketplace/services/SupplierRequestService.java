@@ -45,7 +45,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
     SessionService sessionService;
 
     @Override
-    public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
+    public SupplierRequest create(SupplierRequest s, Long productId) throws Exception {
         User user = sessionService.getUserBySession();
         Product product = productService.getById(productId);
 
@@ -149,7 +149,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
 
     @Override
     //confirm request after delivering the products
-    public void confirmRequestDelivery(Long supplierRequestId) {
+    public void confirmRequestDelivery(Long supplierRequestId) throws Exception {
         if (supplierRequestRepository.findById(supplierRequestId).isPresent()) {
             SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId).get();
             Product product = supplierRequest.getProduct();

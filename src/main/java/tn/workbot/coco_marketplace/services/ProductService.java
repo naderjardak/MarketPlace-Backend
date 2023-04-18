@@ -86,8 +86,26 @@ public class ProductService implements ProductInterface {
     }
 
     @Override
-    public Product update(Product p) {
-        return productRepository.save(p);
+    public Product update(Product p) throws Exception {
+
+        if (p.getProductCategory() == null)
+            throw new Exception("Missing Category");
+
+
+        if (p.getProductWeight() <= 1) {
+            p.setDeliveryPrice(6);
+        } else if (p.getProductWeight() > 1) {
+            p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
+
+        }
+        p.setProductPriceBeforeDiscount(p.getProductPrice());
+
+
+        if(p.getCreationDate() == null)
+            p.setCreationDate(new Timestamp(System.currentTimeMillis()));
+
+
+        return productRepository.saveAndFlush(p);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class SupplierRequestController {
     SupplierRequestInterface supplierRequestInterface;
 
     @PostMapping("createRequest")
-    SupplierRequest create(@RequestBody SupplierRequest s, @RequestParam Long productId) throws MessagingException {
+    SupplierRequest create(@RequestBody SupplierRequest s, @RequestParam Long productId) throws Exception {
         return supplierRequestInterface.create(s, productId);
     }
 
@@ -56,7 +56,7 @@ public class SupplierRequestController {
 
     }
     @PutMapping("ConfirmDelivery")
-    void ConfirmDelivery(@RequestParam Long supplierRequestId) {
+    void ConfirmDelivery(@RequestParam Long supplierRequestId) throws Exception {
         supplierRequestInterface.confirmRequestDelivery(supplierRequestId);
 
     }

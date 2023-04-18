@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ProductInterface {
 
     Product create(Product p,String storeName) throws Exception;
-    Product update(Product p);
+    Product update(Product p) throws Exception;
     List<Product> retrieveAll();
 
     Product getById(Long id);

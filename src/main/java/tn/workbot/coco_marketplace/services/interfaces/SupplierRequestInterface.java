@@ -7,7 +7,7 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 public interface SupplierRequestInterface {
-    SupplierRequest create(SupplierRequest s,Long productId) throws MessagingException;
+    SupplierRequest create(SupplierRequest s,Long productId) throws Exception;
 
     SupplierRequest update(SupplierRequest s);
 
@@ -22,5 +22,5 @@ public interface SupplierRequestInterface {
 
     void accpetRequestBySeller(Long supplierRequestId);
 
-    void confirmRequestDelivery(Long supplierRequestId);
+    void confirmRequestDelivery(Long supplierRequestId) throws Exception;
 }
