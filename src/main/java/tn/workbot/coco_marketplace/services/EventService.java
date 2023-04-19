@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Event;
 import tn.workbot.coco_marketplace.entities.KeyWords;
@@ -14,6 +15,11 @@ import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,5 +123,13 @@ public class EventService implements EventInterface {
         if(productList.size()>0)
         return productList;
         return new ArrayList<>();
+    }
+
+    private static final String FILE_DIRECTORY = "C:/xampp/htdocs/MarketPlace-Frontend/src/assets/uploads";
+    @Override
+    public void storeFile(MultipartFile file) throws IOException {
+        Path filePath = Paths.get(FILE_DIRECTORY + "/" + file.getOriginalFilename());
+
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
     }
 }
