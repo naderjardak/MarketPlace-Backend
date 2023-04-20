@@ -64,6 +64,9 @@ public class EventController {
     public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         eventInterface.storeFile(file);
     }
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('MODIRATOR')")
+    @DeleteMapping("deleteKeywordFromEvent")
+    public void deleteKeywordFromEvent(@RequestParam Long eventId,@RequestParam Long keywordId){eventInterface.deleteKeywordFromEvent(eventId,keywordId);}
 
     public List<Product> displayProductForEvent(@RequestParam Long id){return eventInterface.displayProductForEvent(id);}
 

@@ -15,6 +15,7 @@ import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -99,9 +100,27 @@ public class EventService implements EventInterface {
     @Override
     public void addKeyWordToEvent(Long id, KeyWords keyWords) {
     Event event=eventRepository.findById(id).get();
-    event.getListkeyWords().add(keyWordsRepository.save(keyWords));
-    event.setProductList(displayProductForEvent(event.getId()));
-    eventRepository.save(event);
+    KeyWords kw=new KeyWords();
+    kw=keyWordsRepository.findByWord(keyWords.getWord());
+    if(kw==null) {
+        event.getListkeyWords().add(keyWordsRepository.save(keyWords));
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
+    }
+    else if(!event.getListkeyWords().contains(kw)) {
+        event.getListkeyWords().add(kw);
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
+    }
+    }
+
+    @Override
+    public void deleteKeywordFromEvent(Long eventId, Long keywordId) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        KeyWords keyword = keyWordsRepository.findById(keywordId).orElse(null);
+        event.getListkeyWords().remove(keyword);
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
     }
 
     @Override
@@ -125,11 +144,13 @@ public class EventService implements EventInterface {
         return new ArrayList<>();
     }
 
-    private static final String FILE_DIRECTORY = "C:/xampp/htdocs/MarketPlace-Frontend/src/assets/uploads";
+    private static final String FILE_DIRECTORY1 = "C:/xampp/htdocs/MarketPlace-Frontend/src/assets/uploads";
+    private static final String FILE_DIRECTORY2 = "C:/xampp/htdocs/MarketPlace-Frontend/projects/front-office/src/assets/front-template/images/banners";
     @Override
     public void storeFile(MultipartFile file) throws IOException {
-        Path filePath = Paths.get(FILE_DIRECTORY + "/" + file.getOriginalFilename());
-
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        Path filePath1 = Paths.get(FILE_DIRECTORY1 + "/" + file.getOriginalFilename());
+        Path filePath2 = Paths.get(FILE_DIRECTORY2 + "/" + file.getOriginalFilename());
+        Files.copy(file.getInputStream(), filePath1, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), filePath2, StandardCopyOption.REPLACE_EXISTING);
     }
 }

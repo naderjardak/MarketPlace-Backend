@@ -19,5 +19,5 @@ public interface EventInterface {
     public void deleteEvent(Long id);
     public List<Product> displayProductForEvent(Long id);
     public void storeFile(MultipartFile file) throws IOException;
-
+    public void deleteKeywordFromEvent(Long eventId, Long keywordId);
 }

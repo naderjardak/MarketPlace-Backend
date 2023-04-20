@@ -60,7 +60,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("select o.ref from Order o ")
   List<String> reflist();
 
-  @Query("SELECT p from Product p where p.name LIKE :nameProduct")
+  @Query("SELECT p from Product p where p.name LIKE :nameProduct OR p.description LIKE :nameProduct")
   List<Product> productsByNameLike(@Param("nameProduct") String nameProduct);
 
   @Query("select pq from Order o,ProductQuantity pq where o.id=:id and pq.order=o ")
