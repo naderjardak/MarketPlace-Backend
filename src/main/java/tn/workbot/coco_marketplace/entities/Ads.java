@@ -25,6 +25,7 @@ public class Ads implements Serializable {
     private String gender;
     private int audiencesAge;
     private LocalDateTime dateCreation;
+    private Boolean enabled;
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
     @Temporal(TemporalType.TIMESTAMP)

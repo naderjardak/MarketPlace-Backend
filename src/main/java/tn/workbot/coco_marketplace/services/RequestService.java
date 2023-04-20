@@ -108,7 +108,7 @@ public class RequestService implements RequestInterface {
 
             }
         }
-        user.setPoints(user.getPoints()-p.getPoints());
+        user.setAdsPoints(user.getAdsPoints()-p.getPoints());
         ur.save(user);
         return rr.save(request1);    }
 
@@ -129,7 +129,7 @@ public class RequestService implements RequestInterface {
         request1.setDeliveryman(user);
         request1.setPickup(pickup);
         request1.setRequestDate(LocalDateTime.now());
-        user.setPoints(user.getPoints()-p.getPoints());
+        user.setAdsPoints(user.getAdsPoints()-p.getPoints());
         ur.save(user);
         return rr.save(request1);
     }
