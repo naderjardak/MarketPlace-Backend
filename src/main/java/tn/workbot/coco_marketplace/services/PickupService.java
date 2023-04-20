@@ -183,6 +183,7 @@ public class PickupService implements PickupIService {
         Set<Pickup> pickups = new HashSet<>();
         List<Request> requests=pr.REQUESTofuser(u.getId());
         agencyBranches.addAll(u.getAgencyBranches());
+        
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {

@@ -108,6 +108,8 @@ public class RequestService implements RequestInterface {
 
             }
         }
+        user.setPoints(user.getPoints()-p.getPoints());
+        ur.save(user);
         return rr.save(request1);    }
 
     @Override
