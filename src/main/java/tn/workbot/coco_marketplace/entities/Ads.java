@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tn.workbot.coco_marketplace.entities.enmus.ObjectiveType;
+import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,7 +23,8 @@ public class Ads implements Serializable {
     @Id
     private Long id;
     private String audiencesGovernorate;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private genderType gender;
     private int audiencesAge;
     private LocalDateTime dateCreation;
     private Boolean enabled;

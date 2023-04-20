@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Ads;
+import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.services.interfaces.AdsInterface;
 
 import java.util.List;
@@ -27,5 +28,13 @@ public class AdsController {
     @GetMapping("retrieveAdsById")
     public Ads retrieveAdsById(@RequestParam Long idAds) {
         return ai.retrieveAdsById(idAds);
+    }
+    @GetMapping("retrieveProductAdsTOInterestedBuyer")
+    public List<Ads> retrieveProductAdsTOInterestedBuyer() {
+        return  ai.retrieveAdsTOInterestedBuyerObSales();
+    }
+    @GetMapping("retrieveAdsTOInterestedBuyerObTraffic")
+    public List<Ads> retrieveAdsTOInterestedBuyerObTraffic() {
+        return ai.retrieveAdsTOInterestedBuyerObTraffic();
     }
     }
