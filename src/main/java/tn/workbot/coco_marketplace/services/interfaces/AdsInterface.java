@@ -1,5 +1,7 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
-public interface AdsInterface {
+import tn.workbot.coco_marketplace.entities.Ads;
 
+public interface AdsInterface {
+public Ads assignAdsToProduct(Ads ads,Long idProduct);
 }

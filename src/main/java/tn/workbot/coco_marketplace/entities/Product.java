@@ -90,7 +90,6 @@ public class Product {
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
     @OneToMany(mappedBy = "product")
-    @JsonIgnore
     private List<Ads> adsList;
 
     @Override

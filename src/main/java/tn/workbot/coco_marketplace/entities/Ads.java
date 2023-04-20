@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Ads implements Serializable {
     private Date expiredDate;
     @Enumerated(EnumType.STRING)
     private ObjectiveType objectiveType;
+    @JsonIgnore
     @ManyToOne
     private Product product;
 
