@@ -89,7 +89,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<SupplierRequest> supplierRequests;
-
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<Ads> adsList;
 
     @Override
     public boolean equals(Object o) {

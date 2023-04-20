@@ -30,6 +30,8 @@ public class Ads implements Serializable {
     private Date expiredDate;
     @Enumerated(EnumType.STRING)
     private ObjectiveType objectiveType;
+    @ManyToOne
+    private Product product;
 
 
 }
