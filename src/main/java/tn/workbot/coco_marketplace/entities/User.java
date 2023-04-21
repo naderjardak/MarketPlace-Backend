@@ -9,6 +9,7 @@ import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +31,7 @@ public class User implements Serializable {
     private boolean TokenExpired;
     private boolean banned;
     private String PhoneNumber;
-
-    @Temporal(TemporalType.DATE)
-    private Date BirthDate;
+    private LocalDate BirthDate;
     private String image;
     @Enumerated(EnumType.STRING)
     private genderType gender;

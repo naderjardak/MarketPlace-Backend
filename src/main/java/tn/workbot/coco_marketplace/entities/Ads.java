@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tn.workbot.coco_marketplace.entities.enmus.BudgetType;
 import tn.workbot.coco_marketplace.entities.enmus.ObjectiveType;
 import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
@@ -22,12 +23,15 @@ public class Ads implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    private String audiencesGovernorate;
     @Enumerated(EnumType.STRING)
     private genderType gender;
-    private int audiencesAge;
+    private int audiencesAgeMin;
+    private int audiencesAgeMax;
+    public float adsPoints;
     private LocalDateTime dateCreation;
     private Boolean enabled;
+    @Enumerated(EnumType.STRING)
+    private BudgetType budgetType;
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
     @Temporal(TemporalType.TIMESTAMP)
