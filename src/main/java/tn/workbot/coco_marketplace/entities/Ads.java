@@ -11,6 +11,7 @@ import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -28,14 +29,12 @@ public class Ads implements Serializable {
     private int audiencesAgeMin;
     private int audiencesAgeMax;
     public float adsPoints;
-    private LocalDateTime dateCreation;
+    private LocalDate dateCreation;
     private Boolean enabled;
     @Enumerated(EnumType.STRING)
     private BudgetType budgetType;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiredDate;
+    private LocalDate startDate;
+    private LocalDate expiredDate;
     @Enumerated(EnumType.STRING)
     private ObjectiveType objectiveType;
     @JsonIgnore

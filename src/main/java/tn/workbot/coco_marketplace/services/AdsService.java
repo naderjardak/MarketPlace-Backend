@@ -111,15 +111,26 @@ public class AdsService implements AdsInterface {
     }
 
     @Override
-    public Integer retrieveHMAwRWithAds(float adsPoints, Date startDate, Date expiredDate, BudgetType budgetType) {
+    public Integer retrieveHMAwRWithAds(float adsPoints, String startDate, String expiredDate, BudgetType budgetType) {
         int reach = 0;
+        LocalDate startDate1 = LocalDate.parse(startDate);
+        LocalDate expiredDate1 = LocalDate.parse(expiredDate);
+        Ads ads=ar.findById(1L).get();
+        System.out.println(ads.getStartDate());
         if (adsPoints == 1) {
             if(budgetType.equals(BudgetType.DAILYBUDGET)){
                 reach = 100;
             }
             else{
-
-
+                int Days= Period.between(startDate1, expiredDate1).getDays();
+                //int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                if(Days==1){
+                    reach = 100;
+                }
+                else{
+                    int dayIncrement = (int) (Days - 1);
+                    reach = 100-10*dayIncrement;
+                }
             }
 
         } else if (adsPoints > 1){
@@ -128,6 +139,15 @@ public class AdsService implements AdsInterface {
                 reach = 100 + adsPointsIncrement * 200;
             }
             else{
+                int Days= Period.between(startDate1, expiredDate1).getDays();
+               // int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                if(Days==1){
+                    reach = 100*Days;
+                }
+                else{
+                    int dayIncrement = (int) (Days - 1);
+                    reach = 100*Days-10*dayIncrement;
+                }
 
             }
         }

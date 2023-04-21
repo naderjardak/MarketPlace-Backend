@@ -7,6 +7,7 @@ import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.enmus.BudgetType;
 import tn.workbot.coco_marketplace.services.interfaces.AdsInterface;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -41,8 +42,8 @@ public class AdsController {
     }
     @GetMapping("retrieveHMAwRWithAds")
     public Integer retrieveHMAwRWithAds(@RequestParam float adsPoints,
-                                        @RequestParam(required = false) Date startDate,
-                                        @RequestParam(required = false) Date expiredDate,
+                                        @RequestParam(required = false) String startDate,
+                                        @RequestParam(required = false) String expiredDate,
                                         @RequestParam(required = false) BudgetType budgetType) {
     return ai.retrieveHMAwRWithAds(adsPoints,startDate,expiredDate,budgetType);
     }
