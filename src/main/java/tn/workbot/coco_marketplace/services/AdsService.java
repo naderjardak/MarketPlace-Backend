@@ -1,6 +1,7 @@
 package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Ads;
@@ -33,14 +34,45 @@ public class AdsService implements AdsInterface {
     LastVuedRepository lvr;
     @Autowired
     UserrRepository ur;
+
     @Override
     public String assignAdsToProduct(Ads ads, Long idProduct) {
         Product product = pr.findById(idProduct).get();
         User user = ss.getUserBySession();
-        if ((user.getAdsPoints() - ads.getAdsPoints()) > 0) {
+        if ((user.getAdsPoints() - ads.getAdsPoints()) >= 0) {
             ads.setProduct(product);
             ads.setEnabled(true);
             user.setAdsPoints(user.getAdsPoints() - ads.getAdsPoints());
+            if (ads.getAdsPoints() == 1) {
+                if (ads.getBudgetType().equals(BudgetType.DAILYBUDGET)) {
+                    ads.setReach(100);
+                } else {
+                    int Days = Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                    //int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                    if (Days == 1) {
+                        ads.setReach(100);
+                    } else {
+                        int dayIncrement = (int) (Days - 1);
+                        ads.setReach(100 - 10 * dayIncrement);
+                    }
+                }
+
+            } else if (ads.getAdsPoints() > 1) {
+                if (ads.getBudgetType().equals(BudgetType.DAILYBUDGET)) {
+                    int adsPointsIncrement = (int) (ads.getAdsPoints() - 1);
+                    ads.setReach(100 + adsPointsIncrement * 200);
+                } else {
+                    int Days = Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                    // int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                    if (Days == 1) {
+                        ads.setReach(100 * Days);
+                    } else {
+                        int dayIncrement = (int) (Days - 1);
+                        ads.setReach(100 * Days - 10 * dayIncrement);
+                    }
+
+                }
+            }
             ur.save(user);
             ar.save(ads);
             return null; // return null since the operation was successful
@@ -51,7 +83,7 @@ public class AdsService implements AdsInterface {
 
     @Override
     public Ads descativatedAds(Long idAds) {
-        Ads ads=ar.findById(idAds).get();
+        Ads ads = ar.findById(idAds).get();
         ads.setEnabled(false);
         ads.setProduct(ads.getProduct());
         return ar.save(ads);
@@ -64,24 +96,24 @@ public class AdsService implements AdsInterface {
 
     @Override
     public Ads retrieveAdsById(Long idAds) {
-        Ads ads=ar.findById(idAds).get();
+        Ads ads = ar.findById(idAds).get();
         return ads;
     }
 
     @Override
     public List<Ads> retrieveAdsTOInterestedBuyerObSales() {
-        User u=ss.getUserBySession();
+        User u = ss.getUserBySession();
         LocalDate currentDate = LocalDate.now();
-        int years= Period.between(u.getBirthDate(), currentDate).getYears();
-        List<Ads> adsList= (List<Ads>) ar.findAll();
-        List<LastVued> lastVuedList=lvr.findAll();
-        List<Ads> productList=new ArrayList<>();
-        for (Ads a:adsList) {
-            for (LastVued lv:lastVuedList) {
-                if((lv.getUser().getId().equals(u.getId()))&&(a.getGender().equals(u.getGender()))&&(a.getEnabled().equals(true))
-                        &&(a.getObjectiveType().equals(ObjectiveType.SALES))&&(a.getAudiencesAgeMin()<=years)&&(a.getAudiencesAgeMax()>=years)){
-                    if(lv.getProductVued().getProductCategory().getName().equals(a.getProduct().getProductCategory().getName())){
-                          productList.add(a);
+        int years = Period.between(u.getBirthDate(), currentDate).getYears();
+        List<Ads> adsList = (List<Ads>) ar.findAll();
+        List<LastVued> lastVuedList = lvr.findAll();
+        List<Ads> productList = new ArrayList<>();
+        for (Ads a : adsList) {
+            for (LastVued lv : lastVuedList) {
+                if ((lv.getUser().getId().equals(u.getId())) && (a.getGender().equals(u.getGender())) && (a.getEnabled().equals(true))
+                        && (a.getObjectiveType().equals(ObjectiveType.SALES)) && (a.getAudiencesAgeMin() <= years) && (a.getAudiencesAgeMax() >= years)) {
+                    if (lv.getProductVued().getProductCategory().getName().equals(a.getProduct().getProductCategory().getName())) {
+                        productList.add(a);
                     }
                 }
             }
@@ -91,17 +123,17 @@ public class AdsService implements AdsInterface {
 
     @Override
     public List<Ads> retrieveAdsTOInterestedBuyerObTraffic() {
-        User u=ss.getUserBySession();
-        List<Ads> adsList= (List<Ads>) ar.findAll();
-        List<LastVued> lastVuedList=lvr.findAll();
+        User u = ss.getUserBySession();
+        List<Ads> adsList = (List<Ads>) ar.findAll();
+        List<LastVued> lastVuedList = lvr.findAll();
         LocalDate currentDate = LocalDate.now();
-        int years= Period.between(u.getBirthDate(), currentDate).getYears();
-        List<Ads> productList=new ArrayList<>();
-        for (Ads a:adsList) {
-            for (LastVued lv:lastVuedList) {
-                if((lv.getUser().getId().equals(u.getId()))&&(a.getGender().equals(u.getGender()))&&(a.getEnabled().equals(true))
-                        &&(a.getObjectiveType().equals(ObjectiveType.TRAFFIC))&&(a.getAudiencesAgeMin()<=years)&&(a.getAudiencesAgeMax()>=years)){
-                    if(lv.getProductVued().getProductCategory().getName().equals(a.getProduct().getProductCategory().getName())){
+        int years = Period.between(u.getBirthDate(), currentDate).getYears();
+        List<Ads> productList = new ArrayList<>();
+        for (Ads a : adsList) {
+            for (LastVued lv : lastVuedList) {
+                if ((lv.getUser().getId().equals(u.getId())) && (a.getGender().equals(u.getGender())) && (a.getEnabled().equals(true))
+                        && (a.getObjectiveType().equals(ObjectiveType.TRAFFIC)) && (a.getAudiencesAgeMin() <= years) && (a.getAudiencesAgeMax() >= years)) {
+                    if (lv.getProductVued().getProductCategory().getName().equals(a.getProduct().getProductCategory().getName())) {
                         productList.add(a);
                     }
                 }
@@ -115,42 +147,49 @@ public class AdsService implements AdsInterface {
         int reach = 0;
         LocalDate startDate1 = LocalDate.parse(startDate);
         LocalDate expiredDate1 = LocalDate.parse(expiredDate);
-        Ads ads=ar.findById(1L).get();
+        Ads ads = ar.findById(1L).get();
         System.out.println(ads.getStartDate());
         if (adsPoints == 1) {
-            if(budgetType.equals(BudgetType.DAILYBUDGET)){
+            if (budgetType.equals(BudgetType.DAILYBUDGET)) {
                 reach = 100;
-            }
-            else{
-                int Days= Period.between(startDate1, expiredDate1).getDays();
+            } else {
+                int Days = Period.between(startDate1, expiredDate1).getDays();
                 //int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
-                if(Days==1){
+                if (Days == 1) {
                     reach = 100;
-                }
-                else{
+                } else {
                     int dayIncrement = (int) (Days - 1);
-                    reach = 100-10*dayIncrement;
+                    reach = 100 - 10 * dayIncrement;
                 }
             }
 
-        } else if (adsPoints > 1){
-            if(budgetType.equals(BudgetType.DAILYBUDGET)){
+        } else if (adsPoints > 1) {
+            if (budgetType.equals(BudgetType.DAILYBUDGET)) {
                 int adsPointsIncrement = (int) (adsPoints - 1);
                 reach = 100 + adsPointsIncrement * 200;
-            }
-            else{
-                int Days= Period.between(startDate1, expiredDate1).getDays();
-               // int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
-                if(Days==1){
-                    reach = 100*Days;
-                }
-                else{
+            } else {
+                int Days = Period.between(startDate1, expiredDate1).getDays();
+                // int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
+                if (Days == 1) {
+                    reach = 100 * Days;
+                } else {
                     int dayIncrement = (int) (Days - 1);
-                    reach = 100*Days-10*dayIncrement;
+                    reach = 100 * Days - 10 * dayIncrement;
                 }
 
             }
         }
         return reach;
+    }
+    @Scheduled(cron = "* * 10 * * *")
+    public void DisAdsWhenDateExpired(){
+        List<Ads> adsList= (List<Ads>) ar.findAll();
+        LocalDate currentDate = LocalDate.now();
+        for (Ads ads:adsList) {
+            if (ads.getExpiredDate().compareTo(currentDate) < 0) {
+                ads.setEnabled(false);
+                ar.save(ads);
+            }
+        }
     }
 }

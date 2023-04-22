@@ -35,6 +35,7 @@ public class Ads implements Serializable {
     private BudgetType budgetType;
     private LocalDate startDate;
     private LocalDate expiredDate;
+    private Integer reach;
     @Enumerated(EnumType.STRING)
     private ObjectiveType objectiveType;
     @JsonIgnore
