@@ -58,7 +58,7 @@ public class StoreService implements StoreInterface {
 
     @Override
     public List<Store> getStoresByUser(Long idUser) {
-        return storeRepository.findStoreBySeller(userrRepository.findById(idUser).get());
+        return storeRepository.findStoresBySeller(userrRepository.findById(idUser).get());
     }
 
 

@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import tn.workbot.coco_marketplace.entities.Product;
 import tn.workbot.coco_marketplace.entities.Store;
 import tn.workbot.coco_marketplace.entities.SupplierRequest;
+import tn.workbot.coco_marketplace.entities.User;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -29,6 +30,7 @@ public interface ProductInterface {
     List<Product> getProductBySeller();
 
     List<Product> getProductsByStore(String store);
+    List<Product> getProductsOutOfStockBySeller();
 
 
 

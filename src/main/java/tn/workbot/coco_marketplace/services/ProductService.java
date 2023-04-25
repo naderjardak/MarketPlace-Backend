@@ -22,8 +22,8 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -75,12 +75,12 @@ public class ProductService implements ProductInterface {
 
         Random random = new Random();
         int nbRand = random.nextInt(99999);
-        p.setReference(("REF-" +p.getStore().getName().substring(p.getStore().getName().length()-2)+ p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
+        p.setReference(("REF-" + p.getStore().getName().substring(p.getStore().getName().length() - 2) + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
         p.setProductStatus(ProductStatus.PENDING);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
-       // p.setStore(store);
+        // p.setStore(store);
 
         return productRepository.saveAndFlush(p);
     }
@@ -101,7 +101,7 @@ public class ProductService implements ProductInterface {
         p.setProductPriceBeforeDiscount(p.getProductPrice());
 
 
-        if(p.getCreationDate() == null)
+        if (p.getCreationDate() == null)
             p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
 
@@ -163,8 +163,8 @@ public class ProductService implements ProductInterface {
 
         //cascade
         p.setProductCategory(subCategory);
-        for(String st:storeName.stream().toList()){
-            Product p2=new Product();
+        for (String st : storeName.stream().toList()) {
+            Product p2 = new Product();
             Store store = storeRepository.findByNameAndSeller(st, user);
             if (store == null)
                 throw new Exception("Store not found");
@@ -182,8 +182,7 @@ public class ProductService implements ProductInterface {
             p2.setProductCategory(p.getProductCategory());
 
 
-
-            this.create(p2,st);
+            this.create(p2, st);
         }
 
         return p;
@@ -290,9 +289,9 @@ public class ProductService implements ProductInterface {
     @Override
     public List<Product> getProductBySeller() {
         User user = sessionService.getUserBySession();
-        List<Product> products=new ArrayList<>();
-        for(Store s:user.getStores()){
-            products.addAll(productRepository.findProductsByStore(s)) ;
+        List<Product> products = new ArrayList<>();
+        for (Store s : user.getStores()) {
+            products.addAll(productRepository.findProductsByStore(s));
         }
         return products;
     }
@@ -300,8 +299,23 @@ public class ProductService implements ProductInterface {
     @Override
     public List<Product> getProductsByStore(String store) {
         User user = sessionService.getUserBySession();
-        Store store1=storeRepository.findByNameAndSeller(store,user);
-        return new ArrayList<>(store1.getProducts());    }
+        Store store1 = storeRepository.findByNameAndSeller(store, user);
+        return new ArrayList<>(store1.getProducts());
+    }
+
+    @Override
+    public List<Product> getProductsOutOfStockBySeller() {
+        User user = sessionService.getUserBySession();
+        List<Product> products=new ArrayList<>();
+        List<Store> stores = storeService.getStoresByUser(user.getId());
+        for (Store s : stores) {
+            for(Product p:s.getProducts()){
+                if(p.getQuantity()==0)
+                    products.add(p);
+            }
+        }
+        return products;
+    }
 
 
     @Scheduled(cron = "0 0 11 1 * *")

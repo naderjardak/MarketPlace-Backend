@@ -152,4 +152,8 @@ public class ProductController {
     public List<Product> getProductsByStore(@RequestParam String store) {
         return productInterface.getProductsByStore(store);
     }
+    @GetMapping("getProductsOutOfStockBySeller")
+    public List<Product> getProductsOutOfStockBySeller() {
+        return productInterface.getProductsOutOfStockBySeller();
+    }
     }
