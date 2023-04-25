@@ -16,6 +16,8 @@ import tn.workbot.coco_marketplace.services.UserService;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -44,18 +46,18 @@ public class ForgetPassword {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    @PostMapping("/checkEmail")
+    @PostMapping("checkEmail")
     public String resetPasswordEmail(@RequestBody ResetPassword resetPassword, HttpServletRequest request) {
         User user = userService.findByEmail(resetPassword.getEmail());
         AccountResponse accountResponse = new AccountResponse();
         if (user != null) {
             // String code = UserCode.getCode();
-            user.setResetToken(UUID.randomUUID().toString());
-            userService.Create(user);
+         user.setResetToken(UUID.randomUUID().toString());
+            userService.Create1(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
             mailSenderService.sendEmail(resetPassword.getEmail(), "Forget password", "To reset your password, check your token :\n" +
                     "token=" + user.getResetToken());
-            ResetTwilio.sendSMS("To reset your password, check your token : token=" + user.getResetToken());
+           // ResetTwilio.sendSMS("To reset your password, check your code : code=" + user.getResetToken());
             accountResponse.setResult("User Found");
         } else {
             accountResponse.setResult("Forgot Password");
@@ -64,31 +66,26 @@ public class ForgetPassword {
     }
 
 
-    @GetMapping("/resetPassword")
-    public String resetPassword(@RequestParam(required = false) String token,
-                                Model model) {
-
-
-        User user = this.userService.findByResetToken(token);
+    @GetMapping("resetPassword")
+    public Map<String, Boolean> resetPassword(@RequestParam(required = false) String resetToken) {
+        Map<String, Boolean> response = new HashMap<>();
+        User user = this.userService.findByResetToken(resetToken);
         if (user == null) {
-            model.addAttribute("error", "Invalid Token");
-            return "Invalid Token";
+            response.put("isValidToken", false);
         } else {
-
-            model.addAttribute("token", token);
-
-            return "token valid";
+            response.put("isValidToken", true);
         }
-
+        return response;
     }
 
-    @PostMapping("/changePass")
-    public String processResetPassword(@RequestParam("token") String token, @RequestParam String Password ) {
+
+    @GetMapping("/changePass")
+    public String processResetPassword(@RequestParam("resetToken") String resetToken, @RequestParam String Password ) {
  AccountResponse accountResponse = new AccountResponse();
 
 
         // Find the user associated with the reset token
-        User user = userService.findByResetToken(token);
+        User user = userService.findByResetToken(resetToken);
 
         if (user != null) {
                 String a = this.passwordEncoder.encode(Password);

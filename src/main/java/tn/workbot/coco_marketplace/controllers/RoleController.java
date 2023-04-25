@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Role;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
 import java.util.List;
 
 @RestController
 @RequestMapping("Role")
-@PreAuthorize("hasAuthority('ADMIN')")
 
 public class RoleController {
     @Autowired
@@ -46,5 +46,9 @@ public class RoleController {
     public void AssignRolePrivilege(@RequestParam long idRole , @RequestParam long idPrivilege){
         roleInterface.AssignRolePrivilege(idRole,idPrivilege);
     }
-}
+    @GetMapping("/findRolebyRoleType")
+    public Role findRolebyRoleType(@RequestParam RoleType roleType) {
+        return roleInterface.findRolebyRoleType(roleType);
+    }
+    }
 //test

@@ -11,8 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.Api.StatStorePDF;
 import tn.workbot.coco_marketplace.configuration.SessionService;
+import tn.workbot.coco_marketplace.configuration.SpringSecurityConfiguration;
 import tn.workbot.coco_marketplace.entities.Model.auth.ConfirmationToken;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.ConfirmationTokenRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.MailSenderService;
@@ -43,15 +45,17 @@ public class UserController {
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private MailSenderService emailService;
+    @Autowired
+    SpringSecurityConfiguration springSecurityConfiguration;
 
     {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @PostMapping("/add")
-    public User Create(@RequestBody User u) {
+    public User Create(@RequestBody User u,@RequestParam long idRole) {
 
-        userInterface.Create(u);
+        userInterface.Create(u,idRole);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(u);
 
@@ -63,7 +67,10 @@ public class UserController {
 
         return u;
     }
-
+    @PutMapping("/affectRole")
+    public void affectRoleAtUser(@RequestParam long idRole, @RequestParam long idUser) {
+        userInterface.affectRoleAtUser(idRole, idUser);
+    }
    // @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("users")
     public List<User> GetAll() {
@@ -89,16 +96,13 @@ public class UserController {
         userInterface.DeleteById(id);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @PutMapping("/update")
     public User update(@RequestBody User u) {
         return userInterface.update(u);
     }
 
-    @PutMapping("/affectRole")
-    public void affectRoleAtUser(@RequestParam long idRole, @RequestParam long idUser) {
-        userInterface.affectRoleAtUser(idRole, idUser);
-    }
+
 
 
     @GetMapping("/confirm-account")
@@ -141,7 +145,11 @@ public class UserController {
     public User getUserBySession() {
         return sessionService.getUserBySession();
     }
-
+    @GetMapping("role")
+    public RoleType GetRole(@RequestParam String email){
+    User user1=userrRepository.getUserByEmail(email);
+        return  user1.getRole().getType();
+    }
 }
 
 

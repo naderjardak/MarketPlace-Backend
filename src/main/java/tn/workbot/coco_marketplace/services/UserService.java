@@ -35,12 +35,20 @@ public class UserService implements UserInterface {
 
 
     @Override
-    public User Create(User u) {
-
+    public User Create(User u,Long idRole) {
+         Role role= roleRepository.findById(idRole).get();
         u.setPassword(this.passwordEncoder.encode(u.getPassword()));
-        User user=   userRepository.save(u);
-        return  user;
+        u.setRole(role);
+        userRepository.save(u);
+        return  u;
 
+    }
+
+    @Override
+    public User Create1(User u) {
+        u.setPassword(this.passwordEncoder.encode(u.getPassword()));
+        userRepository.save(u);
+        return  u;
     }
 
     @Override

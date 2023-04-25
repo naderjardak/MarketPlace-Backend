@@ -5,7 +5,9 @@ import tn.workbot.coco_marketplace.entities.User;
 import java.util.List;
 
 public interface UserInterface {
-    User Create(User u);
+    User Create(User u,Long idRole);
+
+    User Create1(User u);
 
     void  DeleteById(long id);
 
