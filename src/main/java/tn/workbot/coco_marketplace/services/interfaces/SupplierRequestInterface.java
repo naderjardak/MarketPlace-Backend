@@ -20,7 +20,7 @@ public interface SupplierRequestInterface {
     List<Product> retriveProductsOutOfStock();
 
 
-    void accpetRequestBySeller(Long supplierRequestId);
+    SupplierRequest accpetRequestBySeller(SupplierRequest supplierRequestId);
 
     void confirmRequestDelivery(Long supplierRequestId) throws Exception;
 }

@@ -87,7 +87,6 @@ public class Product {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "product")
-    @JsonIgnore
     private List<SupplierRequest> supplierRequests;
 
 

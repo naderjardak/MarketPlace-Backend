@@ -310,7 +310,7 @@ public class ProductService implements ProductInterface {
         List<Store> stores = storeService.getStoresByUser(user.getId());
         for (Store s : stores) {
             for(Product p:s.getProducts()){
-                if(p.getQuantity()==0)
+                if(p.getQuantity()<=0)
                     products.add(p);
             }
         }

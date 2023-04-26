@@ -10,9 +10,10 @@ import tn.workbot.coco_marketplace.services.interfaces.SupplierRequestInterface;
 import javax.mail.MessagingException;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("SupplierRequest")
-@PreAuthorize("hasAuthority('SUPPLIER') || hasAuthority('ADMIN')")
+@RequestMapping("supplier")
+@PreAuthorize(" hasAuthority('SELLER') || hasAuthority('SUPPLIER') || hasAuthority('ADMIN') ")
 public class SupplierRequestController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class SupplierRequestController {
         return supplierRequestInterface.update(s);
     }
 
-    @GetMapping("RetrieveRequests")
+    @GetMapping("retrieveRequests")
     List<SupplierRequest> retrieveAll() {
         return supplierRequestInterface.retrieveAll();
     }
@@ -50,9 +51,9 @@ public class SupplierRequestController {
 
 
 
-    @PutMapping("AcceptRequest")
-    void accpetRequestBySeller(@RequestParam Long supplierRequestId) {
-        supplierRequestInterface.accpetRequestBySeller(supplierRequestId);
+    @PutMapping("acceptRequest")
+    public SupplierRequest accpetRequestBySeller(@RequestBody SupplierRequest supplierRequest) {
+      return  supplierRequestInterface.accpetRequestBySeller(supplierRequest);
 
     }
     @PutMapping("ConfirmDelivery")

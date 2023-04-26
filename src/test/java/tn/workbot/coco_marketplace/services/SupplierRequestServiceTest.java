@@ -58,7 +58,7 @@ class SupplierRequestServiceTest {
     }
 
     @Test
-    public void shouldAcceptRequestAutomatically() throws MessagingException {
+    public void shouldAcceptRequestAutomatically() throws Exception {
 
 
         User user = new User();
@@ -101,7 +101,7 @@ class SupplierRequestServiceTest {
     }
 
     @Test
-    public void shouldNotAcceptRequestAutomatically() throws MessagingException {
+    public void shouldNotAcceptRequestAutomatically() throws Exception {
 
 
         User user = new User();
