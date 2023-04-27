@@ -59,7 +59,7 @@ public class EventController {
     public void deleteEvent(@RequestParam Long id){eventInterface.deleteEvent(id);}
 
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('MODIRATOR')")
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         eventInterface.storeFile(file);
