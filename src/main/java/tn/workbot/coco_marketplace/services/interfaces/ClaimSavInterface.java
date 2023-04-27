@@ -1,9 +1,11 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.ClaimSav;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavType;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ClaimSavInterface {
@@ -16,4 +18,6 @@ public interface ClaimSavInterface {
     public void modifyClaimStatus(Long id, ClaimSavStatusType newStatus);
 
     public List<ClaimSav> getClaimsByTypeAndStatus(ClaimSavType type, ClaimSavStatusType status);
+
+    public void storeFile(MultipartFile file) throws IOException;
 }

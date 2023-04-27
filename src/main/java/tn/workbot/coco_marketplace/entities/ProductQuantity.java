@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class ProductQuantity implements Serializable {
     @ManyToOne
     private Product product;
 
-    @OneToOne(mappedBy = "productQuantity")
-    private ClaimSav claimSav;
+    @OneToMany(mappedBy = "productQuantity")
+    private List<ClaimSav> claimSav;
 
 }

@@ -3,9 +3,13 @@ package tn.workbot.coco_marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.entities.ClaimSav;
+import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavStatusType;
 import tn.workbot.coco_marketplace.entities.enmus.ClaimSavType;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
@@ -14,11 +18,12 @@ import tn.workbot.coco_marketplace.services.ClaimSavService;
 import tn.workbot.coco_marketplace.services.UserService;
 
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("claims")
-@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('TECHNICALSUPPORT')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('TECHNICALSUPPORT')|| hasAuthority('BUYER')" )
 public class ClaimSavController {
 
     @Autowired
@@ -28,6 +33,7 @@ public class ClaimSavController {
     UserService userService;
     @Autowired
     UserrRepository ur;
+
 
 
 
@@ -68,7 +74,11 @@ public class ClaimSavController {
         return  claimSavService.getClaimsByTypeAndStatus(type, status);
     }
 
-
+    @PostMapping(value = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+        claimSavService.storeFile(file);
+    }
 
 
 }
