@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserrRepository extends CrudRepository<User,Long> {
@@ -24,5 +25,8 @@ public interface UserrRepository extends CrudRepository<User,Long> {
     public User getUserByEmailAndPassword(@Param("v1")String Email,@Param("v2")String pdw);
     @Query("select u from User u where u.email=:v1 ")
     public User getUserByEmail(@Param("v1")String Email);
+
+    @Query("select u.role.type as role ,count(u) as nb from User u group by u.role")
+    List<Map<String,Integer>> statsUsersByRole();
 
 }

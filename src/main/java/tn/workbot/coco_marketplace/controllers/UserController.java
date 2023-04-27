@@ -3,16 +3,19 @@ package tn.workbot.coco_marketplace.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.Api.StatStorePDF;
 import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.configuration.SpringSecurityConfiguration;
 import tn.workbot.coco_marketplace.entities.Model.auth.ConfirmationToken;
+import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.ConfirmationTokenRepository;
@@ -25,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -150,6 +154,18 @@ public class UserController {
     User user1=userrRepository.getUserByEmail(email);
         return  user1.getRole().getType();
     }
+
+    @PostMapping(value = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+        userInterface.storeFile(file);
+    }
+
+    @GetMapping("StatsByRole")
+    public List<Map<String, Integer>> statsByRole(){return userInterface.statsByRole();}
+
+    @GetMapping("getAllRoles")
+    public  List<Role> getAllRolesd(){return  userInterface.getAllRolesd();}
 }
 
 
