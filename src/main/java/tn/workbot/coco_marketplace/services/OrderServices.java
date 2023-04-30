@@ -78,6 +78,8 @@ public class OrderServices implements OrderInterface {
 
     @Override
     public Order addOrder(Order order){
+        order.setBuyer(sessionService.getUserBySession());
+        order.setStatus(StatusOrderType.BASKET);
         return orderRepository.save(order);
     }
 
@@ -316,7 +318,7 @@ public class OrderServices implements OrderInterface {
             order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
             order.setPayment(PaymentType.BANK_CARD);
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-            //orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+            orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
             //Twilio mna7iha 3al flous
             //OrderTwilioService.sendSMS(msg);
             List<String> refList=orderRepository.reflist();
