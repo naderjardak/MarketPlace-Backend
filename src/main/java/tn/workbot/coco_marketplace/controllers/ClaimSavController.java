@@ -20,6 +20,7 @@ import tn.workbot.coco_marketplace.services.UserService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("claims")
@@ -54,7 +55,7 @@ public class ClaimSavController {
     }
 
     @PutMapping("modifyclaimstatus")
-    public void modifyClaimStatus(@RequestParam Long id, @RequestBody ClaimSavStatusType newStatus){
+    public void modifyClaimStatus(@RequestParam Long id, @RequestParam ClaimSavStatusType newStatus){
         claimSavService.modifyClaimStatus(id, newStatus);
     }
 
@@ -80,5 +81,7 @@ public class ClaimSavController {
         claimSavService.storeFile(file);
     }
 
+    @GetMapping("statsClaim")
+    public List<Map<String,Integer>> statsClaim(){return claimSavService.statsClaim();}
 
 }

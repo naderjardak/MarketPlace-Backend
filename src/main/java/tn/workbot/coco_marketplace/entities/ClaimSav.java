@@ -47,11 +47,9 @@ public class ClaimSav implements Serializable {
 
    ///DoneCrud
 
-    @JsonIgnore
     @ManyToOne
     private User user;
 
-    @JsonIgnore
     @ManyToOne
     private ProductQuantity productQuantity;
 

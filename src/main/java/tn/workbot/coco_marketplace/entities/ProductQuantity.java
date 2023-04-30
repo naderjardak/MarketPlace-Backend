@@ -30,6 +30,7 @@ public class ProductQuantity implements Serializable {
     @ManyToOne
     private Product product;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "productQuantity")
     private List<ClaimSav> claimSav;
 

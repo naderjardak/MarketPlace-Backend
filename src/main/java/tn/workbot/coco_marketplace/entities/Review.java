@@ -28,12 +28,10 @@ public class Review {
 
 
 
-    @JsonIgnore
     private int rating;
 
     private String comment;
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private ReviewEmotionStatus emotionStatus;
 

@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ClaimSavService implements ClaimSavInterface {
@@ -113,8 +114,8 @@ public class ClaimSavService implements ClaimSavInterface {
         User user = ur.findById(1L).get();
         String subject = "";
         String message = "Hello from CocoMarket Claim Service " +"Mr"+ user.getFirstName() + ",\n\n we inform you that your claim status is "+newStatus+"  Thank you";
-        mailSenderService.sendEmail(user.getEmail(),subject,message);
-        PickupTwilio.sendSMS(message);
+        //mailSenderService.sendEmail(user.getEmail(),subject,message);
+        //PickupTwilio.sendSMS(message);
         crp.save(claimSav);
     }
 
@@ -134,4 +135,9 @@ public class ClaimSavService implements ClaimSavInterface {
         Files.copy(file.getInputStream(), filePath2, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    @Override
+    public List<Map<String,Integer>> statsClaim()
+    {
+        return crp.statsClaim();
+    }
 }
