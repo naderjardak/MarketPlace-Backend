@@ -28,12 +28,10 @@ public class Review {
 
 
 
-    @JsonIgnore
     private int rating;
 
     private String comment;
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private ReviewEmotionStatus emotionStatus;
 
@@ -45,7 +43,6 @@ public class Review {
 
 
     @ManyToOne
-    @JsonIgnore
     private User userSender;
 
     @JsonIgnore
@@ -55,7 +52,6 @@ public class Review {
     @JsonIgnore
     private User DeliveryFreelancer;
     @ManyToOne
-    @JsonIgnore
     private Product product;
 
 

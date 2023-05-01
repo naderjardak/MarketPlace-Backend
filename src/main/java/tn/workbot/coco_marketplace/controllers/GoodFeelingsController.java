@@ -11,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("GoodFeelings")
-@PreAuthorize("hasAuthority('ROLE!!!')")
+@PreAuthorize("hasAuthority('ADMIN')")
 
 public class GoodFeelingsController {
     @Autowired
     GoodFeelingsService goodFeelingsService;
 
     @PostMapping("addNewGoodFeelings")
-    public void addNewGoodFeelings(GoodFeelings goodFeelings){
+    public void addNewGoodFeelings(@RequestBody GoodFeelings goodFeelings){
         goodFeelingsService.addNewGoodFeelings(goodFeelings);
     }
 

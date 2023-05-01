@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("Loyalty")
-@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('ADMIN')")
 
 public class LoyaltyController {
     @Autowired
