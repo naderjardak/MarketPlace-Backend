@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.Dto.auth.AuthenticationRequest;
@@ -15,6 +16,10 @@ import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.configuration.SpringSecurityConfiguration;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.auth.ApplicationUserDetailsService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -62,7 +67,20 @@ public class AuthenticationController {
     }
 
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // Clear the session
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
 
+        // Clear the authentication token
+        SecurityContextHolder.clearContext();
+
+        // Redirect to the login page
+        return "redirect:/login";
+    }
 
 
 }

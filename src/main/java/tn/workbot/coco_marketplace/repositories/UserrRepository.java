@@ -18,8 +18,12 @@ public interface UserrRepository extends CrudRepository<User,Long> {
     User findUserByEmail(String email);
     User findByResetToken(String resetToken);
 
-    @Query("select u from User u where u.role='SELLER' group by u.city order by count(u)")
-    List<String> SellersGroupeByCityname();
+
+
+    @Query("SELECT concat(o.FirstName,' ',o.LastName,' ',count(o)) from User  o where o.role='SELLER' group by o.city order by count (o) desc ")
+    List<String> getSellersGroupedByCityName();
+
+
 
  @Query("select u from User u where u.email=:v1 and u.password=:v2")
     public User getUserByEmailAndPassword(@Param("v1")String Email,@Param("v2")String pdw);

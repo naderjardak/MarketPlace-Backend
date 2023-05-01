@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class StatStorePDF {
     private static final Logger logger = LoggerFactory.getLogger(StatStorePDF.class);
 
-    public static ByteArrayInputStream SellersGroupeByCitynamee(List<String> stats) {
+    public static ByteArrayInputStream SellersGroupedByCityName (List<String> stats) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 

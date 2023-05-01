@@ -30,4 +30,6 @@ public interface UserInterface {
 
     List<Map<String, Integer>> statsByRole();
     public  List<Role> getAllRolesd();
+
+    public boolean sessionReteurn();
 }

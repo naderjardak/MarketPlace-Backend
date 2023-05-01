@@ -43,6 +43,7 @@ public class JWT {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+
         claims.put("role" ,userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return createToken(claims, userDetails.getUsername());
     }

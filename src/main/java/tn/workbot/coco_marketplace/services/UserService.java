@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.Dto.auth.AccountResponse;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
@@ -30,6 +31,9 @@ public class UserService implements UserInterface {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    SessionService sessionService;
 
 
     PasswordEncoder passwordEncoder;
@@ -125,5 +129,10 @@ public class UserService implements UserInterface {
         return (List<Role>) roleRepository.findAll();
     }
 
+    @Override
+    public boolean sessionReteurn() {
+        User user=sessionService.getUserBySession();
+        return user!=null;
+    }
 
 }

@@ -24,6 +24,8 @@ import tn.workbot.coco_marketplace.services.MailSenderService;
 import tn.workbot.coco_marketplace.services.UserService;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -128,12 +130,13 @@ public class UserController {
         return msg;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(value = "/PDF_StatStore", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> PDF_RankGouvernoratByOrdersNumber() throws IOException {
-        List<String> stats = userrRepository.SellersGroupeByCityname();
 
-        ByteArrayInputStream bis = StatStorePDF.SellersGroupeByCitynamee(stats);
+
+    @GetMapping(value = "/PDF_StatStore", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> SellersGroupedByCityName() throws IOException {
+        List<String> stats = userrRepository.getSellersGroupedByCityName();
+
+        ByteArrayInputStream bis = StatStorePDF.SellersGroupedByCityName(stats);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
         headers.add("Content-Disposition", "attachment; filename=" + new Date(System.currentTimeMillis()) + ".pdf");
@@ -166,6 +169,24 @@ public class UserController {
 
     @GetMapping("getAllRoles")
     public  List<Role> getAllRolesd(){return  userInterface.getAllRolesd();}
+
+    @GetMapping("session")
+    public boolean sessionReteurn(){
+        return userInterface.sessionReteurn();
+    }
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @GetMapping("/logout")
+    public String logout() {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/login";
+    }
+
 }
 
 
