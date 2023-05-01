@@ -15,16 +15,15 @@ public class SessionService {
     @Autowired
     UserrRepository userrRepository;
 
-    public User getUserBySession(){
+    public User getUserBySession() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    // Get the user details from the authentication object
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-    /// Get the user email from the user details object
-    String username = userDetails.getUsername();
-
-    return userrRepository.findUserByEmail(username);
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            return userrRepository.findUserByEmail(username);
+        } else {
+            return null; // or throw an exception, depending on your requirements
+        }
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("buyerShipping")
-@PreAuthorize("hasAuthority('BUYER')")
+@PreAuthorize("hasAuthority('BUYER')||hasAuthority('ADMIN')")
 
 public class ShippingController {
     @Autowired
