@@ -22,8 +22,8 @@ import tn.workbot.coco_marketplace.services.interfaces.ProductInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -53,17 +53,17 @@ public class ProductService implements ProductInterface {
     @Autowired
     SessionService sessionService;
 
+
     @Override
     public Product create(Product p, String storeName) throws Exception {
         if (p.getProductCategory() == null)
             throw new Exception("Missing Category");
+        //User user = sessionService.getUserBySession();
 
-        User user = sessionService.getUserBySession();
-        log.info(user.getId().toString());
 
-        Store store = storeRepository.findByNameAndSeller(storeName, user);
-        if (store == null)
-            throw new Exception("Store not found");
+//        Store store = storeRepository.findByNameAndSeller(storeName, user);
+//        if (store == null)
+//            throw new Exception("Store not found");
 
         if (p.getProductWeight() <= 1) {
             p.setDeliveryPrice(6);
@@ -75,19 +75,37 @@ public class ProductService implements ProductInterface {
 
         Random random = new Random();
         int nbRand = random.nextInt(99999);
-        p.setReference(("REF-" +store.getName().substring(store.getName().length()-2)+ p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
+        p.setReference(("REF-" + p.getStore().getName().substring(p.getStore().getName().length() - 2) + p.getProductCategory().getName().substring(0, 2).toUpperCase() + p.getName().substring(0, 2).toUpperCase() + nbRand));
 
         p.setProductStatus(ProductStatus.PENDING);
         p.setCreationDate(new Timestamp(System.currentTimeMillis()));
 
-        p.setStore(store);
+        // p.setStore(store);
 
         return productRepository.saveAndFlush(p);
     }
 
     @Override
-    public Product update(Product p) {
-        return productRepository.save(p);
+    public Product update(Product p) throws Exception {
+
+        if (p.getProductCategory() == null)
+            throw new Exception("Missing Category");
+
+
+        if (p.getProductWeight() <= 1) {
+            p.setDeliveryPrice(6);
+        } else if (p.getProductWeight() > 1) {
+            p.setDeliveryPrice(6 + (p.getProductWeight() - 1) * 2.5f);
+
+        }
+        p.setProductPriceBeforeDiscount(p.getProductPrice());
+
+
+        if (p.getCreationDate() == null)
+            p.setCreationDate(new Timestamp(System.currentTimeMillis()));
+
+
+        return productRepository.saveAndFlush(p);
     }
 
     @Override
@@ -119,9 +137,9 @@ public class ProductService implements ProductInterface {
 
     @Override
     public Product createAndAssignCategoryAndSubCategory(Product p, String categoryName, String subCatName, Set<String> storeName) throws Exception {
-
         ProductCategory category = productCategoryRepository.findByName(categoryName);
         ProductCategory subCategory = productCategoryRepository.findByNameAndCategoryName(subCatName, categoryName);
+        User user = sessionService.getUserBySession();
 
         if (category == null && subCategory == null) {
             ProductCategory category1 = new ProductCategory();
@@ -145,9 +163,26 @@ public class ProductService implements ProductInterface {
 
         //cascade
         p.setProductCategory(subCategory);
-        for(String st:storeName.stream().toList()){
+        for (String st : storeName.stream().toList()) {
+            Product p2 = new Product();
+            Store store = storeRepository.findByNameAndSeller(st, user);
+            if (store == null)
+                throw new Exception("Store not found");
+            p2.setStore(store);
+            p2.setName(p.getName());
+            p2.setProductWeight(p.getProductWeight());
+            p2.setProductPrice(p.getProductPrice());
+            p2.setDescription(p.getDescription());
+            p2.setQuantity(p.getQuantity());
+            p2.setAdditionalDeliveryInstructions(p.getAdditionalDeliveryInstructions());
+            p2.setImage(p.getImage());
+            p2.setImage1(p.getImage1());
+            p2.setImage2(p.getImage2());
+            p2.setImage3(p.getImage3());
+            p2.setProductCategory(p.getProductCategory());
 
-            this.create(p,st);
+
+            this.create(p2, st);
         }
 
         return p;
@@ -254,9 +289,9 @@ public class ProductService implements ProductInterface {
     @Override
     public List<Product> getProductBySeller() {
         User user = sessionService.getUserBySession();
-        List<Product> products=new ArrayList<>();
-        for(Store s:user.getStores()){
-            products.addAll(productRepository.findProductsByStore(s)) ;
+        List<Product> products = new ArrayList<>();
+        for (Store s : user.getStores()) {
+            products.addAll(productRepository.findProductsByStore(s));
         }
         return products;
     }
@@ -264,8 +299,23 @@ public class ProductService implements ProductInterface {
     @Override
     public List<Product> getProductsByStore(String store) {
         User user = sessionService.getUserBySession();
-        Store store1=storeRepository.findByNameAndSeller(store,user);
-        return new ArrayList<>(store1.getProducts());    }
+        Store store1 = storeRepository.findByNameAndSeller(store, user);
+        return new ArrayList<>(store1.getProducts());
+    }
+
+    @Override
+    public List<Product> getProductsOutOfStockBySeller() {
+        User user = sessionService.getUserBySession();
+        List<Product> products=new ArrayList<>();
+        List<Store> stores = storeService.getStoresByUser(user.getId());
+        for (Store s : stores) {
+            for(Product p:s.getProducts()){
+                if(p.getQuantity()<=0)
+                    products.add(p);
+            }
+        }
+        return products;
+    }
 
 
     @Scheduled(cron = "0 0 11 1 * *")
