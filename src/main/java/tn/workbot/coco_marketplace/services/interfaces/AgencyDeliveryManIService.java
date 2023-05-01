@@ -1,5 +1,6 @@
 package tn.workbot.coco_marketplace.services.interfaces;
 
+import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Pickup;
 
@@ -16,4 +17,6 @@ public interface AgencyDeliveryManIService {
     public List<AgencyDeliveryMan> RetrieveDeliverymenByagencyWhenThegovernorateOfPickupisSomeGovernorateofdeliverymen(Long idPickup);
     public List<AgencyDeliveryMan> RetrieveDeliveryMenByBranch(Long idBranch);
     public int countDeliveryMenInBranch(Long idBranch);
+    public List<AgencyDeliveryMan> TopDeliveryMenByPickupDelivered();
+    public List<AgencyBranch> TopDeliveryAgencyByPickupDelivered();
 }

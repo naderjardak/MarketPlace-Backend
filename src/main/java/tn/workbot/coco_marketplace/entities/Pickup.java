@@ -38,6 +38,7 @@ public class Pickup implements Serializable {
     private StatusPickupSeller statusPickupSeller;
     @Enumerated(EnumType.STRING)
     private StatusPickupBuyer statusPickupBuyer;
+    private Integer points;
 
 
     @ManyToOne
@@ -45,7 +46,7 @@ public class Pickup implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "pickup", cascade = CascadeType.ALL)
     private List<Request> requests;
-    @JsonIgnore
+
     @ManyToOne
     private Store store;
 /////////////fff

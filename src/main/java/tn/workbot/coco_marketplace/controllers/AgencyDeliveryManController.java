@@ -13,7 +13,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("AgencyDeliveryMan")
-@PreAuthorize(" hasAuthority('ADMIN') || hasAuthority('DELIVERYAGENCY')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
 
 public class AgencyDeliveryManController  {
     @Autowired
@@ -56,5 +56,13 @@ public class AgencyDeliveryManController  {
     @GetMapping("countDeliveryMenInBranch")
     public int countDeliveryMenInBranch(@RequestParam Long idBranch) {
     return ad.countDeliveryMenInBranch(idBranch);
+    }
+    @GetMapping("TopDeliveryMenByPickupDelivered")
+    public List<AgencyDeliveryMan> TopDeliveryMenByPickupDelivered(){
+    return ad.TopDeliveryMenByPickupDelivered();
+    }
+    @GetMapping("TopDeliveryAgencyByPickupDelivered")
+    public List<AgencyBranch> TopDeliveryAgencyByPickupDelivered() {
+        return ad.TopDeliveryAgencyByPickupDelivered();
     }
     }

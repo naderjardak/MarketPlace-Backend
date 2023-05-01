@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("order")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('ADMIN')")
 public class OrderController {
 
     @Autowired

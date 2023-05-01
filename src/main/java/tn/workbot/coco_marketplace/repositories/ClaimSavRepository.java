@@ -17,5 +17,9 @@ public interface ClaimSavRepository extends JpaRepository<ClaimSav,Long> {
     @Query("SELECT c FROM ClaimSav c WHERE c.claimSavType = :type AND c.status = :status")
     List<ClaimSav> getClaimsByTypeAndStatus(@Param("type") ClaimSavType type, @Param("status") ClaimSavStatusType status);
 
+
+    @Query("select c.status as status,count(c) as nb from ClaimSav c group by c.status")
+    List<Map<String,Integer>> statsClaim();
+
 }
 

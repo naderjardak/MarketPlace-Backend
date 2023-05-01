@@ -15,9 +15,10 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping("RequestController")
 @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
-public class RequestController   {
+public class RequestController {
     @Autowired
     RequestInterface ri;
+
     @PostMapping("addRequest")
     public Request addRequest(@RequestBody Request request) {
         return ri.addRequest(request);
@@ -25,7 +26,7 @@ public class RequestController   {
 
     @DeleteMapping("deleteRequest")
     public void removeRequest(@RequestParam Long id) {
-          ri.removeRequest(id);
+        ri.removeRequest(id);
     }
 
     @GetMapping("retrieveRequest")
@@ -44,27 +45,30 @@ public class RequestController   {
     }
 
     @PostMapping("assignRequestDeliveryAgencyandPickup")
-    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request,@RequestParam Long idPickup,@RequestParam Long idDeliveryMenAgency) {
-       return  ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request,idPickup,idDeliveryMenAgency);
+    public Request assignRequestDeliveryAgencyandPickup(@RequestBody Request request, @RequestParam Long idPickup, @RequestParam Long idDeliveryMenAgency) {
+        return ri.assignRequestDeliveryAgencyandDeliverymenandPickup(request, idPickup, idDeliveryMenAgency);
     }
 
     @PostMapping("assignRequestDeliveryMenFreelancerandPickup")
-    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request,@RequestParam Long idPickup) {
+    public Request assignRequestDeliveryMenFreelancerandPickup(@RequestBody Request request, @RequestParam Long idPickup) {
         return ri.assignRequestDeliveryMenFreelancerandPickup(request, idPickup);
     }
+
     @PostMapping("assignRequesttoseller")
-    public Request assignRequesttoseller(@RequestParam Long idRequest,@RequestParam String status,@RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
-        return ri.assignRequesttoseller(idRequest,  status,idPickup);
+    public Request assignRequesttoseller(@RequestParam Long idRequest, @RequestParam String status, @RequestParam Long idPickup) throws IOException, InterruptedException, ApiException {
+        return ri.assignRequesttoseller(idRequest, status, idPickup);
 
     }
-     @GetMapping("retrieveRequestBySeller")
-     public List<Request> retrieveRequestBySeller() {
-         return ri.retrieveRequestBySeller();
-     }
-     @GetMapping("retrieveRequestByPickup")
-     public List<Request> retrieveRequestByPickup(Long idPickup) {
-         return ri.retrieveRequestByPickup(idPickup);
-     }
+
+    @GetMapping("retrieveRequestBySeller")
+    public List<Request> retrieveRequestBySeller() {
+        return ri.retrieveRequestBySeller();
+    }
+
+    @GetMapping("retrieveRequestByPickup")
+    public List<Request> retrieveRequestByPickup(Long idPickup) {
+        return ri.retrieveRequestByPickup(idPickup);
+    }
 
     @GetMapping("RetrieveRequestByAgency")
 
@@ -76,13 +80,15 @@ public class RequestController   {
     public List<Request> RetrieveRequestByFreelancer() {
         return ri.RetrieveRequestByFreelancer();
     }
+
     @GetMapping("RetrieveFreelancerDeliveryrByRequest")
     public User RetrieveFreelancerDeliveryrByRequest(@RequestParam Long idRequest) {
-       return ri.RetrieveFreelancerDeliveryrByRequest(idRequest);
+        return ri.RetrieveFreelancerDeliveryrByRequest(idRequest);
     }
+
     @GetMapping("countRequestTotalForAgencyPending")
     public int countRequestTotalForAgencyPending() {
-        return ri.countRequestTotalForAgencyPending() ;
+        return ri.countRequestTotalForAgencyPending();
     }
 
     @GetMapping("countRequestApprovedForAgency")
@@ -96,13 +102,30 @@ public class RequestController   {
     }
 
     @GetMapping("retrieveRequestApprovedOfPickupFreelancer")
-    public List<Request> retrieveRequestApprovedOfPickupFreelancer(){
+    public List<Request> retrieveRequestApprovedOfPickupFreelancer() {
         return ri.retrieveRequestApprovedOfPickupFreelancer();
     }
+
     @GetMapping("retrieveRequestApprovedOfPickupAgency")
     public List<Request> retrieveRequestApprovedOfPickupAgency() {
         return ri.retrieveRequestApprovedOfPickupAgency();
     }
+
+    @GetMapping("countRequestByPickup")
+    public int countRequestByPickup(@RequestParam Long idPickup) {
+        return ri.countRequestByPickup(idPickup);
     }
 
-
+    @GetMapping("LastRequestCreatedForSeller")
+    public List<Request> LastRequestCreatedForSeller() {
+        return ri.LastRequestCreatedForSeller();
+    }
+    @GetMapping("LastRequestAssignedToFreelancer")
+    public List<Request> LastRequestAssignedToFreelancer() {
+        return ri.LastRequestAssignedToFreelancer();
+    }
+    @GetMapping("RetrieveRequestOfFreelancer")
+    public List<Request> RetrieveRequestOfFreelancer() {
+        return ri.RetrieveRequestOfFreelancer();
+    }
+    }
