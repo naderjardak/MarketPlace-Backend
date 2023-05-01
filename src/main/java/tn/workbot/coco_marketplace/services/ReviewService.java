@@ -93,6 +93,7 @@ public class ReviewService implements ReviewInterface {
                     }
                 }
             }
+            review.setRating(rating);
                rvp.save(review);
         }
 
