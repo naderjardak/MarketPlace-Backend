@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.Api.*;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 import tn.workbot.coco_marketplace.services.interfaces.PickupIService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ import java.util.Set;
 
 @RequestMapping("Pickup")
 @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('SELLER') || hasAuthority('DELIVERYAGENCY') || hasAuthority('DELIVERYMEN')")
-public class PickupController  {
+public class PickupController {
     @Autowired
     PickupIService pis;
     @Autowired
@@ -294,18 +296,6 @@ public class PickupController  {
     }
 
 
-    ///////////Kilometre Cra
-    @GetMapping("kilometreTotalConsommerParFreelancerDelivery")
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
-        return pis.kilometreTotalConsommerParFreelancerDelivery();
-    }
-
-    //////FraisEssenceTotalParGearConsommer
-    @GetMapping("FraisEssenceTotal")
-    public String FraisEssenceTotal() throws Exception {
-        return pis.FraisEssenceTotal();
-    }
-
     //////////////calculer co2 and update in user entity
     @PostMapping("UpdateTheCO2ConsoFreelancer")
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
@@ -319,28 +309,28 @@ public class PickupController  {
     }
 
     ///////////predict som
-    @GetMapping("/predict/{request}")
+    @GetMapping("/predict/requedt")
     public ResponseEntity<Double> predict(@RequestParam int r) {
         // Predict the delivery sum using the linear regression model
         double predictedTime = dp.predict((float) r);
         return ResponseEntity.ok(predictedTime);
     }
 
-    @PostMapping("/predict/{Data}")
+    @GetMapping("/predictrequest")
     public ResponseEntity<String> addDelivery() {
         dp.addDelivery();
         return ResponseEntity.ok("Delivery added successfully");
     }
 
     //////////predict co2
-    @GetMapping("/predict/{co2}")
+    @GetMapping("/predictco2")
     public ResponseEntity<Double> predictco2(@RequestParam int gearage) {
         // Predict the CO2 using the linear regression model
         double predictedTime = dp.predictco2((float) gearage);
         return ResponseEntity.ok(predictedTime);
     }
 
-    @PostMapping("/predict/{Dataco2}")
+    @GetMapping("/predictc")
     public ResponseEntity<String> addUser() {
         dp.addUser();
         return ResponseEntity.ok("user added successfully");
@@ -402,42 +392,48 @@ public class PickupController  {
     public Order getOrderByPickupId(@RequestParam Long idPickup) {
         return pis.getOrderByPickupId(idPickup);
     }
+
     @GetMapping("GetShippingByPickupId")
     public Shipping getShippingByPickupId(@RequestParam Long idPickup) {
         return pis.getShippingByPickupId(idPickup);
     }
+
     @GetMapping("GetBuyerByPickupId")
     public User getBuyerByPickupId(@RequestParam Long idPickup) {
         return pis.getBuyerByPickupId(idPickup);
     }
+
     @GetMapping("getUserNOw")
     public User getUserNOw() {
         return pis.getUserNOw();
     }
+
     @GetMapping("countOrderBySellerNoPickup")
-    public int countOrderBySellerNoPickup(@RequestParam Long idStore){
+    public int countOrderBySellerNoPickup(@RequestParam Long idStore) {
         return pis.countOrderBySellerNoPickup(idStore);
     }
+
     @GetMapping("getProductSumANdListOfpRODUCTByOrder")
-    public ResponseEntity<Map<Float, List<Product>>> getProduct(@RequestParam Long idOrder,@RequestParam Long idStore) {
-    return pis.getProduct(idOrder,idStore);
+    public ResponseEntity<Map<Float, List<Product>>> getProduct(@RequestParam Long idOrder, @RequestParam Long idStore) {
+        return pis.getProduct(idOrder, idStore);
     }
+
     @GetMapping("getListProductOfOrder")
 
-    public List<Product> getListProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
-        return pis.getListProductOfOrder(idOrder,idStore);
+    public List<Product> getListProductOfOrder(@RequestParam Long idOrder, @RequestParam Long idStore) {
+        return pis.getListProductOfOrder(idOrder, idStore);
     }
 
-   @GetMapping("getSumPriceProductOfOrder")
-    public Float getSumPriceProductOfOrder(@RequestParam Long idOrder,@RequestParam Long idStore) {
-        return  pis.getSumPriceProductOfOrder(idOrder,idStore);
+    @GetMapping("getSumPriceProductOfOrder")
+    public Float getSumPriceProductOfOrder(@RequestParam Long idOrder, @RequestParam Long idStore) {
+        return pis.getSumPriceProductOfOrder(idOrder, idStore);
     }
+
     @GetMapping("getAllProductQuantity")
-    public List<ProductQuantity> getAllProductQuantity(){
-        return  pis.getAllProductQuantity();
+    public List<ProductQuantity> getAllProductQuantity() {
+        return pis.getAllProductQuantity();
     }
-  //stat Agency
-
+    //stat Agency
 
 
     @GetMapping("countPickupDeliveredForAgency")
@@ -460,6 +456,15 @@ public class PickupController  {
         return pis.countPickupRefundedForAgency();
     }
 
+    @GetMapping("countPickupAssignedForAgency")
+    public int countPickupAssignedForAgency() {
+        return pis.countPickupAssignedForAgency();
+    }
+
+    @GetMapping("countPickupTakedForAgency")
+    public int countPickupTakedForAgency() {
+        return pis.countPickupTakedForAgency();
+    }
 
     //stat freelancer
     @GetMapping("countPickupDeliveredForfreelancer")
@@ -481,8 +486,85 @@ public class PickupController  {
     public int countPickupRefundedForfreelancer() {
         return pis.countPickupRefundedForfreelancer();
     }
+
+    @GetMapping("countPickupAssignedForFreelancer")
+    public int countPickupAssignedForFreelancer() {
+        return pis.countPickupAssignedForFreelancer();
+    }
+
+    @GetMapping("countPickupTakedForFreelancer")
+    public int countPickupTakedForFreelancer() {
+        return pis.countPickupTakedForFreelancer();
+    }
+
+    ////
     @GetMapping("RetrievePickupInProgress")
     public List<Pickup> RetrievePickupInProgress() {
-         return pis.RetrievePickupInProgress();
+        return pis.RetrievePickupInProgress();
+    }
+
+    @GetMapping("countProductQuantityInOrderProduct")
+    public int countProductQuantityInOrderProduct(@RequestParam Long idOrder, @RequestParam Long idProduct) {
+        return pis.countProductQuantityInOrderProduct(idOrder, idProduct);
+    }
+
+    @GetMapping("countPickupAssignedSeller")
+    public int countPickupAssignedSeller() {
+        return pis.countPickupAssignedSeller();
+    }
+
+    @GetMapping("countPickupTakedSeller")
+    public int countPickupTakedSeller() {
+        return pis.countPickupTakedSeller();
+    }
+
+    @GetMapping("getStoreByPickup")
+    public Store getStoreByPickup(@RequestParam Long idPickup) {
+        return pis.getStoreByPickup(idPickup);
+    }
+
+    @GetMapping("SumOfPricePickupDeliveredToday")
+    public Double SumOfPricePickupDeliveredToday() {
+        return pis.SumOfPricePickupDeliveredToday();
+    }
+
+    @GetMapping("getNumberOfPickupByStatus")
+    public Map<StatusPickupSeller, Integer> getNumberOfPickupByStatus() {
+        return pis.getNumberOfPickupByStatus();
+    }
+
+    @GetMapping("getNumberOfPickupByStatusByMonthAndYearAndAll")
+    public Map<StatusPickupSeller, Integer> getNumberOfPickupByStatusByMonthAndYearAndAll() {
+        return pis.getNumberOfPickupByStatusByMonthAndYearAndAll();
+    }
+
+    @GetMapping("AllCo2User")
+    public Double AllCo2User() {
+        return pis.AllCo2User();
+    }
+
+    @GetMapping("getNumberPickupsInMonth")
+    public Map<String, Integer> getNumberPickupsInMonth() {
+        return pis.getNumberPickupsInMonth();
+    }
+
+    @GetMapping("getNumberRequestsInMonth")
+    public Map<String, Integer> getNumberRequestsInMonth() {
+        return pis.getNumberRequestsInMonth();
+    }
+
+    @GetMapping("RetrieveAllPickupsOfUser")
+    public List<Pickup> RetrieveAllPickupsOfUser() {
+        return pis.RetrieveAllPickupsOfUser();
+    }
+
+    @GetMapping("RetrieveAllPickupsOfSeller")
+    public List<Pickup> RetrieveAllPickupsOfSeller() {
+        return pis.RetrieveAllPickupsOfSeller();
+    }
+    @GetMapping("retrieveTheFreelancerOfPickup")
+    public User retrieveTheFreelancerOfPickup(@RequestParam Long idPickup) {
+        return pis.retrieveTheFreelancerOfPickup(idPickup);
     }
 }
+

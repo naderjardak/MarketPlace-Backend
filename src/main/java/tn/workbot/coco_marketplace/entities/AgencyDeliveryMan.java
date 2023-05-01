@@ -28,6 +28,7 @@ public class AgencyDeliveryMan implements Serializable {
     @Enumerated(EnumType.STRING)
     private TypeOfGear typeOfGear;
 
+
     @ManyToOne
     private AgencyBranch agencyBranch;
     @JsonIgnore

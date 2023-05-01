@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @PutMapping("UpdateProduct")
-    public Product updateProduct(@RequestBody Product p) {
+    public Product updateProduct(@RequestBody Product p) throws Exception {
         return productInterface.update(p);
     }
 
@@ -72,8 +72,8 @@ public class ProductController {
 
     @PostMapping("CreateProductAndAssignCatAndSub")
     public Product createAndAssignCategoryAndSubCategory(@RequestBody ProductFormDTO p) throws Exception {
-        String categoryName=p.getProductCategory().getCategory().getName();
-        String subCatName=p.getProductCategory().getName();
+        String subCatName=p.getProductCategory().getCategory().getName();
+        String categoryName=p.getProductCategory().getCategory().getCategory().getName();
         Set<String> storeName=p.getStoresNames();
         Product p2=new Product();
         p2.setName(p.getName());
@@ -86,6 +86,7 @@ public class ProductController {
         p2.setImage1(p.getImage1());
         p2.setImage2(p.getImage2());
         p2.setImage3(p.getImage3());
+
         return productInterface.createAndAssignCategoryAndSubCategory(p2, categoryName, subCatName, storeName);
 
     }
@@ -150,5 +151,9 @@ public class ProductController {
     @GetMapping("getProductsByStore")
     public List<Product> getProductsByStore(@RequestParam String store) {
         return productInterface.getProductsByStore(store);
+    }
+    @GetMapping("getProductsOutOfStockBySeller")
+    public List<Product> getProductsOutOfStockBySeller() {
+        return productInterface.getProductsOutOfStockBySeller();
     }
     }

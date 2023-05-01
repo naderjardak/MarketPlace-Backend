@@ -27,8 +27,8 @@ public class SupplierRequest {
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
     private int quantity;
-    @Temporal(TemporalType.TIME)
-    private Date deliveryTime;
+//    @Temporal(TemporalType.TIME)
+//    private Date deliveryTime;
 
     @Enumerated(EnumType.STRING)
     private SupplierRequestStatus requestStatus;
@@ -41,16 +41,5 @@ public class SupplierRequest {
 
     private String reference;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SupplierRequest that = (SupplierRequest) o;
-        return id != null && Objects.equals(id, that.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

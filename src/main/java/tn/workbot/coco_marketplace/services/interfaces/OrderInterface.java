@@ -12,6 +12,8 @@ import java.util.Map;
 
 public interface OrderInterface {
 
+    public Order addOrder(Order order);
+
     Order GetBasketOrder();
     List<ProductQuantity> productOfBasket();
     // Get all orders from the database
@@ -43,13 +45,15 @@ public interface OrderInterface {
     Map<String, Integer> statsByStatusType();
 
     //Ranking Users
-    List<String> statsByStatusTypeOrdred();
+    List<Map<String,Integer>> statsByStatusTypeOrdred();
+
+    public List<String> PDFstatsByStatusTypeOrdred();
 
     //Governorate top Shipped
     List<Map<String,Integer>> GovernoratTopShipped();
 
     //Sum of order Amount
-    public float SummOrder();
+    float SummOrder();
 
     //StripePayement
     CustemerModel StripePayementService(CustemerModel data) throws StripeException, MessagingException;
@@ -58,21 +62,25 @@ public interface OrderInterface {
     void deleteOrderAfterDateExmiration();
 
     //Buyer Product Page and research
-    public List<Product> researchProduct(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre);
+    List<Product> researchProduct(float maxPrix , float minPrix , String nameProduct, String categorie, String mark, ProductFiltre productFiltre);
 
     //validate Cash On delivery Command
-    public String validateCommand(String token) throws MessagingException;
+    String validateCommand(String token) throws MessagingException;
 
     //Token generator
-    public String generateToken(User user);
+    String generateToken(User user);
 
     //uncode Token
-    public String parseToken(String token);
+    String parseToken(String token);
 
-    public String generateRandomNumber(int n);
+    String generateRandomNumber(int n);
 
-    public Order deleteBasket();
+    Order deleteBasket();
 
-    public List<Order> getAllOrdersByUserId();
+    List<Order> getAllOrdersByUserId();
+
+    boolean sessionReteurn();
+
+    public List<Order> getBestOrdersUser();
 
     }

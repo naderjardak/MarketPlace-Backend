@@ -47,7 +47,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
 
-   }
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -63,6 +63,11 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/ForgetPassword/checkEmail",
                         "/**/resetPassword",
                         "/**/changePass",
+                        "/**/sessionReteurn",
+                        "/**/ProductResearch",
+                        "/**/displayRunningEvents",
+                        "/**/GetProductById",
+                        "/**/GetProductsForEvent",
                         "/swagger-ui/**",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
@@ -75,6 +80,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement(
                         session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -113,4 +119,3 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 }
-

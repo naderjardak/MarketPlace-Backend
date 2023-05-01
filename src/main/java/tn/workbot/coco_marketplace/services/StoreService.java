@@ -51,7 +51,6 @@ public class StoreService implements StoreInterface {
 
         return new Store();
     }
-    //
     @Override
     public void delete(Store s) {
         storeRepository.delete(s);
@@ -59,7 +58,7 @@ public class StoreService implements StoreInterface {
 
     @Override
     public List<Store> getStoresByUser(Long idUser) {
-        return storeRepository.findStoreBySeller(userrRepository.findById(idUser).get());
+        return storeRepository.findStoresBySeller(userrRepository.findById(idUser).get());
     }
 
 

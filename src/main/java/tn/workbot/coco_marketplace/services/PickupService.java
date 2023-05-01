@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -154,7 +155,7 @@ public class PickupService implements PickupIService {
         if (u.getGear().equals("CAR")) {
             for (Store storee : storesInSameGovernorate) {
 
-                for(Pickup pe:storee.getPickups()){
+                for(Pickup pe:storee.getPickups() ){
                     boolean hasRequest=false;
                     for(Request re:pe.getRequests()){
                         if(re.getDeliveryman()!=null && re.getDeliveryman().getId().equals(u.getId())){
@@ -162,7 +163,7 @@ public class PickupService implements PickupIService {
                             break;
                         }
                     }
-                    if(!hasRequest){
+                    if(!hasRequest && ( pe.getStatusPickupSeller().equals(StatusPickupSeller.PICKED))){
                         pickups.add(pe);
                     }
                 }
@@ -183,6 +184,7 @@ public class PickupService implements PickupIService {
         Set<Pickup> pickups = new HashSet<>();
         List<Request> requests=pr.REQUESTofuser(u.getId());
         agencyBranches.addAll(u.getAgencyBranches());
+        
         for (AgencyBranch ab : agencyBranches) {
             for (Store s : stores) {
                 if (s.getGovernorate().equals(ab.getGovernorate())) {
@@ -249,6 +251,11 @@ public class PickupService implements PickupIService {
             // pickup1.setOrderOfTheSomeSeller(true);
             pickup1.setStore(storeer);
             pickup1.setSum(order.getSum());
+            if(order.getDeliveryPrice()>=1 && order.getDeliveryPrice()<=8){
+                pickup.setPoints(4);
+            } else {
+                pickup1.setPoints(6);
+            }
             if (order.getPayment().equals(PaymentType.BANK_CARD)) {
                 pickup1.setPayed(true);
             } else {
@@ -270,6 +277,11 @@ public class PickupService implements PickupIService {
                             String code1 = prefix + randomNumber + randomNumber1;
                             pickup1.setCodePickup(code1);
                         }
+                    }
+                    if(order.getDeliveryPrice()>=1 && order.getDeliveryPrice()<=8){
+                        pickup.setPoints(4);
+                    } else {
+                        pickup1.setPoints(6);
                     }
                     pickup1.setShippingStatus(order.getPayment().toString());
                     pickup1.setCodePickup(code);
@@ -318,7 +330,7 @@ public class PickupService implements PickupIService {
         Request request1 = pr.Requestprettolivred(idPickup);
         if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
             GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .apiKey("AIzaSyBdVAHuNwlcMICaKUcx8RNGUb5dBiMYIIo")
                     .build();
             // Get the distance and travel time using the DistanceMatrixApi
             DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
@@ -415,12 +427,17 @@ public class PickupService implements PickupIService {
         List<Pickup> pickups = (List<Pickup>) pr.findAll();
         List<Order> orders = pr.orderOfstore(idStore, u.getId());
         List<Order> finalOrders = new ArrayList<>();
+        List<Product>products=pr.ProductBysto(idStore);
+        double sum=0;
         for (Order order : orders) {
             boolean hasPickup = false;
             for (Pickup pickup : pickups) {
-                if (pickup.getOrder().getId().equals(order.getId())) {
-                    hasPickup = true;
-                    break;
+                for(Product p:products) {
+                    sum=p.getProductPrice()+sum;
+                    if ((pickup.getOrder().getId().equals(order.getId())) && (pickup.getStore().getId()==idStore)) {
+                        hasPickup = true;
+                        break;
+                    }
                 }
             }
             if (!hasPickup) {
@@ -522,7 +539,7 @@ public class PickupService implements PickupIService {
         pickups.addAll(pr.SumPricePickupDeliveredByFreelancerToday(u.getId()));
         Float sum = Float.valueOf(0);
         for (Pickup p : pickups) {
-            sum = p.getSum() + sum;
+            sum = p.getOrder().getDeliveryPrice() + sum;
         }
         return sum;
     }
@@ -663,42 +680,78 @@ public class PickupService implements PickupIService {
         return sum;
     }
 
-    @Override
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException {
+    @Scheduled(cron = "* * * 1 * *")
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws Exception {
         //session manager idUser
-        User u=sessionService.getUserBySession();
-        List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
-        List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
+        List<User> u1= (List<User>) ur.findAll();
+        double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
         float kiloSum = 0;
+        double price = Float.valueOf(0);
+        double co2kilo = Float.valueOf(0);
+        double Co2Car = 2.55;
         //////
         GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                .apiKey("AIzaSyBdVAHuNwlcMICaKUcx8RNGUb5dBiMYIIo")
                 .build();
         // Get the distance and travel time using the DistanceMatrixApi
-        if (u.getRole().getType().equals(RoleType.DELIVERYMEN)) {
-            for (Pickup p : pickups) {
-                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                        .origins(p.getGovernorate())
-                        .destinations(p.getStore().getGovernorate())
-                        .mode(TravelMode.DRIVING);
+        for (User u: u1) {
+            List<Pickup> pickups = pr.SumKilometreINCar(u.getId());
+            List<Pickup> pickups1 = pr.AgencyINCar(u.getId());
+            if (u.getRole().getType().equals(RoleType.DELIVERYMEN)) {
+                for (Pickup p : pickups) {
+                    DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                            .origins(p.getCity())
+                            .destinations(p.getStore().getCity())
+                            .mode(TravelMode.DRIVING);
 
-                DistanceMatrix matrix = request.await();
-                Distance distance = matrix.rows[0].elements[0].distance;
-                double distanceInKm = distance.inMeters / 1000.0;
-                kiloSum = (float) distanceInKm + kiloSum;
-            }
-        } else if (u.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
-            for (Pickup p : pickups1) {
-                DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
-                        .origins(p.getGovernorate())
-                        .destinations(p.getStore().getGovernorate())
-                        .mode(TravelMode.DRIVING);
+                    DistanceMatrix matrix = request.await();
+                    Distance distance = matrix.rows[0].elements[0].distance;
+                    double distanceInKm = distance.inMeters / 1000.0;
+                    kiloSum = (float) distanceInKm + kiloSum;
+                    if(u.getGear().equals("CAR")){
+                        if (u.getGearAge() > 0 && u.getGearAge() < 5) {
+                            price = kiloSum * (5.8 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (5.8 / 100) * Co2Car;
+                        } else if (u.getGearAge() >= 5 && u.getGearAge() < 10) {
+                            price = kiloSum * (6.9 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (6.9 / 100) * Co2Car;
+                        } else if (u.getGearAge() >= 10) {
+                            price = kiloSum * (7.8 / 100) * priceEssnceliters;
+                            co2kilo = kiloSum * (7.8 / 100) * Co2Car;
+                        }
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    String formattedNumber = decimalFormat.format(price);
+                    u.setFraisEssance(formattedNumber);
+                    u.setKilometreConsomer(kiloSum);
+                    u.setCo2(co2kilo);
+                    ur.save(u);
+                }
+            } else if (u.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
+                for (Pickup p : pickups1) {
+                    DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
+                            .origins(p.getGovernorate())
+                            .destinations(p.getStore().getGovernorate())
+                            .mode(TravelMode.DRIVING);
 
-                DistanceMatrix matrix = request.await();
-                Distance distance = matrix.rows[0].elements[0].distance;
-                double distanceInKm = distance.inMeters / 1000.0;
-                kiloSum = (float) distanceInKm + kiloSum;
+                    DistanceMatrix matrix = request.await();
+                    Distance distance = matrix.rows[0].elements[0].distance;
+                    double distanceInKm = distance.inMeters / 1000.0;
+                    kiloSum = (float) distanceInKm + kiloSum;
+                    if(u.getGear().equals("CAR")){
+                            price = kiloSum * (5.8 / 100) * priceEssnceliters;
+                        co2kilo = kiloSum * (5.8 / 100) * Co2Car;
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    String formattedNumber = decimalFormat.format(price);
+                    u.setFraisEssance(formattedNumber);
+                    u.setKilometreConsomer(kiloSum);
+                    u.setCo2(co2kilo);
+                    ur.save(u);
+                }
             }
+
+
         }
 
         return kiloSum;
@@ -707,33 +760,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public String FraisEssenceTotal() throws Exception {
-        //sessionManager
-        User user=sessionService.getUserBySession();
-        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
-        double price = Float.valueOf(0);
-        double priceEssnceliters = Double.parseDouble(se.scrapePage("https://fr.globalpetrolprices.com/Tunisia/gasoline_prices/"));
-        if (user.getRole().getType().equals(RoleType.DELIVERYMEN)) {
-            if (user.getGear().equals("CAR")) {
-                if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                    price = kiloSum * (5.8 / 100) * priceEssnceliters;
-                } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                    price = kiloSum * (6.9 / 100) * priceEssnceliters;
-                } else if (user.getGearAge() >= 10) {
-                    price = kiloSum * (7.8 / 100) * priceEssnceliters;
-                }
-            }
-        } else if (user.getRole().getType().equals(RoleType.DELIVERYAGENCY)) {
-            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                price = kiloSum * (5.8 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                price = kiloSum * (6.9 / 100) * priceEssnceliters;
-            } else if (user.getGearAge() >= 10) {
-                price = kiloSum * (7.8 / 100) * priceEssnceliters;
-            }
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String formattedNumber = decimalFormat.format(price);
-        return formattedNumber;
+        return null;
     }
 
 
@@ -755,23 +782,7 @@ public class PickupService implements PickupIService {
 
     @Override
     public User UpdateTheCO2ConsoFreelancer() throws IOException, InterruptedException, ApiException {
-        User user=sessionService.getUserBySession();
-        Float kiloSum = kilometreTotalConsommerParFreelancerDelivery();
-        double co2kilo = Float.valueOf(0);
-
-        double Co2Car = 2.55;
-        if (user.getGear().equals("CAR")) {
-            if (user.getGearAge() > 0 && user.getGearAge() < 5) {
-                co2kilo = kiloSum * (5.8 / 100) * Co2Car;
-            } else if (user.getGearAge() >= 5 && user.getGearAge() < 10) {
-                co2kilo = kiloSum * (6.9 / 100) * Co2Car;
-            } else if (user.getGearAge() >= 10) {
-                co2kilo = kiloSum * (7.8 / 100) * Co2Car;
-            }
-
-        }
-        user.setCo2(co2kilo);
-        return ur.save(user);
+        return null;
     }
 
     @Override
@@ -852,7 +863,7 @@ public class PickupService implements PickupIService {
         for (Order order : orders) {
             boolean hasPickup = false;
             for (Pickup pickup : pickups) {
-                if (pickup.getOrder().getId().equals(order.getId())) {
+                if ((pickup.getOrder().getId().equals(order.getId()))&&(pickup.getStore().getId()==idStore)) {
                     hasPickup = true;
                     break;
                 }
@@ -967,6 +978,18 @@ public class PickupService implements PickupIService {
     }
 
     @Override
+    public int countPickupAssignedForAgency() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupAssignedForAgency(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedForAgency() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupTakedForAgency(u.getId());
+    }
+
+    @Override
     public int countPickupDeliveredForfreelancer() {
         User u=sessionService.getUserBySession();
         return pr.countPickupDeliveredForFreelancer(u.getId());
@@ -991,9 +1014,224 @@ public class PickupService implements PickupIService {
     }
 
     @Override
+    public int countPickupAssignedForFreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupAssignedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedForFreelancer() {
+        User u=sessionService.getUserBySession();
+        return pr.countPickupTakedForFreelancer(u.getId());
+    }
+
+    @Override
+    public int countPickupAssignedSeller() {
+        User u=sessionService.getUserBySession();
+        return pr.countpickupassignedSeller(u.getId());
+    }
+
+    @Override
+    public int countPickupTakedSeller() {
+        User u=sessionService.getUserBySession();
+        return pr.countpickupTakedSeller(u.getId());
+    }
+
+    @Override
     public List<Pickup> RetrievePickupInProgress() {
         User u=sessionService.getUserBySession();
-        return pr.retrievePickupInprogress(u.getId());
+        List<Pickup> pickups=pr.retrievePickupInprogress(u.getId());
+        List<Pickup> pickupsml=new ArrayList<>();
+        for (Pickup p:pickups) {
+            if(!p.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)){
+                pickupsml.add(p);
+            }
+        }
+        return pickupsml;
+    }
+
+    @Override
+    public int countProductQuantityInOrderProduct(Long idOrder, Long idProduct) {
+        return pr.countProductQuantityByOrderAndProduct(idOrder,idProduct);
+    }
+
+    @Override
+    public Store getStoreByPickup(Long idPickup) {
+        return pr.getStoreByPickup(idPickup);
+    }
+
+    @Override
+    public Double SumOfPricePickupDeliveredToday() {
+            List<Pickup> pickups = pr.sumOfPickupDeliveredTodayAdministrator();
+            double sum = 0;
+            Set<Long> countedOrders = new HashSet<>();
+            for (Pickup p : pickups) {
+                Long orderId = p.getOrder().getId();
+                if (!countedOrders.contains(orderId)) {
+                    countedOrders.add(orderId);
+                    sum += p.getOrder().getDeliveryPrice();
+                }
+            }
+            return sum;
+        }
+
+    @Override
+    public Map<StatusPickupSeller, Integer> getNumberOfPickupByStatus() {
+        List<Pickup> pickup= (List<Pickup>) pr.findAll();
+        Map<StatusPickupSeller, Integer> countMap = new HashMap<>();
+        countMap.put(StatusPickupSeller.PICKED, 0);
+        countMap.put(StatusPickupSeller.ASSIGNED, 0);
+        countMap.put(StatusPickupSeller.DELIVERED, 0);
+        countMap.put(StatusPickupSeller.TAKED, 0);
+        countMap.put(StatusPickupSeller.RETURN, 0);
+        countMap.put(StatusPickupSeller.REFUNDED, 0);
+        for (Pickup p:pickup) {
+            if (p.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)) {
+                countMap.put(StatusPickupSeller.PICKED, countMap.get(StatusPickupSeller.PICKED) + 1);
+            } else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.ASSIGNED)) {
+                countMap.put(StatusPickupSeller.ASSIGNED, countMap.get(StatusPickupSeller.ASSIGNED) + 1);
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.DELIVERED)) {
+                countMap.put(StatusPickupSeller.DELIVERED, countMap.get(StatusPickupSeller.DELIVERED) + 1);
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.TAKED)) {
+                countMap.put(StatusPickupSeller.TAKED, countMap.get(StatusPickupSeller.TAKED) + 1);
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.RETURN)) {
+                countMap.put(StatusPickupSeller.RETURN, countMap.get(StatusPickupSeller.RETURN) + 1);
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.REFUNDED)) {
+                countMap.put(StatusPickupSeller.REFUNDED, countMap.get(StatusPickupSeller.REFUNDED) + 1);
+            }
+        }
+        return countMap;
+    }
+
+    @Override
+    public Map<StatusPickupSeller, Integer> getNumberOfPickupByStatusByMonthAndYearAndAll() {
+        List<Pickup> pickup= (List<Pickup>) pr.findAll();
+        Map<StatusPickupSeller, Integer> countMap = new HashMap<>();
+        LocalDate d=LocalDate.now();
+        System.out.println(d);
+        countMap.put(StatusPickupSeller.PICKED, 0);
+        countMap.put(StatusPickupSeller.ASSIGNED, 0);
+        countMap.put(StatusPickupSeller.DELIVERED, 0);
+        countMap.put(StatusPickupSeller.TAKED, 0);
+        countMap.put(StatusPickupSeller.RETURN, 0);
+        countMap.put(StatusPickupSeller.REFUNDED, 0);
+        for (Pickup p:pickup) {
+            if (p.getStatusPickupSeller().equals(StatusPickupSeller.PICKED)) {
+                if((p.getDateCreationPickup().getMonth().equals(d.getMonth()))) {
+                    countMap.put(StatusPickupSeller.PICKED, countMap.get(StatusPickupSeller.PICKED) + 1);
+                }
+            } else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.ASSIGNED)) {
+                if(p.getDateCreationPickup().getMonth().equals(d.getMonth())) {
+                    countMap.put(StatusPickupSeller.ASSIGNED, countMap.get(StatusPickupSeller.ASSIGNED) + 1);
+                }
+
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.DELIVERED)) {
+                if((p.getDateCreationPickup().getMonth().equals(d.getMonth()))) {
+                    countMap.put(StatusPickupSeller.DELIVERED, countMap.get(StatusPickupSeller.DELIVERED) + 1);
+                }
+
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.TAKED)) {
+                if((p.getDateCreationPickup().getMonth().equals(d.getMonth()))) {
+                    countMap.put(StatusPickupSeller.TAKED, countMap.get(StatusPickupSeller.TAKED) + 1);
+                }
+
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.RETURN)) {
+                if((p.getDateCreationPickup().getMonth().equals(d.getMonth()))) {
+                    countMap.put(StatusPickupSeller.RETURN, countMap.get(StatusPickupSeller.RETURN) + 1);
+                }
+
+            }
+            else  if (p.getStatusPickupSeller().equals(StatusPickupSeller.REFUNDED)) {
+                if((p.getDateCreationPickup().getMonth().equals(d.getMonth()))) {
+                    countMap.put(StatusPickupSeller.REFUNDED, countMap.get(StatusPickupSeller.REFUNDED) + 1);
+                }
+
+            }
+        }
+        return countMap;
+    }
+
+    @Override
+    public Double AllCo2User() {
+        List<User> users= (List<User>) ur.findAll();
+        double sum=0;
+        for (User u:users) {
+            sum=sum+u.getCo2();
+        }
+        return sum;
+    }
+
+    @Override
+    public Map<String, Integer> getNumberPickupsInMonth() {
+        Map<String, Integer> countMap = new HashMap<>();
+        countMap.put("a",pr.PickupByMonth(1));
+        countMap.put("b",pr.PickupByMonth(2));
+        countMap.put("c",pr.PickupByMonth(3));
+        countMap.put("d",pr.PickupByMonth(4));
+        countMap.put("e",pr.PickupByMonth(5));
+        countMap.put("f",pr.PickupByMonth(6));
+        countMap.put("g",pr.PickupByMonth(7));
+        countMap.put("h",pr.PickupByMonth(8));
+        countMap.put("i",pr.PickupByMonth(9));
+        countMap.put("j",pr.PickupByMonth(10));
+        countMap.put("k",pr.PickupByMonth(11));
+        countMap.put("m",pr.PickupByMonth(12));
+
+        return countMap;
+    }
+
+    @Override
+    public Map<String, Integer> getNumberRequestsInMonth() {
+        Map<String, Integer> countMap = new HashMap<>();
+        countMap.put("a",pr.RequestByMonth(1));
+        countMap.put("b",pr.RequestByMonth(2));
+        countMap.put("c",pr.RequestByMonth(3));
+        countMap.put("d",pr.RequestByMonth(4));
+        countMap.put("e",pr.RequestByMonth(5));
+        countMap.put("f",pr.RequestByMonth(6));
+        countMap.put("g",pr.RequestByMonth(7));
+        countMap.put("h",pr.RequestByMonth(8));
+        countMap.put("i",pr.RequestByMonth(9));
+        countMap.put("j",pr.RequestByMonth(10));
+        countMap.put("k",pr.RequestByMonth(11));
+        countMap.put("m",pr.RequestByMonth(12));
+
+        return countMap;
+    }
+
+    @Override
+    public List<Pickup> RetrieveAllPickupsOfUser() {
+        User u= sessionService.getUserBySession();
+        return pr.getAllPickupsForUser(u.getId());
+    }
+
+    @Override
+    public List<Pickup> RetrieveAllPickupsOfSeller() {
+        User u=sessionService.getUserBySession();
+        return pr.getPickupsOfSeller(u.getId());
+    }
+
+    @Override
+    public User retrieveTheFreelancerOfPickup(Long idPickup) {
+        Pickup pickup=pr.findById(idPickup).get();
+
+        for (Request p:pickup.getRequests()) {
+            if(p.getRequestStatus().equals(RequestStatus.APPROVED)){
+                if(p.getAgency()!=null){
+                    return p.getAgency();
+                } else if (p.getDeliveryman()!=null) {
+                    return p.getDeliveryman();
+                }
+            }
+        }
+        return null;
     }
 
     @Scheduled(cron = "* * * 27 * *")

@@ -94,4 +94,16 @@ public class AgencyDeliveryManService implements AgencyDeliveryManIService {
     public int countDeliveryMenInBranch(Long idBranch) {
         return admr.countDmInBranch(idBranch);
     }
+
+    @Override
+    public List<AgencyDeliveryMan> TopDeliveryMenByPickupDelivered() {
+        User user=sessionService.getUserBySession();
+        return admr.getATopDeliveryMen(user.getId());
+    }
+
+    @Override
+    public List<AgencyBranch> TopDeliveryAgencyByPickupDelivered() {
+        User user=sessionService.getUserBySession();
+        return admr.TopDeliveryAgencyByPickupDelivered(user.getId());
+    }
 }

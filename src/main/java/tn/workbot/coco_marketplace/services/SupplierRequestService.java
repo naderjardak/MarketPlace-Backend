@@ -45,7 +45,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
     SessionService sessionService;
 
     @Override
-    public SupplierRequest create(SupplierRequest s, Long productId) throws MessagingException {
+    public SupplierRequest create(SupplierRequest s, Long productId) throws Exception {
         User user = sessionService.getUserBySession();
         Product product = productService.getById(productId);
 
@@ -71,7 +71,7 @@ public class SupplierRequestService implements SupplierRequestInterface {
             product.setQuantity(-1);
 
             String st = "Good Morning\n \nthe request of " + user.getBrandName() + "on " + product.getName() + " was accepted\nhere are some details : \n"
-                    + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDate() + " At " + s.getDeliveryTime() + "\n \n Best Regards";
+                    + "Unity Price : " + s.getUnityPrice() + " Quantity : " + s.getQuantity() + " Delivery Date : " + s.getDeliveryDate() + "\n \n Best Regards";
 
             supplierRequestRepository.save(s);
             productService.update(product);
@@ -127,9 +127,9 @@ public class SupplierRequestService implements SupplierRequestInterface {
 
 
     @Override
-    public void accpetRequestBySeller(Long supplierRequestId) {
-        if (supplierRequestRepository.findById(supplierRequestId).isPresent()) {
-            SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId).get();
+    public SupplierRequest accpetRequestBySeller(SupplierRequest supplierRequestId) {
+        if (supplierRequestRepository.findById(supplierRequestId.getId()).isPresent()) {
+            SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId.getId()).get();
             List<SupplierRequest> supplierRequests = supplierRequest.getProduct().getSupplierRequests();
             for (SupplierRequest s : supplierRequests) {
                 if (s.equals(supplierRequest)) {
@@ -143,13 +143,15 @@ public class SupplierRequestService implements SupplierRequestInterface {
                 }
                 this.update(s);
             }
-        }
+            return supplierRequest;
 
+        }
+        return new SupplierRequest();
     }
 
     @Override
     //confirm request after delivering the products
-    public void confirmRequestDelivery(Long supplierRequestId) {
+    public void confirmRequestDelivery(Long supplierRequestId) throws Exception {
         if (supplierRequestRepository.findById(supplierRequestId).isPresent()) {
             SupplierRequest supplierRequest = supplierRequestRepository.findById(supplierRequestId).get();
             Product product = supplierRequest.getProduct();

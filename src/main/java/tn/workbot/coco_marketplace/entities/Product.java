@@ -78,7 +78,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<PromotionCode> promotionCodes;
-
+    @JsonIgnore
     @ManyToOne
     private Store store;
 
@@ -87,9 +87,9 @@ public class Product {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "product")
-    @JsonIgnore
     private List<SupplierRequest> supplierRequests;
-
+    @OneToMany(mappedBy = "product")
+    private List<Ads> adsList;
 
     @Override
     public boolean equals(Object o) {
