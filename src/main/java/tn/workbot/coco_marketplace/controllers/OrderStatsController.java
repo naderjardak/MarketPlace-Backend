@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tn.workbot.coco_marketplace.entities.Order;
 import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.services.interfaces.OrderInterface;
 import tn.workbot.coco_marketplace.Api.OrderStatsPDFGenerator;
@@ -36,7 +37,7 @@ public class OrderStatsController {
     Map<String, Integer> statsByStatusType(){return orderInterface.statsByStatusType();}
 
     @GetMapping("OrderRankForUsersByStatusType")
-    List<String> statsByStatusTypeOrdred(){return orderInterface.statsByStatusTypeOrdred();}
+    List<Map<String,Integer>> statsByStatusTypeOrdred(){return orderInterface.statsByStatusTypeOrdred();}
 
     @GetMapping("RankGouvernoratByOrdersNumber")
     List<Map<String,Integer>> GovernoratTopShipped() {return orderInterface.GovernoratTopShipped();}
@@ -59,7 +60,7 @@ public class OrderStatsController {
 
     @GetMapping(value = "PDF_OrderRankForUsersByStatusType", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> PDF_OrderRankForUsers() throws IOException {
-        List<String> stats = orderInterface.statsByStatusTypeOrdred();
+        List<String> stats = orderInterface.PDFstatsByStatusTypeOrdred();
 
         ByteArrayInputStream bis = OrderStatsPDFGenerator.OrderRankForUsersPDFReport(stats);
         HttpHeaders headers = new HttpHeaders();
@@ -72,4 +73,7 @@ public class OrderStatsController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(bis));
     }
+
+    @GetMapping("GetBestUserOrders")
+    public List<Order> getBestOrdersUser(){return orderInterface.getBestOrdersUser();}
 }

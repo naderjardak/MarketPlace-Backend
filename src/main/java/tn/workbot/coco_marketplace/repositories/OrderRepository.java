@@ -4,10 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import tn.workbot.coco_marketplace.entities.Order;
-import tn.workbot.coco_marketplace.entities.Product;
-import tn.workbot.coco_marketplace.entities.ProductQuantity;
-import tn.workbot.coco_marketplace.entities.Shipping;
+import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.StatusOrderType;
 
 import javax.persistence.OrderBy;
@@ -17,8 +14,11 @@ import java.util.Map;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-  @Query("SELECT concat(o.buyer.FirstName,' & ',o.buyer.LastName,' ',count(o)) from Order o where o.status='ACCEPTED_PAYMENT' group by o.buyer order by count (o) desc ")
-  List<String> RankUsersByOrdersAcceptedPayement();
+  @Query("SELECT concat(o.buyer.FirstName,' ',o.buyer.LastName) as name ,count(o) as nb from Order o where o.status='ACCEPTED_PAYMENT' group by o.buyer order by count (o) desc ")
+  List<Map<String,Integer>> RankUsersByOrdersAcceptedPayement();
+
+  @Query("SELECT concat(o.buyer.FirstName,' ',o.buyer.LastName,' ',count(o)) from Order o where o.status='ACCEPTED_PAYMENT' group by o.buyer order by count (o) desc ")
+  List<String> PDFRankUsersByOrdersAcceptedPayement();
 
   //int findByBuyerId(Long id);
 
@@ -60,7 +60,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("select o.ref from Order o ")
   List<String> reflist();
 
-  @Query("SELECT p from Product p where p.name LIKE :nameProduct")
+  @Query("SELECT p from Product p where p.name LIKE :nameProduct OR p.description LIKE :nameProduct")
   List<Product> productsByNameLike(@Param("nameProduct") String nameProduct);
 
   @Query("select pq from Order o,ProductQuantity pq where o.id=:id and pq.order=o ")
@@ -71,6 +71,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
   List<Order> findOrderByBuyerIdAndStatusIsNotLike(Long id, StatusOrderType st);
+
+  @Query("select o from Order o where not o.status='BASKET' Order By (o.sum+o.deliveryPrice) desc  ")
+  List<Order> usersBestOrders();
 
 
 }

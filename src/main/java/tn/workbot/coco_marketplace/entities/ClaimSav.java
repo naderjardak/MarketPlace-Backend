@@ -31,25 +31,26 @@ public class ClaimSav implements Serializable {
     private String screenshot;
 
     @Enumerated(EnumType.STRING)
+
     private ClaimSavStatusType status;
 
     @Enumerated(EnumType.STRING)
+
     private ClaimSavType claimSavType;
 
     @Temporal(TemporalType.DATE)
     private Date createdAt;
 
     @Temporal(TemporalType.DATE)
+
     private Date updatedAt;
 
    ///DoneCrud
 
-    @JsonIgnore
     @ManyToOne
     private User user;
 
-    @JsonIgnore
-    @OneToOne
+    @ManyToOne
     private ProductQuantity productQuantity;
 
 

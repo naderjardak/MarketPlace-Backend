@@ -8,13 +8,16 @@ import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.RequestStatus;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.AgencyBranchRepository;
 import tn.workbot.coco_marketplace.repositories.AgencyDeliveryManRepository;
 import tn.workbot.coco_marketplace.repositories.RequestRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.AgencyBranchIService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AgencyBranchService implements AgencyBranchIService {
@@ -66,7 +69,6 @@ public class AgencyBranchService implements AgencyBranchIService {
     public List<AgencyBranch> retrievethebranchesofeachagency() {
         User u=sessionService.getUserBySession();
         List<AgencyBranch> agencyBranches = u.getAgencyBranches();
-
         return agencyBranches;
     }
 
@@ -86,6 +88,8 @@ public class AgencyBranchService implements AgencyBranchIService {
         AgencyBranch agencyBranch1 = abr.save(agencyBranch);
         User u=sessionService.getUserBySession();
         agencyBranch1.setDeliveryAgency(u);
+        agencyBranch1.setX(0);
+        agencyBranch1.setY(0);
         return abr.save(agencyBranch1);
     }
 
@@ -117,5 +121,28 @@ public class AgencyBranchService implements AgencyBranchIService {
     @Override
     public int countDeliveryMenInAgency(Long idBranch) {
         return abr.countDeliveryMenInBranchByIdBranch(idBranch);
+    }
+
+    @Override
+    public AgencyBranch updatebRANCHwithMAP(Long idBranch, AgencyBranch agencyBranch) {
+        AgencyBranch agencyBranch1=abr.findById(idBranch).get();
+        agencyBranch.setDeliveryAgency(agencyBranch1.getDeliveryAgency());
+        return abr.save(agencyBranch);
+    }
+
+    @Override
+    public Map<RoleType, Integer> countAllAgencyAdmin() {
+        List<User> users = (List<User>) user.findAll();
+        Map<RoleType, Integer> countMap = new HashMap<>();
+        countMap.put(RoleType.DELIVERYAGENCY, 0);
+        countMap.put(RoleType.DELIVERYMEN, 0);
+        for (User u : users) {
+            if (u.getRole().getType() == RoleType.DELIVERYAGENCY) {
+                countMap.put(RoleType.DELIVERYAGENCY, countMap.get(RoleType.DELIVERYAGENCY) + 1);
+            } else if (u.getRole().getType() == RoleType.DELIVERYMEN) {
+                countMap.put(RoleType.DELIVERYMEN, countMap.get(RoleType.DELIVERYMEN) + 1);
+            }
+        }
+        return countMap;
     }
 }
