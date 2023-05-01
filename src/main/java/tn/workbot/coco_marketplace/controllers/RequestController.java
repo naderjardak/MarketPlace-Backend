@@ -116,4 +116,16 @@ public class RequestController {
         return ri.countRequestByPickup(idPickup);
     }
 
-}
+    @GetMapping("LastRequestCreatedForSeller")
+    public List<Request> LastRequestCreatedForSeller() {
+        return ri.LastRequestCreatedForSeller();
+    }
+    @GetMapping("LastRequestAssignedToFreelancer")
+    public List<Request> LastRequestAssignedToFreelancer() {
+        return ri.LastRequestAssignedToFreelancer();
+    }
+    @GetMapping("RetrieveRequestOfFreelancer")
+    public List<Request> RetrieveRequestOfFreelancer() {
+        return ri.RetrieveRequestOfFreelancer();
+    }
+    }

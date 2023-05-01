@@ -17,10 +17,9 @@ import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.AdsInterface;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdsService implements AdsInterface {
@@ -73,6 +72,7 @@ public class AdsService implements AdsInterface {
 
                 }
             }
+            ads.setDateCreation(LocalDate.now());
             ur.save(user);
             ar.save(ads);
             return null; // return null since the operation was successful
@@ -145,14 +145,13 @@ public class AdsService implements AdsInterface {
     @Override
     public Integer retrieveHMAwRWithAds(float adsPoints, String startDate, String expiredDate, BudgetType budgetType) {
         int reach = 0;
-        LocalDate startDate1 = LocalDate.parse(startDate);
-        LocalDate expiredDate1 = LocalDate.parse(expiredDate);
-        Ads ads = ar.findById(1L).get();
-        System.out.println(ads.getStartDate());
+
         if (adsPoints == 1) {
             if (budgetType.equals(BudgetType.DAILYBUDGET)) {
                 reach = 100;
             } else {
+                LocalDate startDate1 = LocalDate.parse(startDate);
+                LocalDate expiredDate1 = LocalDate.parse(expiredDate);
                 int Days = Period.between(startDate1, expiredDate1).getDays();
                 //int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
                 if (Days == 1) {
@@ -168,6 +167,8 @@ public class AdsService implements AdsInterface {
                 int adsPointsIncrement = (int) (adsPoints - 1);
                 reach = 100 + adsPointsIncrement * 200;
             } else {
+                LocalDate startDate1 = LocalDate.parse(startDate);
+                LocalDate expiredDate1 = LocalDate.parse(expiredDate);
                 int Days = Period.between(startDate1, expiredDate1).getDays();
                 // int Days=Period.between(ads.getStartDate(), ads.getExpiredDate()).getDays();
                 if (Days == 1) {
@@ -181,7 +182,26 @@ public class AdsService implements AdsInterface {
         }
         return reach;
     }
-    @Scheduled(cron = "* * 10 * * *")
+
+    @Override
+    public List<Product> getProductByUserSess() {
+        User u=ss.getUserBySession();
+        return ar.getProductByUser(u.getId());
+    }
+
+    @Override
+    public List<Ads> getMyAds() {
+        User user=ss.getUserBySession();
+        List<Ads> adsList= ar.getAdsByUser(user.getId());
+        return adsList;
+    }
+
+    @Override
+    public void deleteAds(Long idAds) {
+        ar.deleteById(idAds);
+    }
+
+    @Scheduled(cron = "* 30 9 * * *")
     public void DisAdsWhenDateExpired(){
         List<Ads> adsList= (List<Ads>) ar.findAll();
         LocalDate currentDate = LocalDate.now();

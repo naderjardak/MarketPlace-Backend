@@ -19,5 +19,7 @@ public interface AdsInterface {
     public List<Ads> retrieveAdsTOInterestedBuyerObSales();
     public List<Ads> retrieveAdsTOInterestedBuyerObTraffic();
     public Integer retrieveHMAwRWithAds(float adsPoints, String startDate, String expiredDate, BudgetType budgetType);
-
+    public List<Product> getProductByUserSess();
+    public List<Ads> getMyAds();
+    public void deleteAds(Long idAds);
 }

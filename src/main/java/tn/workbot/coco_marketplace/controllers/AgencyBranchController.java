@@ -7,9 +7,11 @@ import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 import tn.workbot.coco_marketplace.entities.Request;
 import tn.workbot.coco_marketplace.entities.User;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.services.interfaces.AgencyBranchIService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -80,6 +82,10 @@ public class AgencyBranchController {
     @PutMapping("updatebRANCHwithMAP")
     public AgencyBranch updatebRANCHwithMAP(@RequestParam Long idBranch,@RequestBody AgencyBranch agencyBranch) {
     return abi.updatebRANCHwithMAP(idBranch, agencyBranch);
+    }
+    @GetMapping("countAllAgencyAdmin")
+    public Map<RoleType, Integer> countAllAgencyAdmin() {
+        return abi.countAllAgencyAdmin();
     }
 
     }

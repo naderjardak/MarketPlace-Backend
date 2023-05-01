@@ -57,4 +57,12 @@ public class AgencyDeliveryManController  {
     public int countDeliveryMenInBranch(@RequestParam Long idBranch) {
     return ad.countDeliveryMenInBranch(idBranch);
     }
+    @GetMapping("TopDeliveryMenByPickupDelivered")
+    public List<AgencyDeliveryMan> TopDeliveryMenByPickupDelivered(){
+    return ad.TopDeliveryMenByPickupDelivered();
+    }
+    @GetMapping("TopDeliveryAgencyByPickupDelivered")
+    public List<AgencyBranch> TopDeliveryAgencyByPickupDelivered() {
+        return ad.TopDeliveryAgencyByPickupDelivered();
+    }
     }

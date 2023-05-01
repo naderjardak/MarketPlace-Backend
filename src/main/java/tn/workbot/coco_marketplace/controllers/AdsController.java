@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.workbot.coco_marketplace.entities.Ads;
 import tn.workbot.coco_marketplace.entities.Product;
+import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.entities.enmus.BudgetType;
 import tn.workbot.coco_marketplace.services.interfaces.AdsInterface;
 
@@ -46,5 +47,17 @@ public class AdsController {
                                         @RequestParam(required = false) String expiredDate,
                                         @RequestParam(required = false) BudgetType budgetType) {
     return ai.retrieveHMAwRWithAds(adsPoints,startDate,expiredDate,budgetType);
+    }
+    @GetMapping("getProductByUserSess")
+    public List<Product> getProductByUserSess() {
+        return ai.getProductByUserSess();
+    }
+    @GetMapping("getMyAds")
+    public List<Ads> getMyAds() {
+    return ai.getMyAds();
+    }
+    @DeleteMapping("deleteAds")
+    public void deleteAds(@RequestParam Long idAds) {
+    ai.deleteAds(idAds);
     }
     }

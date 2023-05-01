@@ -108,7 +108,8 @@ public class RequestService implements RequestInterface {
 
             }
         }
-        user.setAdsPoints(user.getAdsPoints()-p.getPoints());
+        user.setDeliveryPoints((int) (user.getDeliveryPoints()-p.getPoints()));
+
         ur.save(user);
         return rr.save(request1);    }
 
@@ -130,6 +131,7 @@ public class RequestService implements RequestInterface {
         request1.setPickup(pickup);
         request1.setRequestDate(LocalDateTime.now());
         user.setAdsPoints(user.getAdsPoints()-p.getPoints());
+
         ur.save(user);
         return rr.save(request1);
     }
@@ -139,7 +141,7 @@ public class RequestService implements RequestInterface {
         Request request1 = rr.findById(idRequest).get();
         if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
             GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .apiKey("AIzaSyBdVAHuNwlcMICaKUcx8RNGUb5dBiMYIIo")
                     .build();
             // Get the distance and travel time using the DistanceMatrixApi
             DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
@@ -279,6 +281,41 @@ public class RequestService implements RequestInterface {
     @Override
     public int countRequestByPickup(Long idPickup) {
         return pr.countrequest(idPickup);
+    }
+
+    @Override
+    public List<Request> LastRequestCreatedForSeller() {
+        User user=sessionService.getUserBySession();
+        List<Request> requests=rr.getRequestByorderDesc(user.getId());
+        int i=0;
+        for (Request r:requests) {
+            i++;
+            if(i>6){
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> LastRequestAssignedToFreelancer() {
+        User user=sessionService.getUserBySession();
+        List<Request> requests=rr.getRequestFreelancerAssignedLast5(user.getId());
+        int i=0;
+        for (Request r:requests) {
+            i++;
+            if(i>=5){
+                System.out.println(r);
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> RetrieveRequestOfFreelancer() {
+        User user=sessionService.getUserBySession();
+        return rr.getTheRequestOfFreelancer(user.getId());
     }
 
 
