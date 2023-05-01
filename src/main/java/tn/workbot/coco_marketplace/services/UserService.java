@@ -5,7 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.Dto.auth.AccountResponse;
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Role;
 import tn.workbot.coco_marketplace.entities.User;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
@@ -13,6 +15,11 @@ import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.UserInterface;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +32,9 @@ public class UserService implements UserInterface {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    SessionService sessionService;
+
 
     PasswordEncoder passwordEncoder;
 
@@ -35,12 +45,20 @@ public class UserService implements UserInterface {
 
 
     @Override
-    public User Create(User u) {
-
+    public User Create(User u,Long idRole) {
+         Role role= roleRepository.findById(idRole).get();
         u.setPassword(this.passwordEncoder.encode(u.getPassword()));
-        User user=   userRepository.save(u);
-        return  user;
+        u.setRole(role);
+        userRepository.save(u);
+        return  u;
 
+    }
+
+    @Override
+    public User Create1(User u) {
+        u.setPassword(this.passwordEncoder.encode(u.getPassword()));
+        userRepository.save(u);
+        return  u;
     }
 
     @Override
@@ -50,16 +68,13 @@ public class UserService implements UserInterface {
 
     @Override
     public User update(User u) {
+        u.setPassword(this.passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
     }
 
     @Override
     public User updateUserByID(long id,User u) {
         User user1 = userRepository.findById(id).get();
-//        user1.setEmail(u.getEmail());
-//        user1.setFirstName(u.getFirstName());
-//        user1.setPhoneNumber(u.getPhoneNumber());
-//        user1.setPassword(u.getPassword());
         return userRepository.save(user1);
     }
 
@@ -92,7 +107,32 @@ public class UserService implements UserInterface {
 
 
 
+    private static final String FILE_DIRECTORY1 = "C:/xampp/htdocs/MarketPlace-Frontend/src/assets/uploads";
+    private static final String FILE_DIRECTORY2 = "C:/xampp/htdocs/MarketPlace-Frontend/projects/front-office/src/assets/uploads";
+    @Override
+    public void storeFile(MultipartFile file) throws IOException {
+        Path filePath1 = Paths.get(FILE_DIRECTORY1 + "/" + file.getOriginalFilename());
+        Path filePath2 = Paths.get(FILE_DIRECTORY2 + "/" + file.getOriginalFilename());
+        Files.copy(file.getInputStream(), filePath1, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), filePath2, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @Override
+    public List<Map<String, Integer>> statsByRole()
+    {
+        return userRepository.statsUsersByRole();
+    }
 
 
+    public  List<Role> getAllRolesd()
+    {
+        return (List<Role>) roleRepository.findAll();
+    }
+
+    @Override
+    public boolean sessionReteurn() {
+        User user=sessionService.getUserBySession();
+        return user!=null;
+    }
 
 }

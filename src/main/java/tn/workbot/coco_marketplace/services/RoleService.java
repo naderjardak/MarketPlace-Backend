@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.workbot.coco_marketplace.entities.Privilege;
 import tn.workbot.coco_marketplace.entities.Role;
+import tn.workbot.coco_marketplace.entities.enmus.RoleType;
 import tn.workbot.coco_marketplace.repositories.PrivilegeRepository;
 import tn.workbot.coco_marketplace.repositories.RoleRepository;
 import tn.workbot.coco_marketplace.services.interfaces.RoleInterface;
@@ -52,5 +53,11 @@ public class RoleService implements RoleInterface {
         r.getPrivileges().add(p);
         roleRepository.save(r);
 
+    }
+
+    @Override
+    public Role findRolebyRoleType(RoleType roleType) {
+        Role r=roleRepository.findRoleByType(roleType);
+        return r;
     }
 }

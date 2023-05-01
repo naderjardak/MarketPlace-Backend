@@ -20,7 +20,9 @@ import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('ADMIN')")
 @RequestMapping("Event")
+
 public class EventController {
 
     @Autowired

@@ -1,6 +1,5 @@
 package tn.workbot.coco_marketplace.controllers;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
