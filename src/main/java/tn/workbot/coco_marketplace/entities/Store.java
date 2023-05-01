@@ -25,8 +25,8 @@ public class Store {
     private String name;
     private String governorate;
     private String city;
-    private String x;
-    private String y;
+    private double x;
+    private double y;
 
 
     private String IBAN;
