@@ -89,11 +89,11 @@ public class RequestService implements RequestInterface {
         //Hadha fel la9i9a bech yetbadel bel variable mt3 el agency eli connecté tawa Session manager
         User user=sessionService.getUserBySession();
         Request request1 = rr.save(request);
-
         //eli fou9o sessionManger
         User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest();
+        int i = pr.countrequest(idPickup);
+        i=i+1;
         p.setNbRequest(i);
         pr.save(p);
         AgencyDeliveryMan agencyDeliveryMan = admr.findById(idDeliveryMenAgency).get();
@@ -108,15 +108,18 @@ public class RequestService implements RequestInterface {
 
             }
         }
+        user.setDeliveryPoints((int) (user.getDeliveryPoints()-p.getPoints()));
+
+        ur.save(user);
         return rr.save(request1);    }
 
     @Override
     public Request assignRequestDeliveryMenFreelancerandPickup(Request request, Long idPickup) {
         Request request1 = rr.save(request);
         //eliconnectetawa session id bech yet7at lena fel idSeller
-        User u = pr.UserOfPickup(idPickup);
         Pickup p = pr.findById(idPickup).get();
-        int i = pr.countrequest();
+        int i = pr.countrequest(idPickup);
+        i=i+1;
         p.setNbRequest(i);
         pr.save(p);
         User user=sessionService.getUserBySession();
@@ -127,6 +130,9 @@ public class RequestService implements RequestInterface {
         request1.setDeliveryman(user);
         request1.setPickup(pickup);
         request1.setRequestDate(LocalDateTime.now());
+        user.setAdsPoints(user.getAdsPoints()-p.getPoints());
+
+        ur.save(user);
         return rr.save(request1);
     }
     public String calculateDeliveryTime(Long idPickup, Long idRequest) throws IOException, InterruptedException, ApiException {
@@ -135,7 +141,7 @@ public class RequestService implements RequestInterface {
         Request request1 = rr.findById(idRequest).get();
         if (request1.getRequestStatus().equals(RequestStatus.APPROVED)) {
             GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey("AIzaSyDQCUA-GfJipPTO6s9N-cJr7SUHinNMFGY")
+                    .apiKey("AIzaSyBdVAHuNwlcMICaKUcx8RNGUb5dBiMYIIo")
                     .build();
             // Get the distance and travel time using the DistanceMatrixApi
             DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context)
@@ -270,6 +276,46 @@ public class RequestService implements RequestInterface {
     public List<Request> retrieveRequestApprovedOfPickupAgency() {
         User u=sessionService.getUserBySession();
         return rr.RetrieveRequestApprovedByAgency(u.getId());
+    }
+
+    @Override
+    public int countRequestByPickup(Long idPickup) {
+        return pr.countrequest(idPickup);
+    }
+
+    @Override
+    public List<Request> LastRequestCreatedForSeller() {
+        User user=sessionService.getUserBySession();
+        List<Request> requests=rr.getRequestByorderDesc(user.getId());
+        int i=0;
+        for (Request r:requests) {
+            i++;
+            if(i>6){
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> LastRequestAssignedToFreelancer() {
+        User user=sessionService.getUserBySession();
+        List<Request> requests=rr.getRequestFreelancerAssignedLast5(user.getId());
+        int i=0;
+        for (Request r:requests) {
+            i++;
+            if(i>=5){
+                System.out.println(r);
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> RetrieveRequestOfFreelancer() {
+        User user=sessionService.getUserBySession();
+        return rr.getTheRequestOfFreelancer(user.getId());
     }
 
 

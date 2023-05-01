@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import tn.workbot.coco_marketplace.entities.AgencyBranch;
 import tn.workbot.coco_marketplace.entities.AgencyDeliveryMan;
 
 import java.util.List;
@@ -17,4 +18,9 @@ public interface AgencyDeliveryManRepository extends CrudRepository<AgencyDelive
     public List<AgencyDeliveryMan> retrieveDMbYbRANCHE(@Param("v1") Long idBranch);
     @Query("select count(distinct dm) from AgencyDeliveryMan dm ,AgencyBranch ab where dm.agencyBranch.id=:v1")
     public int countDmInBranch(@Param("v1") Long idBranch);
+    @Query("select  distinct dm from AgencyDeliveryMan  dm,Request r,User u,Pickup p where r.Agency.id=:v1 and r.agencyDeliveryMan.id=dm.id and r.pickup.id=p.id group by dm order by COUNT (p) desc ")
+    public List<AgencyDeliveryMan> getATopDeliveryMen(@Param("v1")Long idUser);
+
+    @Query("select  distinct ab from AgencyBranch ab,AgencyDeliveryMan  dm,Request r,User u,Pickup p where r.Agency.id=:v1 and r.agencyDeliveryMan.id=dm.id and r.agencyDeliveryMan.agencyBranch.id=ab.id and r.pickup.id=p.id group by ab order by COUNT (p) desc ")
+    public List<AgencyBranch> TopDeliveryAgencyByPickupDelivered(@Param("v1")Long idUser);
 }

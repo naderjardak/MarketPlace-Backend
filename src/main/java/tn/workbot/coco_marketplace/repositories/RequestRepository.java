@@ -53,5 +53,12 @@ public interface RequestRepository extends CrudRepository<Request,Long> {
     @Query("SELECT DISTINCT r FROM Request r ,Pickup p WHERE r.Agency.id = :v1 AND r.requestStatus = 'APPROVED' AND (r.pickup.statusPickupSeller = 'TAKED' OR r.pickup.statusPickupSeller = 'ONTHEWAY' OR r.pickup.statusPickupSeller = 'RETURN' OR r.pickup.statusPickupSeller = 'ASSIGNED')")
     public List<Request> RetrieveRequestApprovedByAgency(@Param("v1") Long IdAgency);
 
+    @Query("select distinct r from Request r ,Pickup p ,Store s,User u where r.pickup.id=p.id and r.pickup.store.seller.id=:v1 and r.requestStatus='PENDING' order by r.RequestDate desc ")
+    public List<Request> getRequestByorderDesc(@Param("v1") Long idSeller);
 
+
+    @Query("select distinct r from Request r,User u,Pickup p where r.pickup.id=p.id and r.deliveryman.id=:v1 and p.statusPickupSeller='ASSIGNED' order by r.RequestDate desc ")
+    public List<Request> getRequestFreelancerAssignedLast5(@Param("v1") Long idUser);
+   @Query("select distinct r from Request r,User u where r.deliveryman.id=:v1")
+    public List<Request> getTheRequestOfFreelancer(@Param("v1") Long idFreelancer);
 }
