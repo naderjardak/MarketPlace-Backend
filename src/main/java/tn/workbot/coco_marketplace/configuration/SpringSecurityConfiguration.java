@@ -39,7 +39,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
 
-   }
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -61,7 +61,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement(
-                        session -> session
+                session -> session
 
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .invalidSessionUrl("/logout?expired")
@@ -103,4 +103,3 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 }
-

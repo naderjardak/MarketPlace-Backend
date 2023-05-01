@@ -8,5 +8,4 @@ import tn.workbot.coco_marketplace.entities.Event;
 @Repository
 public interface EventRepository extends JpaRepository<Event,Long> {
 Event findByTitle(String title);
-
 }
