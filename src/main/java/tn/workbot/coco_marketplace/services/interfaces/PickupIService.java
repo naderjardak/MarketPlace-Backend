@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services.interfaces;
 import com.google.maps.errors.ApiException;
 import org.springframework.http.ResponseEntity;
 import tn.workbot.coco_marketplace.entities.*;
+import tn.workbot.coco_marketplace.entities.enmus.StatusPickupSeller;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -69,7 +70,7 @@ public interface PickupIService {
     public Float sumOfPickupReturnedweekAdministrator();
 
     ///////////Gear Delivery Alers (Kilometre || ESSENCE)
-    public Float kilometreTotalConsommerParFreelancerDelivery() throws IOException, InterruptedException, ApiException;
+    public Float kilometreTotalConsommerParFreelancerDelivery() throws Exception;
     public String FraisEssenceTotal() throws Exception;
 
     //////////Envoyer Un sms si vous avez cconsoumer ton limite  CO2  ,
@@ -91,16 +92,33 @@ public interface PickupIService {
     public List<Product> getListProductOfOrder(Long idOrder,Long idStore);
     public Float  getSumPriceProductOfOrder(Long idOrder,Long idStore);
     public List<ProductQuantity> getAllProductQuantity();
+    //stat agency
     public int countPickupDeliveredForAgency();
     public int countPickupReturnedForAgency();
     public int countPickupOnTheWayForAgency();
     public int countPickupRefundedForAgency();
+    public int countPickupAssignedForAgency();
+    public int countPickupTakedForAgency();
     ///stat freelancer
     public int countPickupDeliveredForfreelancer();
     public int countPickupReturnedForfreelancer();
     public int countPickupOnTheWayForfreelancer();
     public int countPickupRefundedForfreelancer();
+    public int countPickupAssignedForFreelancer();
+    public int countPickupTakedForFreelancer();
+    ////seller
+    public int countPickupAssignedSeller();
+    public int countPickupTakedSeller();
     public List<Pickup> RetrievePickupInProgress();
-
-
-}
+    public int countProductQuantityInOrderProduct(Long idOrder,Long idProduct);
+    public Store getStoreByPickup(Long idPickup);
+    public Double SumOfPricePickupDeliveredToday();
+    public Map<StatusPickupSeller,Integer> getNumberOfPickupByStatus();
+    public Map<StatusPickupSeller, Integer> getNumberOfPickupByStatusByMonthAndYearAndAll();
+    public Double AllCo2User();
+    public Map<String,Integer> getNumberPickupsInMonth();
+    public Map<String,Integer> getNumberRequestsInMonth();
+    public List<Pickup> RetrieveAllPickupsOfUser();
+    public List<Pickup> RetrieveAllPickupsOfSeller();
+    public User retrieveTheFreelancerOfPickup(Long idPickup);
+    }

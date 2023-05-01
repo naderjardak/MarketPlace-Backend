@@ -9,6 +9,7 @@ import tn.workbot.coco_marketplace.entities.enmus.genderType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +31,7 @@ public class User implements Serializable {
     private boolean TokenExpired;
     private boolean banned;
     private String PhoneNumber;
-
-    @Temporal(TemporalType.DATE)
-    private Date BirthDate;
+    private LocalDate BirthDate;
     private String image;
     @Enumerated(EnumType.STRING)
     private genderType gender;
@@ -61,13 +60,16 @@ public class User implements Serializable {
     // Define a field to store the number of ratings that have been given for the user(buyer_seller,deliveryAgency, DeliveryFreelancer)
     private int numberOfRatings;
     private String LevelDelivery;
-
+    private Float KilometreConsomer;
+    private String FraisEssance;
+    private Integer deliveryPoints;
+    private Double adsPoints;
 
     @OneToMany(mappedBy = "buyer")
     @JsonIgnore
     private List<Order> orders;
-
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Store> stores;
 
 

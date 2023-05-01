@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("LastVued")
-@PreAuthorize("hasAuthority('BUYER') || hasAuthority('Admin')")
+@PreAuthorize("hasAuthority('BUYER') || hasAuthority('ADMIN')")
 public class LastVuedController {
     @Autowired
     LastVuedInterface lastVuedInterface;

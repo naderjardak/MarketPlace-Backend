@@ -37,6 +37,5 @@ public class Event {
     private User user;
 
     @OneToMany
-    @JsonIgnore
     private List<KeyWords> listkeyWords;
 }

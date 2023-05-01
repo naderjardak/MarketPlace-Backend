@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -32,6 +35,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -72,6 +76,12 @@ public class OrderServices implements OrderInterface {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Override
+    public Order addOrder(Order order){
+        order.setBuyer(sessionService.getUserBySession());
+        order.setStatus(StatusOrderType.BASKET);
+        return orderRepository.save(order);
+    }
 
     @Override
     public Order GetBasketOrder() {
@@ -111,11 +121,13 @@ public class OrderServices implements OrderInterface {
             Date currentDate = calendar.getTime();
             order = new Order();
             order.setCreationDate(currentDate);
+            order.setSum(0);
+            order.setDeliveryPrice(0);
             order.setBuyer(user);
             order.setStatus(StatusOrderType.BASKET);
             order.setProductsWeightKg(0);
-                order.setProductQuantities(new ArrayList<>());
-                order.setPromotionCodeList(new ArrayList<>());
+            order.setProductQuantities(new ArrayList<>());
+            order.setPromotionCodeList(new ArrayList<>());
             order=orderRepository.save(order);
         }
         else
@@ -306,7 +318,7 @@ public class OrderServices implements OrderInterface {
             order.setStatus(StatusOrderType.ACCEPTED_PAYMENT);
             order.setPayment(PaymentType.BANK_CARD);
             msg+="From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.";
-            //orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
+            orderMailSenderService.sendEmail(order.getBuyer().getEmail(),"Payment is confirmed","From Coco Market, Have a nice day "+order.getBuyer().getFirstName()+" "+order.getBuyer().getLastName()+" your Payment By card is confirmed successfully.");
             //Twilio mna7iha 3al flous
             //OrderTwilioService.sendSMS(msg);
             List<String> refList=orderRepository.reflist();
@@ -408,8 +420,14 @@ public class OrderServices implements OrderInterface {
     }
 
     @Override
-    public List<String> statsByStatusTypeOrdred() {
-        return orderRepository.RankUsersByOrdersAcceptedPayement();
+    public List<Map<String,Integer>> statsByStatusTypeOrdred() {
+        List<Map<String,Integer>> results = orderRepository.RankUsersByOrdersAcceptedPayement();
+        return results.subList(0, Math.min(10, results.size()));
+    }
+
+    @Override
+    public List<String> PDFstatsByStatusTypeOrdred() {
+        return orderRepository.PDFRankUsersByOrdersAcceptedPayement();
     }
 
     @Override
@@ -575,6 +593,17 @@ public class OrderServices implements OrderInterface {
     }
 
 
+    @Override
+    public boolean sessionReteurn() {
+        User user=sessionService.getUserBySession();
+    return user!=null;
+    }
+
+    @Override
+    public List<Order> getBestOrdersUser() {
+        List<Order> results = orderRepository.usersBestOrders();
+        return results.subList(0, Math.min(10, results.size()));
+    }
 }
 
 

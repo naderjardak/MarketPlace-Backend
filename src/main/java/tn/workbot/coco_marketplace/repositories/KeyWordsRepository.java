@@ -6,4 +6,6 @@ import tn.workbot.coco_marketplace.entities.KeyWords;
 
 @Repository
 public interface KeyWordsRepository extends JpaRepository<KeyWords,Long> {
+
+    KeyWords findByWord(String ch);
 }

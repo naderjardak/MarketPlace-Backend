@@ -3,6 +3,7 @@ package tn.workbot.coco_marketplace.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.*;
 import tn.workbot.coco_marketplace.entities.enmus.ReviewEmotionStatus;
 import tn.workbot.coco_marketplace.entities.enmus.StatusPickupBuyer;
@@ -41,8 +42,14 @@ public class ReviewService implements ReviewInterface {
 
     @Autowired
     BadFeelingsRepository badFeelingsRepository;
+    @Autowired
+    SessionService sessionService;
 
 
+    public User getUserSession()
+    {
+        return sessionService.getUserBySession();
+    }
 
     @Override
     public List<Review> getAllReviews() {
@@ -56,6 +63,8 @@ public class ReviewService implements ReviewInterface {
 
     @Override
     public void addReview(Review review,Long id,int rating) {
+        User user=sessionService.getUserBySession();
+        review.setUserSender(user);
         review.setCreatedAt(new Date());
         Review review1=rvp.save(review);
         Product product=pr.findById(id).get();
@@ -84,6 +93,7 @@ public class ReviewService implements ReviewInterface {
                     }
                 }
             }
+            review.setRating(rating);
                rvp.save(review);
         }
 

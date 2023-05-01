@@ -2,6 +2,7 @@ package tn.workbot.coco_marketplace.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.workbot.coco_marketplace.configuration.SessionService;
 import tn.workbot.coco_marketplace.entities.Event;
 import tn.workbot.coco_marketplace.entities.KeyWords;
@@ -14,6 +15,12 @@ import tn.workbot.coco_marketplace.repositories.OrderRepository;
 import tn.workbot.coco_marketplace.repositories.UserrRepository;
 import tn.workbot.coco_marketplace.services.interfaces.EventInterface;
 
+import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,9 +100,27 @@ public class EventService implements EventInterface {
     @Override
     public void addKeyWordToEvent(Long id, KeyWords keyWords) {
     Event event=eventRepository.findById(id).get();
-    event.getListkeyWords().add(keyWordsRepository.save(keyWords));
-    event.setProductList(displayProductForEvent(event.getId()));
-    eventRepository.save(event);
+    KeyWords kw=new KeyWords();
+    kw=keyWordsRepository.findByWord(keyWords.getWord());
+    if(kw==null) {
+        event.getListkeyWords().add(keyWordsRepository.save(keyWords));
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
+    }
+    else if(!event.getListkeyWords().contains(kw)) {
+        event.getListkeyWords().add(kw);
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
+    }
+    }
+
+    @Override
+    public void deleteKeywordFromEvent(Long eventId, Long keywordId) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        KeyWords keyword = keyWordsRepository.findById(keywordId).orElse(null);
+        event.getListkeyWords().remove(keyword);
+        event.setProductList(displayProductForEvent(event.getId()));
+        eventRepository.save(event);
     }
 
     @Override
@@ -117,5 +142,15 @@ public class EventService implements EventInterface {
         if(productList.size()>0)
         return productList;
         return new ArrayList<>();
+    }
+
+    private static final String FILE_DIRECTORY1 = "C:/xampp/htdocs/MarketPlace-Frontend/src/assets/uploads";
+    private static final String FILE_DIRECTORY2 = "C:/xampp/htdocs/MarketPlace-Frontend/projects/front-office/src/assets/front-template/images/banners";
+    @Override
+    public void storeFile(MultipartFile file) throws IOException {
+        Path filePath1 = Paths.get(FILE_DIRECTORY1 + "/" + file.getOriginalFilename());
+        Path filePath2 = Paths.get(FILE_DIRECTORY2 + "/" + file.getOriginalFilename());
+        Files.copy(file.getInputStream(), filePath1, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), filePath2, StandardCopyOption.REPLACE_EXISTING);
     }
 }
