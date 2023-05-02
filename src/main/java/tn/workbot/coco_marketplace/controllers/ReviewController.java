@@ -66,6 +66,10 @@ public class ReviewController {
         return reviewService.ClassifyReviewsByDateAndEmotons(emotion);
     }
 
+    @GetMapping("getreviewsbyProductId")
+    public List<Review> getReviewsByProductId(@RequestParam Long productId){
+        return reviewService.getReviewsByProductId(productId);
 
+    }
 
 }

@@ -20,4 +20,6 @@ public interface ReviewInterface {
     public ReviewEmotionStatus detectReviewEmotion(String reviewText);
 
     List<Review> ClassifyReviewsByDateAndEmotons(ReviewEmotionStatus emotion);
+
+    public List<Review> getReviewsByProductId(Long productId);
 }

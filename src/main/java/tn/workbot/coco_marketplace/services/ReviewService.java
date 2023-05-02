@@ -189,5 +189,10 @@ public class ReviewService implements ReviewInterface {
         return rvp.ClassifyReviewsByDateAndEmotons(emotion);
     }
 
+    @Override
+    public List<Review> getReviewsByProductId(Long productId) {
+        return rvp.findByProductId(productId);
+    }
+
 
 }

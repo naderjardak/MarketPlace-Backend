@@ -15,6 +15,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r WHERE r.emotionStatus = :emotion GROUP BY r.createdAt")
     List<Review> ClassifyReviewsByDateAndEmotons(@Param("emotion")ReviewEmotionStatus emotion);
-//ghj
-
+    //ghj
+    List<Review> findByProductId(Long productId);
 }
